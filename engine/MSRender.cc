@@ -9,3 +9,30 @@
 
 #include "MSRender.h"
 
+#include "MSCmdBuf.h"
+
+void MSRender::CreateRT()
+{
+
+}
+
+void MSRender::BeginScene()
+{
+
+}
+
+void MSRender::EndScene()
+{
+
+}
+
+void MSRender::Sync()
+{
+
+}
+
+void MSRender::Clear( Colour rgb )
+{
+
+}
+

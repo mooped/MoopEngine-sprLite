@@ -9,3 +9,8 @@
 
 #include "MSRenderThread.h"
 
+void MSRenderThread::ProcessCommands()
+{
+
+}
+

@@ -7,3 +7,21 @@
  *
  */
 
+#ifndef MSRENDER_DEF
+#define MSRENDER_DEF
+
+namespace MSRender
+{
+	typedef unsigned int Colour;
+
+	void CreateRT();	// This does not return! Stupid GLUT
+
+	void BeginScene();
+	void EndScene();
+	void Sync();
+
+	void Clear( Colour rgb ); 
+};
+
+#endif
+

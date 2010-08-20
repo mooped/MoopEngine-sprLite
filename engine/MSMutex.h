@@ -101,17 +101,17 @@ public:
 
 	void Lock()
 	{
-		while ( Atomic::CompareExchange( 0, 1, &m_locked ) != 0 );
+		while ( MSAtomic::CompareExchange( 0, 1, &m_locked ) != 0 );
 	}
 
 	bool TryLock()
 	{
-		return ( Atomic::CompareExchange( 0, 1, &m_locked ) == 0 );
+		return ( MSAtomic::CompareExchange( 0, 1, &m_locked ) == 0 );
 	}
 
 	void Unlock()
 	{
-		Atomic::CompareExchange( 1, 0, &m_locked );
+		MSAtomic::CompareExchange( 1, 0, &m_locked );
 	}
 };
 

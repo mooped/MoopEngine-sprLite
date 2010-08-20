@@ -7,3 +7,13 @@
  *
  */
 
+#ifndef MRENDERTHREAD_DEF
+#define MRENDERTHREAD_DEF
+
+namespace MSRenderThread
+{
+	void ProcessCommands();
+};
+
+#endif
+
