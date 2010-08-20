@@ -16,11 +16,10 @@
 		72067C41121F2F41002FA673 /* MSRenderThread.cc in Sources */ = {isa = PBXBuildFile; fileRef = 72067C40121F2F41002FA673 /* MSRenderThread.cc */; };
 		72067C44121F2F9E002FA673 /* MSGLUT.cc in Sources */ = {isa = PBXBuildFile; fileRef = 72067C43121F2F9E002FA673 /* MSGLUT.cc */; };
 		72067C47121F2FAA002FA673 /* MSInput.cc in Sources */ = {isa = PBXBuildFile; fileRef = 72067C46121F2FAA002FA673 /* MSInput.cc */; };
-		72067C4D121F2FD5002FA673 /* MSMutex.cc in Sources */ = {isa = PBXBuildFile; fileRef = 72067C4C121F2FD5002FA673 /* MSMutex.cc */; };
-		72067C50121F2FE4002FA673 /* MSThread.cc in Sources */ = {isa = PBXBuildFile; fileRef = 72067C4F121F2FE4002FA673 /* MSThread.cc */; };
-		72067C53121F2FEC002FA673 /* MSPoint.cc in Sources */ = {isa = PBXBuildFile; fileRef = 72067C52121F2FEC002FA673 /* MSPoint.cc */; };
 		72067C56121F30E9002FA673 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 72067C55121F30E9002FA673 /* OpenGL.framework */; };
 		72067C58121F30F2002FA673 /* GLUT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 72067C57121F30F2002FA673 /* GLUT.framework */; };
+		72067C6E121F374F002FA673 /* MSThread.cc in Sources */ = {isa = PBXBuildFile; fileRef = 72067C6D121F374F002FA673 /* MSThread.cc */; };
+		72067C7E121F394E002FA673 /* MSUtilities.cc in Sources */ = {isa = PBXBuildFile; fileRef = 72067C7D121F394E002FA673 /* MSUtilities.cc */; };
 		8DD76F650486A84900D96B5E /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 08FB7796FE84155DC02AAC07 /* main.cpp */; settings = {ATTRIBUTES = (); }; };
 /* End PBXBuildFile section */
 
@@ -57,13 +56,13 @@
 		72067C45121F2FAA002FA673 /* MSInput.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MSInput.h; path = ../engine/MSInput.h; sourceTree = SOURCE_ROOT; };
 		72067C46121F2FAA002FA673 /* MSInput.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MSInput.cc; path = ../engine/MSInput.cc; sourceTree = SOURCE_ROOT; };
 		72067C4B121F2FD5002FA673 /* MSMutex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MSMutex.h; path = ../engine/MSMutex.h; sourceTree = SOURCE_ROOT; };
-		72067C4C121F2FD5002FA673 /* MSMutex.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MSMutex.cc; path = ../engine/MSMutex.cc; sourceTree = SOURCE_ROOT; };
 		72067C4E121F2FE4002FA673 /* MSThread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MSThread.h; path = ../engine/MSThread.h; sourceTree = SOURCE_ROOT; };
-		72067C4F121F2FE4002FA673 /* MSThread.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MSThread.cc; path = ../engine/MSThread.cc; sourceTree = SOURCE_ROOT; };
 		72067C51121F2FEC002FA673 /* MSPoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MSPoint.h; path = ../engine/MSPoint.h; sourceTree = SOURCE_ROOT; };
-		72067C52121F2FEC002FA673 /* MSPoint.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MSPoint.cc; path = ../engine/MSPoint.cc; sourceTree = SOURCE_ROOT; };
 		72067C55121F30E9002FA673 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = /System/Library/Frameworks/OpenGL.framework; sourceTree = "<absolute>"; };
 		72067C57121F30F2002FA673 /* GLUT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLUT.framework; path = /System/Library/Frameworks/GLUT.framework; sourceTree = "<absolute>"; };
+		72067C6D121F374F002FA673 /* MSThread.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MSThread.cc; path = ../engine/MSThread.cc; sourceTree = SOURCE_ROOT; };
+		72067C7B121F390F002FA673 /* MSEngine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MSEngine.h; path = ../engine/MSEngine.h; sourceTree = SOURCE_ROOT; };
+		72067C7D121F394E002FA673 /* MSUtilities.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MSUtilities.cc; path = ../engine/MSUtilities.cc; sourceTree = SOURCE_ROOT; };
 		8DD76F6C0486A84900D96B5E /* testgame */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = testgame; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -113,8 +112,9 @@
 				72067C4A121F2FBB002FA673 /* Utility */,
 				72067C49121F2FB6002FA673 /* Input */,
 				72067C48121F2FB0002FA673 /* Render */,
-				72067C43121F2F9E002FA673 /* MSGLUT.cc */,
-				72067C42121F2F9E002FA673 /* MSGLUT.h */,
+				72F9A1C9121F3B2600C537CD /* GLUT */,
+				72067C7D121F394E002FA673 /* MSUtilities.cc */,
+				72067C7B121F390F002FA673 /* MSEngine.h */,
 			);
 			name = Engine;
 			sourceTree = "<group>";
@@ -152,11 +152,9 @@
 		72067C4A121F2FBB002FA673 /* Utility */ = {
 			isa = PBXGroup;
 			children = (
-				72067C4C121F2FD5002FA673 /* MSMutex.cc */,
 				72067C4B121F2FD5002FA673 /* MSMutex.h */,
-				72067C52121F2FEC002FA673 /* MSPoint.cc */,
 				72067C51121F2FEC002FA673 /* MSPoint.h */,
-				72067C4F121F2FE4002FA673 /* MSThread.cc */,
+				72067C6D121F374F002FA673 /* MSThread.cc */,
 				72067C4E121F2FE4002FA673 /* MSThread.h */,
 			);
 			name = Utility;
@@ -169,6 +167,15 @@
 				72067C55121F30E9002FA673 /* OpenGL.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		72F9A1C9121F3B2600C537CD /* GLUT */ = {
+			isa = PBXGroup;
+			children = (
+				72067C43121F2F9E002FA673 /* MSGLUT.cc */,
+				72067C42121F2F9E002FA673 /* MSGLUT.h */,
+			);
+			name = GLUT;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -224,9 +231,8 @@
 				72067C41121F2F41002FA673 /* MSRenderThread.cc in Sources */,
 				72067C44121F2F9E002FA673 /* MSGLUT.cc in Sources */,
 				72067C47121F2FAA002FA673 /* MSInput.cc in Sources */,
-				72067C4D121F2FD5002FA673 /* MSMutex.cc in Sources */,
-				72067C50121F2FE4002FA673 /* MSThread.cc in Sources */,
-				72067C53121F2FEC002FA673 /* MSPoint.cc in Sources */,
+				72067C6E121F374F002FA673 /* MSThread.cc in Sources */,
+				72067C7E121F394E002FA673 /* MSUtilities.cc in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -243,6 +249,7 @@
 				GCC_MODEL_TUNING = G5;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = (
+					MACOSX,
 					"_GLIBCXX_DEBUG=1",
 					"_GLIBCXX_DEBUG_PEDANTIC=1",
 				);
@@ -257,6 +264,7 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_MODEL_TUNING = G5;
+				GCC_PREPROCESSOR_DEFINITIONS = MACOSX;
 				INSTALL_PATH = /usr/local/bin;
 				PRODUCT_NAME = testgame;
 			};
