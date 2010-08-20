@@ -1,0 +1,315 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 45;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		72067C2F121F2ED0002FA673 /* MSImage.cc in Sources */ = {isa = PBXBuildFile; fileRef = 72067C2E121F2ED0002FA673 /* MSImage.cc */; };
+		72067C32121F2EF6002FA673 /* MSRender.cc in Sources */ = {isa = PBXBuildFile; fileRef = 72067C31121F2EF6002FA673 /* MSRender.cc */; };
+		72067C35121F2F08002FA673 /* MSFont.cc in Sources */ = {isa = PBXBuildFile; fileRef = 72067C34121F2F08002FA673 /* MSFont.cc */; };
+		72067C38121F2F12002FA673 /* MSSprite.cc in Sources */ = {isa = PBXBuildFile; fileRef = 72067C37121F2F12002FA673 /* MSSprite.cc */; };
+		72067C3B121F2F1B002FA673 /* MSTile.cc in Sources */ = {isa = PBXBuildFile; fileRef = 72067C3A121F2F1B002FA673 /* MSTile.cc */; };
+		72067C3E121F2F34002FA673 /* MSCmdBuf.cc in Sources */ = {isa = PBXBuildFile; fileRef = 72067C3D121F2F34002FA673 /* MSCmdBuf.cc */; };
+		72067C41121F2F41002FA673 /* MSRenderThread.cc in Sources */ = {isa = PBXBuildFile; fileRef = 72067C40121F2F41002FA673 /* MSRenderThread.cc */; };
+		72067C44121F2F9E002FA673 /* MSGLUT.cc in Sources */ = {isa = PBXBuildFile; fileRef = 72067C43121F2F9E002FA673 /* MSGLUT.cc */; };
+		72067C47121F2FAA002FA673 /* MSInput.cc in Sources */ = {isa = PBXBuildFile; fileRef = 72067C46121F2FAA002FA673 /* MSInput.cc */; };
+		72067C4D121F2FD5002FA673 /* MSMutex.cc in Sources */ = {isa = PBXBuildFile; fileRef = 72067C4C121F2FD5002FA673 /* MSMutex.cc */; };
+		72067C50121F2FE4002FA673 /* MSThread.cc in Sources */ = {isa = PBXBuildFile; fileRef = 72067C4F121F2FE4002FA673 /* MSThread.cc */; };
+		72067C53121F2FEC002FA673 /* MSPoint.cc in Sources */ = {isa = PBXBuildFile; fileRef = 72067C52121F2FEC002FA673 /* MSPoint.cc */; };
+		72067C56121F30E9002FA673 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 72067C55121F30E9002FA673 /* OpenGL.framework */; };
+		72067C58121F30F2002FA673 /* GLUT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 72067C57121F30F2002FA673 /* GLUT.framework */; };
+		8DD76F650486A84900D96B5E /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 08FB7796FE84155DC02AAC07 /* main.cpp */; settings = {ATTRIBUTES = (); }; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		8DD76F690486A84900D96B5E /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 8;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		08FB7796FE84155DC02AAC07 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		72067C2D121F2ED0002FA673 /* MSImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MSImage.h; path = ../engine/MSImage.h; sourceTree = SOURCE_ROOT; };
+		72067C2E121F2ED0002FA673 /* MSImage.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MSImage.cc; path = ../engine/MSImage.cc; sourceTree = SOURCE_ROOT; };
+		72067C30121F2EF6002FA673 /* MSRender.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MSRender.h; path = ../engine/MSRender.h; sourceTree = SOURCE_ROOT; };
+		72067C31121F2EF6002FA673 /* MSRender.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MSRender.cc; path = ../engine/MSRender.cc; sourceTree = SOURCE_ROOT; };
+		72067C33121F2F08002FA673 /* MSFont.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MSFont.h; path = ../engine/MSFont.h; sourceTree = SOURCE_ROOT; };
+		72067C34121F2F08002FA673 /* MSFont.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MSFont.cc; path = ../engine/MSFont.cc; sourceTree = SOURCE_ROOT; };
+		72067C36121F2F12002FA673 /* MSSprite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MSSprite.h; path = ../engine/MSSprite.h; sourceTree = SOURCE_ROOT; };
+		72067C37121F2F12002FA673 /* MSSprite.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MSSprite.cc; path = ../engine/MSSprite.cc; sourceTree = SOURCE_ROOT; };
+		72067C39121F2F1B002FA673 /* MSTile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MSTile.h; path = ../engine/MSTile.h; sourceTree = SOURCE_ROOT; };
+		72067C3A121F2F1B002FA673 /* MSTile.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MSTile.cc; path = ../engine/MSTile.cc; sourceTree = SOURCE_ROOT; };
+		72067C3C121F2F34002FA673 /* MSCmdBuf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MSCmdBuf.h; path = ../engine/MSCmdBuf.h; sourceTree = SOURCE_ROOT; };
+		72067C3D121F2F34002FA673 /* MSCmdBuf.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MSCmdBuf.cc; path = ../engine/MSCmdBuf.cc; sourceTree = SOURCE_ROOT; };
+		72067C3F121F2F41002FA673 /* MSRenderThread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MSRenderThread.h; path = ../engine/MSRenderThread.h; sourceTree = SOURCE_ROOT; };
+		72067C40121F2F41002FA673 /* MSRenderThread.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MSRenderThread.cc; path = ../engine/MSRenderThread.cc; sourceTree = SOURCE_ROOT; };
+		72067C42121F2F9E002FA673 /* MSGLUT.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MSGLUT.h; path = ../engine/MSGLUT.h; sourceTree = SOURCE_ROOT; };
+		72067C43121F2F9E002FA673 /* MSGLUT.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MSGLUT.cc; path = ../engine/MSGLUT.cc; sourceTree = SOURCE_ROOT; };
+		72067C45121F2FAA002FA673 /* MSInput.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MSInput.h; path = ../engine/MSInput.h; sourceTree = SOURCE_ROOT; };
+		72067C46121F2FAA002FA673 /* MSInput.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MSInput.cc; path = ../engine/MSInput.cc; sourceTree = SOURCE_ROOT; };
+		72067C4B121F2FD5002FA673 /* MSMutex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MSMutex.h; path = ../engine/MSMutex.h; sourceTree = SOURCE_ROOT; };
+		72067C4C121F2FD5002FA673 /* MSMutex.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MSMutex.cc; path = ../engine/MSMutex.cc; sourceTree = SOURCE_ROOT; };
+		72067C4E121F2FE4002FA673 /* MSThread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MSThread.h; path = ../engine/MSThread.h; sourceTree = SOURCE_ROOT; };
+		72067C4F121F2FE4002FA673 /* MSThread.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MSThread.cc; path = ../engine/MSThread.cc; sourceTree = SOURCE_ROOT; };
+		72067C51121F2FEC002FA673 /* MSPoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MSPoint.h; path = ../engine/MSPoint.h; sourceTree = SOURCE_ROOT; };
+		72067C52121F2FEC002FA673 /* MSPoint.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MSPoint.cc; path = ../engine/MSPoint.cc; sourceTree = SOURCE_ROOT; };
+		72067C55121F30E9002FA673 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = /System/Library/Frameworks/OpenGL.framework; sourceTree = "<absolute>"; };
+		72067C57121F30F2002FA673 /* GLUT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLUT.framework; path = /System/Library/Frameworks/GLUT.framework; sourceTree = "<absolute>"; };
+		8DD76F6C0486A84900D96B5E /* testgame */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = testgame; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		8DD76F660486A84900D96B5E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				72067C56121F30E9002FA673 /* OpenGL.framework in Frameworks */,
+				72067C58121F30F2002FA673 /* GLUT.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		08FB7794FE84155DC02AAC07 /* testgame */ = {
+			isa = PBXGroup;
+			children = (
+				08FB7795FE84155DC02AAC07 /* Game */,
+				72067C23121F2EA8002FA673 /* Engine */,
+				72067C54121F30BA002FA673 /* Frameworks */,
+				1AB674ADFE9D54B511CA2CBB /* Products */,
+			);
+			name = testgame;
+			sourceTree = "<group>";
+		};
+		08FB7795FE84155DC02AAC07 /* Game */ = {
+			isa = PBXGroup;
+			children = (
+				08FB7796FE84155DC02AAC07 /* main.cpp */,
+			);
+			name = Game;
+			sourceTree = "<group>";
+		};
+		1AB674ADFE9D54B511CA2CBB /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				8DD76F6C0486A84900D96B5E /* testgame */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		72067C23121F2EA8002FA673 /* Engine */ = {
+			isa = PBXGroup;
+			children = (
+				72067C4A121F2FBB002FA673 /* Utility */,
+				72067C49121F2FB6002FA673 /* Input */,
+				72067C48121F2FB0002FA673 /* Render */,
+				72067C43121F2F9E002FA673 /* MSGLUT.cc */,
+				72067C42121F2F9E002FA673 /* MSGLUT.h */,
+			);
+			name = Engine;
+			sourceTree = "<group>";
+		};
+		72067C48121F2FB0002FA673 /* Render */ = {
+			isa = PBXGroup;
+			children = (
+				72067C3D121F2F34002FA673 /* MSCmdBuf.cc */,
+				72067C3C121F2F34002FA673 /* MSCmdBuf.h */,
+				72067C2E121F2ED0002FA673 /* MSImage.cc */,
+				72067C2D121F2ED0002FA673 /* MSImage.h */,
+				72067C34121F2F08002FA673 /* MSFont.cc */,
+				72067C33121F2F08002FA673 /* MSFont.h */,
+				72067C31121F2EF6002FA673 /* MSRender.cc */,
+				72067C30121F2EF6002FA673 /* MSRender.h */,
+				72067C40121F2F41002FA673 /* MSRenderThread.cc */,
+				72067C3F121F2F41002FA673 /* MSRenderThread.h */,
+				72067C37121F2F12002FA673 /* MSSprite.cc */,
+				72067C36121F2F12002FA673 /* MSSprite.h */,
+				72067C3A121F2F1B002FA673 /* MSTile.cc */,
+				72067C39121F2F1B002FA673 /* MSTile.h */,
+			);
+			name = Render;
+			sourceTree = "<group>";
+		};
+		72067C49121F2FB6002FA673 /* Input */ = {
+			isa = PBXGroup;
+			children = (
+				72067C46121F2FAA002FA673 /* MSInput.cc */,
+				72067C45121F2FAA002FA673 /* MSInput.h */,
+			);
+			name = Input;
+			sourceTree = "<group>";
+		};
+		72067C4A121F2FBB002FA673 /* Utility */ = {
+			isa = PBXGroup;
+			children = (
+				72067C4C121F2FD5002FA673 /* MSMutex.cc */,
+				72067C4B121F2FD5002FA673 /* MSMutex.h */,
+				72067C52121F2FEC002FA673 /* MSPoint.cc */,
+				72067C51121F2FEC002FA673 /* MSPoint.h */,
+				72067C4F121F2FE4002FA673 /* MSThread.cc */,
+				72067C4E121F2FE4002FA673 /* MSThread.h */,
+			);
+			name = Utility;
+			sourceTree = "<group>";
+		};
+		72067C54121F30BA002FA673 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				72067C57121F30F2002FA673 /* GLUT.framework */,
+				72067C55121F30E9002FA673 /* OpenGL.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		8DD76F620486A84900D96B5E /* testgame */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1DEB923108733DC60010E9CD /* Build configuration list for PBXNativeTarget "testgame" */;
+			buildPhases = (
+				8DD76F640486A84900D96B5E /* Sources */,
+				8DD76F660486A84900D96B5E /* Frameworks */,
+				8DD76F690486A84900D96B5E /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = testgame;
+			productInstallPath = "$(HOME)/bin";
+			productName = testgame;
+			productReference = 8DD76F6C0486A84900D96B5E /* testgame */;
+			productType = "com.apple.product-type.tool";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		08FB7793FE84155DC02AAC07 /* Project object */ = {
+			isa = PBXProject;
+			buildConfigurationList = 1DEB923508733DC60010E9CD /* Build configuration list for PBXProject "testgame" */;
+			compatibilityVersion = "Xcode 3.1";
+			hasScannedForEncodings = 1;
+			mainGroup = 08FB7794FE84155DC02AAC07 /* testgame */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				8DD76F620486A84900D96B5E /* testgame */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		8DD76F640486A84900D96B5E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8DD76F650486A84900D96B5E /* main.cpp in Sources */,
+				72067C2F121F2ED0002FA673 /* MSImage.cc in Sources */,
+				72067C32121F2EF6002FA673 /* MSRender.cc in Sources */,
+				72067C35121F2F08002FA673 /* MSFont.cc in Sources */,
+				72067C38121F2F12002FA673 /* MSSprite.cc in Sources */,
+				72067C3B121F2F1B002FA673 /* MSTile.cc in Sources */,
+				72067C3E121F2F34002FA673 /* MSCmdBuf.cc in Sources */,
+				72067C41121F2F41002FA673 /* MSRenderThread.cc in Sources */,
+				72067C44121F2F9E002FA673 /* MSGLUT.cc in Sources */,
+				72067C47121F2FAA002FA673 /* MSInput.cc in Sources */,
+				72067C4D121F2FD5002FA673 /* MSMutex.cc in Sources */,
+				72067C50121F2FE4002FA673 /* MSThread.cc in Sources */,
+				72067C53121F2FEC002FA673 /* MSPoint.cc in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		1DEB923208733DC60010E9CD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"_GLIBCXX_DEBUG=1",
+					"_GLIBCXX_DEBUG_PEDANTIC=1",
+				);
+				INSTALL_PATH = /usr/local/bin;
+				PRODUCT_NAME = testgame;
+			};
+			name = Debug;
+		};
+		1DEB923308733DC60010E9CD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_MODEL_TUNING = G5;
+				INSTALL_PATH = /usr/local/bin;
+				PRODUCT_NAME = testgame;
+			};
+			name = Release;
+		};
+		1DEB923608733DC60010E9CD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PREBINDING = NO;
+				SDKROOT = macosx10.6;
+			};
+			name = Debug;
+		};
+		1DEB923708733DC60010E9CD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				PREBINDING = NO;
+				SDKROOT = macosx10.6;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		1DEB923108733DC60010E9CD /* Build configuration list for PBXNativeTarget "testgame" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1DEB923208733DC60010E9CD /* Debug */,
+				1DEB923308733DC60010E9CD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		1DEB923508733DC60010E9CD /* Build configuration list for PBXProject "testgame" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1DEB923608733DC60010E9CD /* Debug */,
+				1DEB923708733DC60010E9CD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 08FB7793FE84155DC02AAC07 /* Project object */;
+}
