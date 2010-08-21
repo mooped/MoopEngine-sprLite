@@ -20,14 +20,15 @@ namespace MSMain
 namespace MSLauncher
 {
 	typedef void (TickFn)();
+	typedef void (Callback)();
 
 	const char* GetBasePath();
 
 	void RequestRedisplay();
 	void SwapBuffers();
-	void ReshapeCallback( int width, int height );
-	void DisplayCallback();
-	void ExitCallback();
+
+	void SetDisplayCallback( Callback* pfnCallback );
+	void SetExitCallback( Callback* pfnCallback );
 
 	void Launch( TickFn* pfnTick );
 

@@ -25,8 +25,15 @@ namespace MSCmdBuf
 		unsigned int buffer[MAX_RENDER_COMMANDS];
 		unsigned int valid_length;	// Data in the buffer that is complete
 		unsigned int length;	// Data in the buffer
-		MSMutex lock;	// ToDo: fancy region based locking
+		MSMutex lock;
+		bool rendering;	// True if rendering from, otherwise writing to
 	};
+
+	void LockForWriting();
+	void UnlockForWriting();
+	void FinishedRendering();
+	void FinishedWriting();
+	void SwapRenderingBuffer();
 
 	void Clear();
 	void Extend( unsigned int size );

@@ -14,38 +14,50 @@
 
 void MSRender::BeginScene()
 {
+	MSCmdBuf::LockForWriting();
 	MSCmdBuf::AddCommand( eCmd_BeginScene );
 	MSCmdBuf::Dispatch();
+	MSCmdBuf::UnlockForWriting();
 }
 
 void MSRender::EndScene()
 {
+	MSCmdBuf::LockForWriting();
 	MSCmdBuf::AddCommand( eCmd_EndScene );
 	MSCmdBuf::Dispatch();
+	MSCmdBuf::UnlockForWriting();
 }
 
 void MSRender::Sync()
 {
-	MSCmdBuf::AddCommand( eCmd_Sync );
-	MSCmdBuf::Dispatch();
+	//MSCmdBuf::LockForWriting();
+	//MSCmdBuf::AddCommand( eCmd_Sync );
+	//MSCmdBuf::Dispatch();
+	//MSCmdBuf::UnlockForWriting();
+	MSCmdBuf::FinishedWriting();
 }
 
 void MSRender::ClearColour( Colour rgba )
 {
+	MSCmdBuf::LockForWriting();
 	MSCmdBuf::AddCommand( eCmd_ClearColour );
 	MSCmdBuf::AddUInt( rgba );
 	MSCmdBuf::Dispatch();
+	MSCmdBuf::UnlockForWriting();
 }
 
 void MSRender::SetTexture( class MSImage* pImage )
 {
+	MSCmdBuf::LockForWriting();
 	MSCmdBuf::AddCommand( eCmd_SetTexture );
 	MSCmdBuf::AddPointer( pImage );
 	MSCmdBuf::Dispatch();
+	MSCmdBuf::UnlockForWriting();
 }
 
 void MSRender::Quad( MSVec verts[4], int layer, MSVec uvs[2], Colour rgba )
 {
+	MSCmdBuf::LockForWriting();
 	MSCmdBuf::AddCommand( eCmd_Quad );
 	MSCmdBuf::AddVec( verts[0] );
 	MSCmdBuf::AddVec( verts[1] );
@@ -55,5 +67,6 @@ void MSRender::Quad( MSVec verts[4], int layer, MSVec uvs[2], Colour rgba )
 	MSCmdBuf::AddVec( uvs[0] );
 	MSCmdBuf::AddVec( uvs[1] );
 	MSCmdBuf::AddUInt( rgba );
+	MSCmdBuf::UnlockForWriting();
 }
 

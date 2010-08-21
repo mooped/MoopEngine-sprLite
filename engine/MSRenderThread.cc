@@ -177,10 +177,20 @@ void MSRenderThread::CreateRT()
 bool MSRenderThread::ProcessCommand()
 {
 	unsigned int &idx = s_curCmd;
-	if ( idx >= MSCmdBuf::GetBuffer()->valid_length )
+	MSCmdBuf::CmdBuffer* buffer = MSCmdBuf::GetBuffer();
+	buffer->lock.Lock();
+	const bool rendering = buffer->rendering;
+	if ( !rendering )
+	{
+		buffer->lock.Unlock();
+		MSCmdBuf::SwapRenderingBuffer();
+		return false;
+	}
+	if ( idx >= buffer->valid_length )
 	{
 		MSCmdBuf::Clear();
 		idx = 0;
+		buffer->lock.Unlock();
 		return false;
 	}
 	MSRender::ECmd cmd = static_cast<MSRender::ECmd>( MSCmdBuf::GetBuffer()->buffer[idx++] );
@@ -205,7 +215,7 @@ bool MSRenderThread::ProcessCommand()
 		} break;
 		case MSRender::eCmd_SetTexture:
 		{
-			MSImage* pImage = *( reinterpret_cast<MSImage**>( &MSCmdBuf::GetBuffer()->buffer[idx] ) );
+			MSImage* pImage = *( reinterpret_cast<MSImage**>( &buffer->buffer[idx] ) );
 			idx += sizeof( MSImage* ) / sizeof( u_int );
 			SetTexture( pImage );
 		} break;
@@ -214,11 +224,11 @@ bool MSRenderThread::ProcessCommand()
 			MSVec verts[4];
 			memcpy( verts, &MSCmdBuf::GetBuffer()->buffer[idx], sizeof( verts ) );
 			idx += sizeof( verts ) / sizeof( u_int );
-			int layer = static_cast<int>( MSCmdBuf::GetBuffer()->buffer[idx++] );
+			int layer = static_cast<int>( buffer->buffer[idx++] );
 			MSVec uvs[2];
-			memcpy( uvs, &MSCmdBuf::GetBuffer()->buffer[idx], sizeof( uvs ) );
+			memcpy( uvs, &buffer->buffer[idx], sizeof( uvs ) );
 			idx += sizeof( uvs ) / sizeof( u_int );
-			Colour rgba = MSCmdBuf::GetBuffer()->buffer[idx++];
+			Colour rgba = buffer->buffer[idx++];
 			Quad( verts, layer, uvs, rgba );
 		} break;
 		default:
@@ -227,36 +237,15 @@ bool MSRenderThread::ProcessCommand()
 		} break;
 	}
 
+	buffer->lock.Unlock();
 	return true;
 }
-
-#include "MSFont.h"	// HACKHACKHACK
-#include "MSSprite.h"	// HACKHACKHACK
 
 void MSRenderThread::ProcessCommands()
 {
 	// ProcessCommands
 	while ( ProcessCommand() );
-
-	// TESTESTEST
-	static MSImage img = MSImage( "../../charset.tga" );
-	static MSImage sprites = MSImage( "../../sprites.tga" );
-	static bool first = true;
-	static int sheet;
-	if ( first )
-	{
-		MSFont::Initialise( "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!?.:'c", &img, MSVec( 6, 8 ) );
-		sheet = MSSprite::AddSheet( &sprites, MSVec( 16, 8 ) );
-	}
-	MSRender::ClearColour( 0x000000ff );;
-	MSRender::BeginScene();
-	MSFont::RenderString( "HELLO WORLD!", MSVec( 32, 32 ), 5, MSVec( 24, 32 ), 0xffff00ff );
-	MSSprite::RenderSprite( sheet, 0, MSVec( 64, 64 ), 4, MSVec( 32, 16 ), 0xffffffff );
-	MSSprite::RenderSprite( sheet, 8, MSVec( 96, 96 ), 4, MSVec( 32, 16 ), 0xffffffff );
-	MSSprite::RenderSprite( sheet, 16, MSVec( 128, 128 ), 4, MSVec( 32, 16 ), 0xffffffff );
-	MSSprite::RenderSprite( sheet, 24, MSVec( 96, 160 ), 4, MSVec( 32, 16 ), 0xffffffff );
-	MSSprite::RenderSprite( sheet, 32, MSVec( 128, 192 ), 4, MSVec( 32, 16 ), 0xffffffff );
-	MSRender::EndScene();
+	MSCmdBuf::FinishedRendering();
 
 	MSLauncher::RequestRedisplay();
 }

@@ -20,6 +20,8 @@
 		72067C58121F30F2002FA673 /* GLUT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 72067C57121F30F2002FA673 /* GLUT.framework */; };
 		72067C6E121F374F002FA673 /* MSThread.cc in Sources */ = {isa = PBXBuildFile; fileRef = 72067C6D121F374F002FA673 /* MSThread.cc */; };
 		72067C7E121F394E002FA673 /* MSUtilities.cc in Sources */ = {isa = PBXBuildFile; fileRef = 72067C7D121F394E002FA673 /* MSUtilities.cc */; };
+		72AADFEA122050B400C6B4F6 /* MSTimer.cc in Sources */ = {isa = PBXBuildFile; fileRef = 72AADFE9122050B400C6B4F6 /* MSTimer.cc */; };
+		72AAE00B1220534400C6B4F6 /* GameThread.cc in Sources */ = {isa = PBXBuildFile; fileRef = 72AAE00A1220534400C6B4F6 /* GameThread.cc */; };
 		8DD76F650486A84900D96B5E /* main.cc in Sources */ = {isa = PBXBuildFile; fileRef = 08FB7796FE84155DC02AAC07 /* main.cc */; settings = {ATTRIBUTES = (); }; };
 /* End PBXBuildFile section */
 
@@ -63,6 +65,10 @@
 		72067C6D121F374F002FA673 /* MSThread.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MSThread.cc; path = ../engine/MSThread.cc; sourceTree = SOURCE_ROOT; };
 		72067C7B121F390F002FA673 /* MSEngine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MSEngine.h; path = ../engine/MSEngine.h; sourceTree = SOURCE_ROOT; };
 		72067C7D121F394E002FA673 /* MSUtilities.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MSUtilities.cc; path = ../engine/MSUtilities.cc; sourceTree = SOURCE_ROOT; };
+		72AADFE8122050B400C6B4F6 /* MSTimer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MSTimer.h; path = ../engine/MSTimer.h; sourceTree = SOURCE_ROOT; };
+		72AADFE9122050B400C6B4F6 /* MSTimer.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MSTimer.cc; path = ../engine/MSTimer.cc; sourceTree = SOURCE_ROOT; };
+		72AAE0091220534400C6B4F6 /* GameThread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameThread.h; sourceTree = "<group>"; };
+		72AAE00A1220534400C6B4F6 /* GameThread.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GameThread.cc; sourceTree = "<group>"; };
 		8DD76F6C0486A84900D96B5E /* testgame */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = testgame; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -94,6 +100,8 @@
 			isa = PBXGroup;
 			children = (
 				08FB7796FE84155DC02AAC07 /* main.cc */,
+				72AAE00A1220534400C6B4F6 /* GameThread.cc */,
+				72AAE0091220534400C6B4F6 /* GameThread.h */,
 			);
 			name = Game;
 			sourceTree = "<group>";
@@ -156,6 +164,8 @@
 				72067C51121F2FEC002FA673 /* MSPoint.h */,
 				72067C6D121F374F002FA673 /* MSThread.cc */,
 				72067C4E121F2FE4002FA673 /* MSThread.h */,
+				72AADFE9122050B400C6B4F6 /* MSTimer.cc */,
+				72AADFE8122050B400C6B4F6 /* MSTimer.h */,
 			);
 			name = Utility;
 			sourceTree = "<group>";
@@ -233,6 +243,8 @@
 				72067C47121F2FAA002FA673 /* MSInput.cc in Sources */,
 				72067C6E121F374F002FA673 /* MSThread.cc in Sources */,
 				72067C7E121F394E002FA673 /* MSUtilities.cc in Sources */,
+				72AADFEA122050B400C6B4F6 /* MSTimer.cc in Sources */,
+				72AAE00B1220534400C6B4F6 /* GameThread.cc in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

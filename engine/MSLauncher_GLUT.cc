@@ -21,6 +21,13 @@
 namespace MSLauncher
 {
 	const char* s_pBasePath;
+
+	Callback* s_pfnDisplayCallback = NULL;
+	Callback* s_pfnExitCallback = NULL;
+
+	void ReshapeCallback( int width, int height );
+	void DisplayCallback();
+	void ExitCallback();
 };
 
 using namespace MSLauncher;
@@ -35,6 +42,16 @@ void MSLauncher::SwapBuffers()
 	glutSwapBuffers();
 }
 
+void MSLauncher::SetDisplayCallback( Callback* pfnCallback )
+{
+	s_pfnDisplayCallback = pfnCallback;
+}
+
+void MSLauncher::SetExitCallback( Callback* pfnCallback )
+{
+	s_pfnExitCallback = pfnCallback;
+}
+
 void MSLauncher::ReshapeCallback( int width, int height )
 {
 
@@ -42,12 +59,18 @@ void MSLauncher::ReshapeCallback( int width, int height )
 
 void MSLauncher::DisplayCallback()
 {
-
+	if ( s_pfnDisplayCallback )
+	{
+		s_pfnDisplayCallback();
+	}
 }
 
 void MSLauncher::ExitCallback()
 {
-
+	if ( s_pfnExitCallback )
+	{
+		s_pfnExitCallback();
+	}
 }
 
 
