@@ -7,3 +7,20 @@
  *
  */
 
+#ifndef MSINPUT_DEF
+#define MSINPUT_DEF
+
+namespace MSInput
+{
+	void Initialise();
+	void Shutdown();
+
+	bool Key( char key );
+	bool DebouncedKey( char key );
+
+	void ResetKeys();
+	void ResetFrameKeys();
+};
+
+#endif
+

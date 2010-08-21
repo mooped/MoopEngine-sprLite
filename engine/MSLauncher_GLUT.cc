@@ -28,6 +28,13 @@ namespace MSLauncher
 	void ReshapeCallback( int width, int height );
 	void DisplayCallback();
 	void ExitCallback();
+
+	KeyCallback* s_pfnKeyUp = NULL;
+	KeyCallback* s_pfnKeyDown = NULL;
+
+	void KeyDownCallback( unsigned char key, int x, int y );
+	void KeyUpCallback( unsigned char key, int x, int y );
+	void KeySpecialCallback( int key, int x, int y );
 };
 
 using namespace MSLauncher;
@@ -52,6 +59,16 @@ void MSLauncher::SetExitCallback( Callback* pfnCallback )
 	s_pfnExitCallback = pfnCallback;
 }
 
+void MSLauncher::SetKeyUpCallback( KeyCallback* pfnCallback )
+{
+	s_pfnKeyUp = pfnCallback;
+}
+
+void MSLauncher::SetKeyDownCallback( KeyCallback* pfnCallback )
+{
+	s_pfnKeyDown = pfnCallback;
+}
+
 void MSLauncher::ReshapeCallback( int width, int height )
 {
 
@@ -73,6 +90,48 @@ void MSLauncher::ExitCallback()
 	}
 }
 
+void MSLauncher::KeyDownCallback( unsigned char key, int x, int y )
+{
+	if ( s_pfnKeyDown )
+	{
+		s_pfnKeyDown( key );
+	}
+}
+
+void MSLauncher::KeyUpCallback( unsigned char key, int x, int y )
+{
+	if ( s_pfnKeyUp )
+	{
+		s_pfnKeyUp( key );
+	}
+}
+
+void MSLauncher::KeySpecialCallback( int key, int x, int y )
+{
+	if ( s_pfnKeyDown )
+	{
+		switch ( key )
+		{
+			case GLUT_KEY_UP:
+			{
+				s_pfnKeyDown( eSk_Up );
+			} break;
+			case GLUT_KEY_DOWN:
+			{
+				s_pfnKeyDown( eSk_Down );
+			} break;
+			case GLUT_KEY_LEFT:
+			{
+				s_pfnKeyDown( eSk_Left );
+			} break;
+			case GLUT_KEY_RIGHT:
+			{
+				s_pfnKeyDown( eSk_Right );
+			} break;
+			default: break;
+		}
+	}
+}
 
 void MSLauncher::Launch( MSLauncher::TickFn* pfnTick )
 {
@@ -103,12 +162,9 @@ int main( int argc, char** const argv )
 	glutDisplayFunc( &MSLauncher::DisplayCallback );
 
 	// Input
-	//glutKeyboardFunc( &keyboard_callback );
-	//glutKeyboardUpFunc( &keyboard_up_callback );
-	//glutSpecialFunc( &special_key_callback );
-	//glutMouseFunc( &mouse_callback );
-	//glutPassiveMotionFunc( &motion_callback );
-	//glutJoystickFunc( &joystick_callback, 16 );	// Polling interval 16ms
+	glutKeyboardFunc( &KeyDownCallback );
+	glutKeyboardUpFunc( &KeyUpCallback );
+	glutSpecialFunc( &KeySpecialCallback );
 
 	// Now kick off the game threads
 	atexit( &MSLauncher::ExitCallback );

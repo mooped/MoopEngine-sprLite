@@ -25,6 +25,16 @@ typedef unsigned int MHashID;
 
 MHashID MHash( const char* pszString );
 
+// Magic numbers
+enum ESpecialKeys
+{
+	eSk_Esc = 27,
+	eSk_Up = 128,
+	eSk_Down = 129,
+	eSk_Left = 130,
+	eSk_Right = 131,
+};
+
 // Useful macros
 
 // Align (align parameter must be a power of 2)
