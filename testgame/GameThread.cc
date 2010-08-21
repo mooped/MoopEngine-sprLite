@@ -18,6 +18,7 @@
 #include <stdio.h>
 
 #include "AssetManager.h"
+#include "Entity.h"
 
 GameThread::GameThread()
 : MSThread()
@@ -32,6 +33,8 @@ GameThread::~GameThread()
 
 void GameThread::RunThread()
 {
+	GameSetup();
+
 	while ( !ExitRequested() )
 	{
 		MSTimer::FrameStart();
@@ -42,18 +45,25 @@ void GameThread::RunThread()
 	Exit();
 }
 
+void GameThread::GameSetup()
+{
+	// Create the player's entity
+	Entity::SpawnPlayer( MSVec( 64, 64 ) );
+}
+
 void GameThread::GameUpdate()
 {
-	static int i = 0;
 	MSRender::ClearColour( 0x000000ff );;
 	MSRender::BeginScene();
-	MSFont::RenderString( "HELLO WORLD!", MSVec( 32, 32 ), 5, MSVec( 24, 32 ), 0xffff00ff );
-	if ( i > 4 ) i = 0;
-	MSSprite::RenderSprite( AM::Ships(), i++, MSVec( 64, 64 ), 4, MSVec( 32, 16 ));
-	MSSprite::RenderSprite( AM::Ships(), 8, MSVec( 96, 96 ), 4, MSVec( 32, 16 ));
-	MSSprite::RenderSprite( AM::Ships(), 16, MSVec( 128, 128 ), 4, MSVec( 32, 16 ));
-	MSSprite::RenderSprite( AM::Ships(), 24, MSVec( 96, 160 ), 4, MSVec( 32, 16 ));
-	MSSprite::RenderSprite( AM::Ships(), 32, MSVec( 128, 192 ), 4, MSVec( 32, 16 ));
+
+	Entity::Update();
+
+	// Hard coded rendering
+	MSFont::RenderString( "ENEMIES AS WEAPONS!", MSVec( 320, 36 ), 5, MSVec( 24, 32 ), 0xffff00ff, true );
+
+	// Entity rendering 
+	Entity::Render();
+
 	MSRender::EndScene();
 	MSRender::Sync();
 }

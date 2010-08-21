@@ -17,6 +17,7 @@
 class GameThread : public MSThread
 {
 protected:
+	void GameSetup();
 	void GameUpdate();
 
 public:
