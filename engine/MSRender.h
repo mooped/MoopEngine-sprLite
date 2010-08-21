@@ -15,9 +15,7 @@
 
 namespace MSRender
 {
-	typedef unsigned int Colour;
-
-	// Command implementations
+	// Render commands
 	void BeginScene();
 	void EndScene();
 	void Sync();
@@ -26,10 +24,6 @@ namespace MSRender
 
 	void SetTexture( class MSImage* pImage );
 	void Quad( MSVec verts[4], u_int layer, MSVec uvs[2] );
-
-	// Management
-	void CreateRT();	// This does not return! Stupid GLUT
-	void Tick();
 };
 
 #endif

@@ -17,6 +17,8 @@ typedef unsigned int u_int;
 typedef unsigned short u_short;
 typedef unsigned char u_char;
 
+typedef unsigned int Colour;
+
 // Hashing
 #define MHash djb2
 typedef unsigned int MHashID;

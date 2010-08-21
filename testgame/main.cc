@@ -1,7 +1,7 @@
 #include "MSEngine.h"
 #include "MSLauncher.h"
 
-#include "MSRender.h"
+#include "MSRenderThread.h"
 
 #include <stdio.h>
 
@@ -13,6 +13,6 @@ void MSMain::Main()
 
 	// Launch render thread
 	printf( "Launching render thread\n" );
-	MSRender::CreateRT();
+	MSRenderThread::CreateRT();
 }
 
