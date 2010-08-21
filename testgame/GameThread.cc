@@ -16,19 +16,17 @@
 
 #include <stdio.h>
 
+#include "AssetManager.h"
+
 GameThread::GameThread()
 : MSThread()
-, m_font( new MSImage( "../../charset.tga" ) )
-, m_sprites( new MSImage( "../../sprites.tga" ) )
 {
-	MSFont::Initialise( "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!?.:'c", m_font, MSVec( 6, 8 ) );
-	m_shipSheet = MSSprite::AddSheet( m_sprites, MSVec( 16, 8 ) );
+	AM::LoadResources();
 }
 
 GameThread::~GameThread()
 {
-	delete m_font;
-	delete m_sprites;
+	AM::UnloadResources();
 }
 
 void GameThread::RunThread()
@@ -49,11 +47,11 @@ void GameThread::GameUpdate()
 	MSRender::BeginScene();
 	MSFont::RenderString( "HELLO WORLD!", MSVec( 32, 32 ), 5, MSVec( 24, 32 ), 0xffff00ff );
 	if ( i > 4 ) i = 0;
-	MSSprite::RenderSprite( m_shipSheet, i++, MSVec( 64, 64 ), 4, MSVec( 32, 16 ), 0xffffffff );
-	MSSprite::RenderSprite( m_shipSheet, 8, MSVec( 96, 96 ), 4, MSVec( 32, 16 ), 0xffffffff );
-	MSSprite::RenderSprite( m_shipSheet, 16, MSVec( 128, 128 ), 4, MSVec( 32, 16 ), 0xffffffff );
-	MSSprite::RenderSprite( m_shipSheet, 24, MSVec( 96, 160 ), 4, MSVec( 32, 16 ), 0xffffffff );
-	MSSprite::RenderSprite( m_shipSheet, 32, MSVec( 128, 192 ), 4, MSVec( 32, 16 ), 0xffffffff );
+	MSSprite::RenderSprite( AM::Ships(), i++, MSVec( 64, 64 ), 4, MSVec( 32, 16 ), 0xffffffff );
+	MSSprite::RenderSprite( AM::Ships(), 8, MSVec( 96, 96 ), 4, MSVec( 32, 16 ), 0xffffffff );
+	MSSprite::RenderSprite( AM::Ships(), 16, MSVec( 128, 128 ), 4, MSVec( 32, 16 ), 0xffffffff );
+	MSSprite::RenderSprite( AM::Ships(), 24, MSVec( 96, 160 ), 4, MSVec( 32, 16 ), 0xffffffff );
+	MSSprite::RenderSprite( AM::Ships(), 32, MSVec( 128, 192 ), 4, MSVec( 32, 16 ), 0xffffffff );
 	MSRender::EndScene();
 	MSRender::Sync();
 }

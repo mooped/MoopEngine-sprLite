@@ -16,11 +16,6 @@
 
 class GameThread : public MSThread
 {
-private:
-	class MSImage* m_font;
-	class MSImage* m_sprites;
-	int m_shipSheet;
-
 protected:
 	void GameUpdate();
 

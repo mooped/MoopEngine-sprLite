@@ -22,6 +22,7 @@
 		72067C7E121F394E002FA673 /* MSUtilities.cc in Sources */ = {isa = PBXBuildFile; fileRef = 72067C7D121F394E002FA673 /* MSUtilities.cc */; };
 		72AADFEA122050B400C6B4F6 /* MSTimer.cc in Sources */ = {isa = PBXBuildFile; fileRef = 72AADFE9122050B400C6B4F6 /* MSTimer.cc */; };
 		72AAE00B1220534400C6B4F6 /* GameThread.cc in Sources */ = {isa = PBXBuildFile; fileRef = 72AAE00A1220534400C6B4F6 /* GameThread.cc */; };
+		72AAE11912206DCD00C6B4F6 /* AssetManager.cc in Sources */ = {isa = PBXBuildFile; fileRef = 72AAE11812206DCD00C6B4F6 /* AssetManager.cc */; };
 		8DD76F650486A84900D96B5E /* main.cc in Sources */ = {isa = PBXBuildFile; fileRef = 08FB7796FE84155DC02AAC07 /* main.cc */; settings = {ATTRIBUTES = (); }; };
 /* End PBXBuildFile section */
 
@@ -69,6 +70,8 @@
 		72AADFE9122050B400C6B4F6 /* MSTimer.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MSTimer.cc; path = ../engine/MSTimer.cc; sourceTree = SOURCE_ROOT; };
 		72AAE0091220534400C6B4F6 /* GameThread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameThread.h; sourceTree = "<group>"; };
 		72AAE00A1220534400C6B4F6 /* GameThread.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GameThread.cc; sourceTree = "<group>"; };
+		72AAE11712206DCD00C6B4F6 /* AssetManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AssetManager.h; sourceTree = "<group>"; };
+		72AAE11812206DCD00C6B4F6 /* AssetManager.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AssetManager.cc; sourceTree = "<group>"; };
 		8DD76F6C0486A84900D96B5E /* testgame */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = testgame; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -102,6 +105,8 @@
 				08FB7796FE84155DC02AAC07 /* main.cc */,
 				72AAE00A1220534400C6B4F6 /* GameThread.cc */,
 				72AAE0091220534400C6B4F6 /* GameThread.h */,
+				72AAE11812206DCD00C6B4F6 /* AssetManager.cc */,
+				72AAE11712206DCD00C6B4F6 /* AssetManager.h */,
 			);
 			name = Game;
 			sourceTree = "<group>";
@@ -245,6 +250,7 @@
 				72067C7E121F394E002FA673 /* MSUtilities.cc in Sources */,
 				72AADFEA122050B400C6B4F6 /* MSTimer.cc in Sources */,
 				72AAE00B1220534400C6B4F6 /* GameThread.cc in Sources */,
+				72AAE11912206DCD00C6B4F6 /* AssetManager.cc in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
