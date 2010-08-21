@@ -10,17 +10,26 @@
 #ifndef MSRENDER_DEF
 #define MSRENDER_DEF
 
+#include "MSEngine.h"
+#include "MSPoint.h"
+
 namespace MSRender
 {
 	typedef unsigned int Colour;
 
-	void CreateRT();	// This does not return! Stupid GLUT
-
+	// Command implementations
 	void BeginScene();
 	void EndScene();
 	void Sync();
 
-	void Clear( Colour rgb ); 
+	void ClearColour( Colour rgba );
+
+	void SetTexture( class MSImage* pImage );
+	void Quad( MSVec verts[4], u_int layer, MSVec uvs[2] );
+
+	// Management
+	void CreateRT();	// This does not return! Stupid GLUT
+	void Tick();
 };
 
 #endif

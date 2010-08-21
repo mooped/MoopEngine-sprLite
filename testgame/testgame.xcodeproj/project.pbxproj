@@ -14,13 +14,13 @@
 		72067C3B121F2F1B002FA673 /* MSTile.cc in Sources */ = {isa = PBXBuildFile; fileRef = 72067C3A121F2F1B002FA673 /* MSTile.cc */; };
 		72067C3E121F2F34002FA673 /* MSCmdBuf.cc in Sources */ = {isa = PBXBuildFile; fileRef = 72067C3D121F2F34002FA673 /* MSCmdBuf.cc */; };
 		72067C41121F2F41002FA673 /* MSRenderThread.cc in Sources */ = {isa = PBXBuildFile; fileRef = 72067C40121F2F41002FA673 /* MSRenderThread.cc */; };
-		72067C44121F2F9E002FA673 /* MSGLUT.cc in Sources */ = {isa = PBXBuildFile; fileRef = 72067C43121F2F9E002FA673 /* MSGLUT.cc */; };
+		72067C44121F2F9E002FA673 /* MSLauncher_GLUT.cc in Sources */ = {isa = PBXBuildFile; fileRef = 72067C43121F2F9E002FA673 /* MSLauncher_GLUT.cc */; };
 		72067C47121F2FAA002FA673 /* MSInput.cc in Sources */ = {isa = PBXBuildFile; fileRef = 72067C46121F2FAA002FA673 /* MSInput.cc */; };
 		72067C56121F30E9002FA673 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 72067C55121F30E9002FA673 /* OpenGL.framework */; };
 		72067C58121F30F2002FA673 /* GLUT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 72067C57121F30F2002FA673 /* GLUT.framework */; };
 		72067C6E121F374F002FA673 /* MSThread.cc in Sources */ = {isa = PBXBuildFile; fileRef = 72067C6D121F374F002FA673 /* MSThread.cc */; };
 		72067C7E121F394E002FA673 /* MSUtilities.cc in Sources */ = {isa = PBXBuildFile; fileRef = 72067C7D121F394E002FA673 /* MSUtilities.cc */; };
-		8DD76F650486A84900D96B5E /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 08FB7796FE84155DC02AAC07 /* main.cpp */; settings = {ATTRIBUTES = (); }; };
+		8DD76F650486A84900D96B5E /* main.cc in Sources */ = {isa = PBXBuildFile; fileRef = 08FB7796FE84155DC02AAC07 /* main.cc */; settings = {ATTRIBUTES = (); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -36,7 +36,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		08FB7796FE84155DC02AAC07 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		08FB7796FE84155DC02AAC07 /* main.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cc; sourceTree = "<group>"; };
 		72067C2D121F2ED0002FA673 /* MSImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MSImage.h; path = ../engine/MSImage.h; sourceTree = SOURCE_ROOT; };
 		72067C2E121F2ED0002FA673 /* MSImage.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MSImage.cc; path = ../engine/MSImage.cc; sourceTree = SOURCE_ROOT; };
 		72067C30121F2EF6002FA673 /* MSRender.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MSRender.h; path = ../engine/MSRender.h; sourceTree = SOURCE_ROOT; };
@@ -51,8 +51,8 @@
 		72067C3D121F2F34002FA673 /* MSCmdBuf.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MSCmdBuf.cc; path = ../engine/MSCmdBuf.cc; sourceTree = SOURCE_ROOT; };
 		72067C3F121F2F41002FA673 /* MSRenderThread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MSRenderThread.h; path = ../engine/MSRenderThread.h; sourceTree = SOURCE_ROOT; };
 		72067C40121F2F41002FA673 /* MSRenderThread.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MSRenderThread.cc; path = ../engine/MSRenderThread.cc; sourceTree = SOURCE_ROOT; };
-		72067C42121F2F9E002FA673 /* MSGLUT.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MSGLUT.h; path = ../engine/MSGLUT.h; sourceTree = SOURCE_ROOT; };
-		72067C43121F2F9E002FA673 /* MSGLUT.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MSGLUT.cc; path = ../engine/MSGLUT.cc; sourceTree = SOURCE_ROOT; };
+		72067C42121F2F9E002FA673 /* MSLauncher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MSLauncher.h; path = ../engine/MSLauncher.h; sourceTree = SOURCE_ROOT; };
+		72067C43121F2F9E002FA673 /* MSLauncher_GLUT.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MSLauncher_GLUT.cc; path = ../engine/MSLauncher_GLUT.cc; sourceTree = SOURCE_ROOT; };
 		72067C45121F2FAA002FA673 /* MSInput.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MSInput.h; path = ../engine/MSInput.h; sourceTree = SOURCE_ROOT; };
 		72067C46121F2FAA002FA673 /* MSInput.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MSInput.cc; path = ../engine/MSInput.cc; sourceTree = SOURCE_ROOT; };
 		72067C4B121F2FD5002FA673 /* MSMutex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MSMutex.h; path = ../engine/MSMutex.h; sourceTree = SOURCE_ROOT; };
@@ -93,7 +93,7 @@
 		08FB7795FE84155DC02AAC07 /* Game */ = {
 			isa = PBXGroup;
 			children = (
-				08FB7796FE84155DC02AAC07 /* main.cpp */,
+				08FB7796FE84155DC02AAC07 /* main.cc */,
 			);
 			name = Game;
 			sourceTree = "<group>";
@@ -172,8 +172,8 @@
 		72F9A1C9121F3B2600C537CD /* GLUT */ = {
 			isa = PBXGroup;
 			children = (
-				72067C43121F2F9E002FA673 /* MSGLUT.cc */,
-				72067C42121F2F9E002FA673 /* MSGLUT.h */,
+				72067C43121F2F9E002FA673 /* MSLauncher_GLUT.cc */,
+				72067C42121F2F9E002FA673 /* MSLauncher.h */,
 			);
 			name = GLUT;
 			sourceTree = "<group>";
@@ -221,7 +221,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8DD76F650486A84900D96B5E /* main.cpp in Sources */,
+				8DD76F650486A84900D96B5E /* main.cc in Sources */,
 				72067C2F121F2ED0002FA673 /* MSImage.cc in Sources */,
 				72067C32121F2EF6002FA673 /* MSRender.cc in Sources */,
 				72067C35121F2F08002FA673 /* MSFont.cc in Sources */,
@@ -229,7 +229,7 @@
 				72067C3B121F2F1B002FA673 /* MSTile.cc in Sources */,
 				72067C3E121F2F34002FA673 /* MSCmdBuf.cc in Sources */,
 				72067C41121F2F41002FA673 /* MSRenderThread.cc in Sources */,
-				72067C44121F2F9E002FA673 /* MSGLUT.cc in Sources */,
+				72067C44121F2F9E002FA673 /* MSLauncher_GLUT.cc in Sources */,
 				72067C47121F2FAA002FA673 /* MSInput.cc in Sources */,
 				72067C6E121F374F002FA673 /* MSThread.cc in Sources */,
 				72067C7E121F394E002FA673 /* MSUtilities.cc in Sources */,
