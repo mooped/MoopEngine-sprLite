@@ -16,11 +16,11 @@
 
 namespace MSFont
 {
-	void Initialise( const char* const pCharSet, MSImage* texture, MSVec& charSize );
+	void Initialise( const char* const pCharSet, MSImage* texture, const MSVec& charSize );
 	void Shutdown();
 
-	void RenderString( const char* const pszString, MSVec& pos, int layer, MSVec& size, const Colour rgba = 0xffffffff, const bool center = false );
-	void RenderCharacter( const u_char character, MSVec& pos, int layer, MSVec& size, const Colour rgba = 0xffffffff );
+	void RenderString( const char* const pszString, const MSVec& pos, int layer, const MSVec& size, const Colour rgba = 0xffffffff, const bool center = false );
+	void RenderCharacter( const u_char character, const MSVec& pos, int layer, const MSVec& size, const Colour rgba = 0xffffffff );
 };
 
 #endif

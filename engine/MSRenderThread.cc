@@ -133,7 +133,7 @@ void MSRenderThread::Quad( MSVec verts[4], int layer, MSVec uvs[2], Colour rgba 
 		// Convert coordinates
 		float x[4];
 		float y[4];
-		float z = layer;
+		float z = -layer;
 		float u[2];
 		float v[2];
 		float xStep = 1.0f / static_cast<float>( s_width );
@@ -230,6 +230,8 @@ bool MSRenderThread::ProcessCommand()
 	return true;
 }
 
+#include "MSFont.h"	// HACKHACKHACK
+
 void MSRenderThread::ProcessCommands()
 {
 	// ProcessCommands
@@ -237,39 +239,15 @@ void MSRenderThread::ProcessCommands()
 
 	// TESTESTEST
 	static MSImage img = MSImage( "../../charset.tga" );
+	static bool first = true;
+	if ( first )
+	{
+		MSFont::Initialise( "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!?.:'c", &img, MSVec( 6, 8 ) );
+	}
 	MSRender::ClearColour( 0x000000ff );;
 	MSRender::BeginScene();
-	MSRender::SetTexture( &img );
-	{
-		MSVec verts[4] =
-		{
-			MSVec( 50, 50 ),
-			MSVec( 100, 50 ),
-			MSVec( 100, 100 ),
-			MSVec( 50, 100 ),
-		};
-		MSVec uvs[2] =
-		{
-			MSVec( 42, 0 ),
-			MSVec( 48, 8 ),
-		};
-		MSRender::Quad( verts, 0, uvs, 0xffffffff );
-	}
-	{
-		MSVec verts[4] =
-		{
-			MSVec( 102, 50 ),
-			MSVec( 152, 50 ),
-			MSVec( 152, 100 ),
-			MSVec( 102, 100 ),
-		};
-		MSVec uvs[2] =
-		{
-			MSVec( 48, 0 ),
-			MSVec( 54, 8 ),
-		};
-		MSRender::Quad( verts, 0, uvs, 0xffffffff );
-	}
+	MSFont::RenderCharacter( 'H', MSVec( 32, 32 ), 5, MSVec( 24, 32 ), 0xffff00ff );
+	MSFont::RenderCharacter( 'I', MSVec( 64, 32 ), 5, MSVec( 24, 32 ), 0xffff00ff );
 	MSRender::EndScene();
 
 	MSLauncher::RequestRedisplay();
