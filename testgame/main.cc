@@ -9,10 +9,10 @@ void MSMain::Main()
 {
 	MSLauncher::SetTitle( "sprLite Window" );
 	// Launch game thread
-	printf( "Launching game thread\n" );
+	printf( "[Main] Launching game thread\n" );
 
 	// Launch render thread
-	printf( "Launching render thread\n" );
+	printf( "[Main] Launching render thread\n" );
 	MSRenderThread::CreateRT();
 }
 
