@@ -42,7 +42,7 @@ namespace MSCmdBuf
 
 	void Dispatch();
 
-	CmdBuffer* GetBuffer( unsigned int id );
+	CmdBuffer* GetBuffer();
 };
 
 #endif

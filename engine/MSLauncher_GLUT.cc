@@ -87,13 +87,11 @@ int main( int argc, char** const argv )
 	//glutPassiveMotionFunc( &motion_callback );
 	//glutJoystickFunc( &joystick_callback, 16 );	// Polling interval 16ms
 
-	// Initialise the game
-	MSMain::Main();
-
 	// Now kick off the game threads
 	atexit( &MSLauncher::ExitCallback );
-	//glutIdleFunc( &spawnthreads );
-	//glutMainLoop();
+
+	// Initialise the game
+	MSMain::Main();
 
 	// We'll never reach this line
 	return 0;

@@ -96,7 +96,7 @@ void MSCmdBuf::Dispatch( void )
 	s_commands.valid_length = s_commands.length;
 }
 
-MSCmdBuf::CmdBuffer* MSCmdBuf::GetBuffer( unsigned int )
+MSCmdBuf::CmdBuffer* MSCmdBuf::GetBuffer()
 {
 	return &s_commands;
 }

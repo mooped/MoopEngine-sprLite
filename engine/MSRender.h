@@ -15,6 +15,19 @@
 
 namespace MSRender
 {
+	// Render command enums
+	enum ECmd
+	{
+		eCmd_BeginScene = 0,
+		eCmd_EndScene,
+		eCmd_Sync,
+		eCmd_ClearColour,
+		eCmd_SetTexture,
+		eCmd_Quad,
+
+		eCmd_Invalid,
+	};
+
 	// Render commands
 	void BeginScene();
 	void EndScene();
@@ -23,7 +36,7 @@ namespace MSRender
 	void ClearColour( Colour rgba );
 
 	void SetTexture( class MSImage* pImage );
-	void Quad( MSVec verts[4], u_int layer, MSVec uvs[2] );
+	void Quad( MSVec verts[4], int layer, MSVec uvs[2] );
 };
 
 #endif
