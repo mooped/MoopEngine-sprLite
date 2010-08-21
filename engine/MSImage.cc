@@ -46,9 +46,22 @@ void MSImage::LoadTGA( const char* const filename )
 		if ( header.bits == 32 )
 		{
 			// Read in the rest of the data
-			char* data = new char[header.width * header.height * 4];
-			read = fread( data, sizeof( char ), header.width * header.height * 4, f );
+			u_char* data = new u_char[header.width * header.height * 4];
+			read = fread( data, sizeof( u_char ), header.width * header.height * 4, f );
 			MASSERT( read, "[LoadTGA] Unexpected EOF." );
+
+			// Colour keying - BGRA
+			for ( int u = 0; u < header.width * header.height * 4; u += 4 )
+			{
+				if ( data[u + 0] == 0xff && data[u + 1] == 0x00 && data[u + 2] == 0xff )
+				{
+					data[u + 0] = 0x00;	// Blue
+					data[u + 1] = 0x00;	// Green
+					data[u + 2] = 0x00;	// Red
+					data[u + 3] = 0xff;	// Alpha
+				}
+			}
+
 			m_width = header.width;
 			m_height = header.height;
 			m_data = data;

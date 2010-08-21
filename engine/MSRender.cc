@@ -44,7 +44,7 @@ void MSRender::SetTexture( class MSImage* pImage )
 	MSCmdBuf::Dispatch();
 }
 
-void MSRender::Quad( MSVec verts[4], int layer, MSVec uvs[2] )
+void MSRender::Quad( MSVec verts[4], int layer, MSVec uvs[2], Colour rgba )
 {
 	MSCmdBuf::AddCommand( eCmd_Quad );
 	MSCmdBuf::AddVec( verts[0] );
@@ -54,5 +54,6 @@ void MSRender::Quad( MSVec verts[4], int layer, MSVec uvs[2] )
 	MSCmdBuf::AddInt( layer );
 	MSCmdBuf::AddVec( uvs[0] );
 	MSCmdBuf::AddVec( uvs[1] );
+	MSCmdBuf::AddUInt( rgba );
 }
 

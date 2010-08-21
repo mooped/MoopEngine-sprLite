@@ -13,6 +13,8 @@
 #include "MSEngine.h"
 #include "MSPoint.h"
 
+class MSImage;
+
 namespace MSRender
 {
 	// Render command enums
@@ -35,8 +37,8 @@ namespace MSRender
 
 	void ClearColour( Colour rgba );
 
-	void SetTexture( class MSImage* pImage );
-	void Quad( MSVec verts[4], int layer, MSVec uvs[2] );
+	void SetTexture( MSImage* pImage );
+	void Quad( MSVec verts[4], int layer, MSVec uvs[2], Colour rgba );
 };
 
 #endif

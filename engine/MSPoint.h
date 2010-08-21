@@ -20,7 +20,7 @@ public:
 	T y;
 
 	MSPoint() : x( (T)0 ), y( (T)0 ) {};
-	MSPoint( T x, T y ) : x( (T)0 ), y( (T)0 ) {};
+	MSPoint( T x, T y ) : x( (T)x ), y( (T)y ) {};
 	MSPoint( const MSPoint& other ) : x( (T)other.x ), y( (T)other.y ) {};
 
 	MSPoint& operator=( const MSPoint& other )

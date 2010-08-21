@@ -62,8 +62,8 @@ void MSCmdBuf::AddFloat( float f )
 void MSCmdBuf::AddVec( const MSVec& vec )
 {
 	const unsigned int length = s_commands.length;
-	*(float*)(&s_commands.buffer[length + 0]) = vec.x;
-	*(float*)(&s_commands.buffer[length + 1]) = vec.y;
+	*(int*)(&s_commands.buffer[length + 0]) = vec.x;
+	*(int*)(&s_commands.buffer[length + 1]) = vec.y;
 	Extend( 2 );
 }
 
