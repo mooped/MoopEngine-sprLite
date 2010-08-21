@@ -9,6 +9,8 @@
 
 #include "MSFont.h"
 
+#include "MSRender.h"
+
 #include <string.h>
 #include <algorithm>
 
@@ -76,11 +78,9 @@ void MSFont::RenderCharacter( const u_char character, const MSVec& pos, int laye
 	}
 	if ( startU >= 0 )
 	{
-		// Compute the vertices
+		MSRender::SetTexture( s_pImage );
 		const MSVec offsetX = MSVec( size.x >> 1, 0 );
 		const MSVec offsetY = MSVec( 0, size.y >> 1 );
-	
-		MSRender::SetTexture( s_pImage );
 		MSVec verts[4] =
 		{
 			pos - offsetX - offsetY,

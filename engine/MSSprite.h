@@ -7,3 +7,24 @@
  *
  */
 
+#ifndef MSSPRITE_DEF
+#define MSSPRITE_DEF
+
+#include "MSEngine.h"
+
+#include "MSImage.h"
+#include "MSPoint.h"
+
+namespace MSSprite
+{
+	typedef int SheetID;
+	typedef int SpriteID;
+
+	SheetID AddSheet( MSImage* image, const MSVec& spriteSize );
+	void Shutdown();
+
+	void RenderSprite( SheetID sheet, SpriteID sprite, const MSVec& pos, int layer, const MSVec& size, const Colour rgba = 0xffffffff );
+};
+
+#endif
+

@@ -12,7 +12,8 @@
 
 #include "MSEngine.h"
 
-#include "MSRender.h"
+#include "MSImage.h"
+#include "MSPoint.h"
 
 namespace MSFont
 {

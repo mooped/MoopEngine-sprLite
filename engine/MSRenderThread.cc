@@ -231,6 +231,7 @@ bool MSRenderThread::ProcessCommand()
 }
 
 #include "MSFont.h"	// HACKHACKHACK
+#include "MSSprite.h"	// HACKHACKHACK
 
 void MSRenderThread::ProcessCommands()
 {
@@ -239,14 +240,22 @@ void MSRenderThread::ProcessCommands()
 
 	// TESTESTEST
 	static MSImage img = MSImage( "../../charset.tga" );
+	static MSImage sprites = MSImage( "../../sprites.tga" );
 	static bool first = true;
+	static int sheet;
 	if ( first )
 	{
 		MSFont::Initialise( "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!?.:'c", &img, MSVec( 6, 8 ) );
+		sheet = MSSprite::AddSheet( &sprites, MSVec( 8, 8 ) );
 	}
 	MSRender::ClearColour( 0x000000ff );;
 	MSRender::BeginScene();
 	MSFont::RenderString( "HELLO WORLD!", MSVec( 32, 32 ), 5, MSVec( 24, 32 ), 0xffff00ff );
+	MSSprite::RenderSprite( sheet, 0, MSVec( 64, 64 ), 4, MSVec( 16, 16 ), 0xffffffff );
+	MSSprite::RenderSprite( sheet, 16, MSVec( 96, 96 ), 4, MSVec( 16, 16 ), 0xffffffff );
+	MSSprite::RenderSprite( sheet, 32, MSVec( 128, 128 ), 4, MSVec( 16, 16 ), 0xffffffff );
+	MSSprite::RenderSprite( sheet, 48, MSVec( 96, 160 ), 4, MSVec( 16, 16 ), 0xffffffff );
+	MSSprite::RenderSprite( sheet, 64, MSVec( 128, 192 ), 4, MSVec( 16, 16 ), 0xffffffff );
 	MSRender::EndScene();
 
 	MSLauncher::RequestRedisplay();
