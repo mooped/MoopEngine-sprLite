@@ -246,8 +246,7 @@ void MSRenderThread::ProcessCommands()
 	}
 	MSRender::ClearColour( 0x000000ff );;
 	MSRender::BeginScene();
-	MSFont::RenderCharacter( 'H', MSVec( 32, 32 ), 5, MSVec( 24, 32 ), 0xffff00ff );
-	MSFont::RenderCharacter( 'I', MSVec( 64, 32 ), 5, MSVec( 24, 32 ), 0xffff00ff );
+	MSFont::RenderString( "HELLO WORLD!", MSVec( 32, 32 ), 5, MSVec( 24, 32 ), 0xffff00ff );
 	MSRender::EndScene();
 
 	MSLauncher::RequestRedisplay();

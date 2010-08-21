@@ -38,7 +38,25 @@ void MSFont::Shutdown()
 
 void MSFont::RenderString( const char* const pszString, const MSVec& pos, int layer, const MSVec& size, const Colour rgba/* = 0xffffffff*/, const bool center/* = false*/ )
 {
+	if ( pszString && !Valid() ) return;
 
+	size_t length = strlen( pszString );
+
+	MSVec p = pos;
+	const int spacing = size.x * 0.1f;
+	const int xoffset = size.x + spacing;
+	if ( center )
+	{
+		p = p - MSVec( ( ( size.x + spacing ) * length ) / 2, size.y / 2 );
+	}
+
+	const char* cur = pszString;
+	while ( *cur != '\0' )
+	{
+		RenderCharacter( *cur, p, layer, size, rgba );
+		p.x += xoffset;
+		++cur;
+	}
 }
 
 void MSFont::RenderCharacter( const u_char character, const MSVec& pos, int layer, const MSVec& size, const Colour rgba/* = 0xffffffff*/ )
