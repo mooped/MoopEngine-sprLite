@@ -12,6 +12,8 @@
 
 #include "MSEngine.h"
 
+#include <algorithm>
+
 template <typename T>
 class MSPoint
 {
@@ -33,6 +35,8 @@ public:
 		return *this;
 	}
 };
+
+typedef MSPoint<int> MSVec;
 
 template <typename T>
 MSPoint<T> operator+( const MSPoint<T>& a, const MSPoint<T>& b )
@@ -58,7 +62,25 @@ MSPoint<T> operator/( const MSPoint<T>& a, const MSPoint<T>& b )
 	return MSPoint<T>( a.x / b.x, a.y / b.y );
 }
 
-typedef MSPoint<int> MSVec;
+template <typename T>
+MSPoint<T> min( const MSPoint<T>& a, const MSPoint<T>& b )
+{
+	MSPoint<T> res(
+		std::min( a.x, b.x ),
+		std::min( a.y, b.y )
+	);
+	return res;
+}
+
+template <typename T>
+MSPoint<T> max( const MSPoint<T>& a, const MSPoint<T>& b )
+{
+	MSPoint<T> res(
+		std::max( a.x, b.x ),
+		std::max( a.y, b.y )
+	);
+	return res;
+}
 
 #endif
 

@@ -49,7 +49,7 @@ void MSFont::RenderString( const char* const pszString, const MSVec& pos, int la
 	const int xoffset = size.x + spacing;
 	if ( center )
 	{
-		p = p - MSVec( ( ( size.x + spacing ) * length ) / 2, size.y / 2 );
+		p = p - MSVec( ( ( size.x + spacing ) * length - ( size.x + spacing ) ) / 2, size.y / 2 );
 	}
 
 	const char* cur = pszString;

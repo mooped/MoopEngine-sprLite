@@ -68,7 +68,7 @@ namespace MSAtomic
 	{
 		return OSAtomicIncrement32Barrier( value );
 	}
-	
+
 	inline int Decrement( volatile int *value )
 	{
 		return OSAtomicDecrement32Barrier( value );

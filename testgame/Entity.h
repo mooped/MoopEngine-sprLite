@@ -31,6 +31,7 @@ namespace Entity
 	{
 		eRC_Base = 0,
 		eRC_Sprite,
+		eRC_AnimSprite,
 	};
 
 	// Entity data structures
@@ -46,6 +47,13 @@ namespace Entity
 		MSSprite::SpriteID sprite;
 	};
 
+	struct SRenderAnimSprite
+	{
+		SRenderSprite sprite;
+		MSSprite::SpriteID start;
+		MSSprite::SpriteID end;
+	};
+
 	struct SBase
 	{
 		EntID id;
@@ -59,7 +67,7 @@ namespace Entity
 	struct SPlayer
 	{
 		SBase base;
-		// ...
+		int shotTimeout;
 	};
 
 	struct SBullet

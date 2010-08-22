@@ -11,9 +11,15 @@
 
 #include <vector>
 
+#include "MSTimer.h"
 #include "MSInput.h"
 
 #include "AssetManager.h"
+
+#define MINX 0
+#define MAXX 640
+#define MINY 40	// Reserve 40 pixels for the header
+#define MAXY 480
 
 namespace Entity
 {
@@ -51,6 +57,7 @@ Entity::EntID Entity::Add( SBase* ent )
 	{
 		ent->id = AssignID();
 	}
+	
 	if ( s_midUpdate )
 	{
 		// Can't update the main entity list partway through an update
@@ -142,17 +149,25 @@ void Entity::UpdateEntity( SBase* ent )
 				{
 					player->base.pos.x += 1;
 				}
+				// Keep player on screen
+				MSVec halfSize = MSVec( player->base.size.x / 2, player->base.size.y / 2 );
+				player->base.pos = min( max( player->base.pos, MSVec( MINX, MINY ) + MSVec( halfSize ) ), MSVec( MAXX, MAXY ) - halfSize );
 				if ( MSInput::Key( ' ' ) )
 				{
 					// Fire primary
-					SpawnBullet( player->base.pos, MSVec( 1, 0 ) );
+					const int time = MSTimer::GetTime();
+					if ( time > player->shotTimeout )
+					{
+						SpawnBullet( player->base.pos, MSVec( 1, 0 ) );
+						player->shotTimeout = time + 100;
+					}
 				}
 			} break;
 			case eEC_Bullet:
 			{
 				SBullet* bullet = reinterpret_cast<SBullet*>( ent );
 				bullet->base.pos = bullet->base.pos + bullet->vel;
-				if ( bullet->base.pos.x > 640 ) { Delete( bullet->base.id ); } 
+				if ( bullet->base.pos.x > 640 ) { Delete( bullet->base.id, false ); } 
 			} break;
 			default: break;
 		}
@@ -170,6 +185,14 @@ void Entity::RenderEntity( SBase* ent )
 				SRenderSprite* sprite = reinterpret_cast<SRenderSprite*>( ent->render );
 				MSSprite::RenderSprite( sprite->sheet, sprite->sprite, ent->pos, ent->layer, ent->size );
 			} break;
+			case eRC_AnimSprite:
+			{
+				SRenderAnimSprite* sprite = reinterpret_cast<SRenderAnimSprite*>( ent->render );
+				MSSprite::RenderSprite( sprite->sprite.sheet, sprite->sprite.sprite, ent->pos, ent->layer, ent->size );
+				// Tick the anim
+				++sprite->sprite.sprite;
+				if ( sprite->sprite.sprite > sprite->end ) sprite->sprite.sprite = sprite->start;
+			} break;
 			default: break;
 		};
 	}
@@ -179,7 +202,7 @@ void Entity::RenderEntity( SBase* ent )
 Entity::EntID Entity::SpawnPlayer( const MSVec& pos )
 {
 	Entity::SPlayer* player = new Entity::SPlayer;
-	Entity::SRenderSprite* playerSprite = new Entity::SRenderSprite;
+	Entity::SRenderAnimSprite* playerSprite = new Entity::SRenderAnimSprite;
 
 	player->base.id = 0;
 	player->base.kind = Entity::eEC_Player;
@@ -188,9 +211,11 @@ Entity::EntID Entity::SpawnPlayer( const MSVec& pos )
 	player->base.size = MSVec( 32, 16 );
 	player->base.render = reinterpret_cast<Entity::SRenderBase*>( playerSprite );
 
-	playerSprite->base.kind = Entity::eRC_Sprite;
-	playerSprite->sheet = AM::Ships();
-	playerSprite->sprite = 0;
+	playerSprite->sprite.base.kind = Entity::eRC_AnimSprite;
+	playerSprite->sprite.sheet = AM::Ships();
+	playerSprite->sprite.sprite = 0;
+	playerSprite->start = 1;
+	playerSprite->end = 4;
 
 	return Entity::Add( reinterpret_cast<Entity::SBase*>( player ) );
 }
@@ -210,7 +235,7 @@ Entity::EntID Entity::SpawnBullet( const MSVec& pos, const MSVec& vel )
 
 	bulletSprite->base.kind = Entity::eRC_Sprite;
 	bulletSprite->sheet = AM::Ships();
-	bulletSprite->sprite = 64;
+	bulletSprite->sprite = 40;
 
 	return Entity::Add( reinterpret_cast<Entity::SBase*>( bullet ) );
 }
