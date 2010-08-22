@@ -2,6 +2,8 @@ AstroVax
 By moop (C) 2010
 v1.0
 
+Not to be used for profit in any way or redistributed in any altered form.
+
 http://moop.org.uk
 mooped@gmail.com
 
