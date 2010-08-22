@@ -16,6 +16,9 @@
 
 class GameThread : public MSThread
 {
+private:
+	int nextTick;
+
 protected:
 	void GameSetup();
 	void GameUpdate();

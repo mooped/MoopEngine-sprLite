@@ -60,7 +60,7 @@ void MSRenderThread::BeginScene()
 
 	// Fixed function pixel state
 	glEnable( GL_DEPTH_TEST );
-	glAlphaFunc( GL_GREATER, 0.1f );
+	glAlphaFunc( GL_GREATER, 0.9f );
 	glEnable( GL_ALPHA_TEST );
 
 	glEnable( GL_TEXTURE_2D );

@@ -58,7 +58,7 @@ void MSImage::LoadTGA( const char* const filename )
 					data[u + 0] = 0x00;	// Blue
 					data[u + 1] = 0x00;	// Green
 					data[u + 2] = 0x00;	// Red
-					data[u + 3] = 0xff;	// Alpha
+					data[u + 3] = 0x00;	// Alpha
 				}
 			}
 

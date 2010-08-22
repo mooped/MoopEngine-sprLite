@@ -22,6 +22,7 @@
 
 GameThread::GameThread()
 : MSThread()
+, nextTick( 0 )
 {
 	AM::LoadResources();
 }
@@ -37,6 +38,18 @@ void GameThread::RunThread()
 
 	while ( !ExitRequested() )
 	{
+		// Lock to ~60fps
+		const int time = MSTimer::GetTime();
+		if ( time > nextTick )
+		{
+			nextTick = time + 16;
+		}
+		else
+		{
+			sleep( 0 );
+			continue;
+		}
+
 		MSTimer::FrameStart();
 		MSInput::ResetFrameKeys();
 

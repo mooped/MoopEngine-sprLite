@@ -16,11 +16,6 @@
 
 #include "AssetManager.h"
 
-#define MINX 0
-#define MAXX 640
-#define MINY 40	// Reserve 40 pixels for the header
-#define MAXY 480
-
 namespace Entity
 {
 	typedef std::vector<SBase*> EntityList;
@@ -34,6 +29,15 @@ namespace Entity
 	EntID s_currentId = s_firstDynamic;
 
 	bool s_midUpdate = false;
+
+	enum EMagicNumbers
+	{
+		MINX = 0,
+		MAXX = 640,
+		MINY = 0,
+		MAXY = 480,
+		SHIP_SPEED = 3,
+	};
 
 	// Internal methods
 	EntID AssignID();
@@ -135,19 +139,19 @@ void Entity::UpdateEntity( SBase* ent )
 				// Player movement
 				if ( MSInput::Key( 'w' ) )
 				{
-					player->base.pos.y -= 1;
+					player->base.pos.y -= SHIP_SPEED;
 				}
 				else if ( MSInput::Key( 's' ) )
 				{
-					player->base.pos.y += 1;
+					player->base.pos.y += SHIP_SPEED;
 				}
 				if ( MSInput::Key( 'a' ) )
 				{
-					player->base.pos.x -= 1;
+					player->base.pos.x -= SHIP_SPEED;
 				}
 				else if ( MSInput::Key( 'd' ) )
 				{
-					player->base.pos.x += 1;
+					player->base.pos.x += SHIP_SPEED;
 				}
 				// Keep player on screen
 				MSVec halfSize = MSVec( player->base.size.x / 2, player->base.size.y / 2 );

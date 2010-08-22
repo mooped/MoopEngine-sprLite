@@ -49,9 +49,11 @@ void AM::LoadResources()
 
 	// Weapon render objects
 	// Lazzor
-	m_weapon[Entity::eWT_Lazzor].sprite.base.kind = Entity::eRC_Sprite;
+	m_weapon[Entity::eWT_Lazzor].sprite.base.kind = Entity::eRC_AnimSprite;
 	m_weapon[Entity::eWT_Lazzor].sprite.sheet = AM::Ships();
 	m_weapon[Entity::eWT_Lazzor].sprite.sprite = 40;
+	m_weapon[Entity::eWT_Lazzor].start = 40;
+	m_weapon[Entity::eWT_Lazzor].end = 43;
 	// Flamer
 	m_weapon[Entity::eWT_Flamer].sprite.base.kind = Entity::eRC_AnimSprite;
 	m_weapon[Entity::eWT_Flamer].sprite.sheet = AM::Ships();
