@@ -119,8 +119,6 @@ namespace Entity
 	EntID SpawnPlayer( const MSVec& pos );
 	EntID SpawnEnemy( const MSVec& pos, const MSVec& vel, EEnemyElement element );
 	EntID SpawnBullet( const MSVec& pos, const MSVec& vel );
-
-	void SpawnWaves();
 };
 
 #endif

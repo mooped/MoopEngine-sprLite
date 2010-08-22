@@ -63,6 +63,18 @@ MSPoint<T> operator/( const MSPoint<T>& a, const MSPoint<T>& b )
 }
 
 template <typename T>
+bool operator==( const MSPoint<T>& a, const MSPoint<T>& b )
+{
+	return ( a.x == b.x ) && ( a.y == b.y );
+}
+
+template <typename T>
+bool operator!=( const MSPoint<T>& a, const MSPoint<T>& b )
+{
+	return !( a == b );
+}
+
+template <typename T>
 MSPoint<T> min( const MSPoint<T>& a, const MSPoint<T>& b )
 {
 	MSPoint<T> res(

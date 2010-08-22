@@ -25,6 +25,7 @@ namespace Entity
 	EntityList s_entities;
 	EntityList s_newEntities;
 	EntityIDList s_deletedEntities;
+	SPlayer* s_player;
 
 	const EntID s_firstDynamic = 100; // Start of dymanically assigned ids
 	EntID s_currentId = s_firstDynamic;
@@ -40,8 +41,9 @@ namespace Entity
 	{
 		MINX = 0,
 		MAXX = 640,
-		MINY = 0,
+		MINY = 40,
 		MAXY = 480,
+		SPAWN_MARGIN = 40,
 		SHIP_SPEED = 3,
 		LASER_RELOAD = 250,
 	};
@@ -53,6 +55,11 @@ namespace Entity
 	void RenderEntity( SBase* ent );
 
 	bool NeedAnimUpdate();
+
+	void SpawnWaves();
+
+	EntID BulletTest( const MSVec& pos, const MSVec& size );
+	bool PlayerTest( const MSVec& pos, const MSVec& size );
 };
 
 // Internals
@@ -128,6 +135,9 @@ void Entity::Update()
 		Delete( (*it), true );
 	}
 	s_deletedEntities.clear();
+
+	// Spawn a new wave if necessary
+	SpawnWaves();
 }
 
 void Entity::Render()
@@ -186,14 +196,27 @@ void Entity::UpdateEntity( SBase* ent )
 			{
 				SEnemy* enemy = reinterpret_cast<SEnemy*>( ent );
 				// Enemy movement
-				enemy->base.pos = enemy->base.pos + enemy->vel;
-				MSVec halfSize = MSVec( enemy->base.size.x / 2, enemy->base.size.y / 2 );
-				if ( 	enemy->base.pos.x < MINX - halfSize.x ||
-							//enemy->base.pos.x > MAXX + halfSize.x ||
-							enemy->base.pos.y < MINY - halfSize.y ||
-							enemy->base.pos.y > MAXY + halfSize.y )
+				if ( enemy->state == eSS_Moving )
 				{
-					Delete( enemy->base.id, false );
+					enemy->base.pos = enemy->base.pos + enemy->vel;
+					MSVec halfSize = MSVec( enemy->base.size.x / 2, enemy->base.size.y / 2 );
+					if ( 	enemy->base.pos.x < MINX - halfSize.x ||
+								//enemy->base.pos.x > MAXX + halfSize.x ||
+								enemy->base.pos.y < MINY - halfSize.y ||
+								enemy->base.pos.y > MAXY + halfSize.y )
+					{
+						Delete( enemy->base.id, false );
+					}
+				}
+				// Collision tests
+				if ( EntID bullet = BulletTest( enemy->base.pos, enemy->base.size ) )
+				{
+					enemy->state = eSS_Passive;
+					Delete( bullet, false );
+				}
+				if ( enemy->state == eSS_Moving && PlayerTest( enemy->base.pos, enemy->base.size ) )
+				{
+					MASSERT( 0, "DEADDEADDEAD" );
 				}
 				// Update render data to match state
 				enemy->base.render = AM::Enemy( enemy->element, enemy->state );
@@ -254,6 +277,8 @@ Entity::EntID Entity::SpawnPlayer( const MSVec& pos )
 	player->base.size = MSVec( 32, 16 );
 	player->base.render = AM::Player( eSS_Moving );
 
+	s_player = player;
+
 	return Entity::Add( reinterpret_cast<Entity::SBase*>( player ) );
 }
 
@@ -296,8 +321,12 @@ void Entity::SpawnWaves()
 	if ( time > s_nextWave )
 	{
 		// Decide on a base position
-		// THIS APPROACH TO RANDOM NUMBERS IS HORRIBLE BUT IT WILL DO!
+		// Waves spawning too close to the top or bottom of the screen will be
+		// pushed inward. This should result in more enemies spawning at the
+		// edges which may or may not be good for gameplay.
 		MSVec pos = MSVec( MAXX + 8, MINY + ( rand() % ( MAXY - MINY ) ) );
+		if ( pos.y < MINY + SPAWN_MARGIN ) { pos.y = MINY + SPAWN_MARGIN; }
+		if ( pos.y > MAXY - SPAWN_MARGIN ) { pos.y = MAXY - SPAWN_MARGIN; }
 		EEnemyElement elem = static_cast<EEnemyElement>( rand() %  Entity::eEE_Count );
 
 		// Pick a formation
@@ -319,5 +348,43 @@ void Entity::SpawnWaves()
 
 		s_nextWave = time + 1750;
 	}
+}
+
+Entity::EntID Entity::BulletTest( const MSVec& pos, const MSVec& size )
+{
+	MASSERT( s_midUpdate, "Calling BulletTest outside of Update will cause bad problems. Don't do it." );
+	
+	for ( EntityList::iterator it = s_entities.begin(), end = s_entities.end(); it != end; ++it )
+	{
+		SBullet* ent = reinterpret_cast<SBullet*>( *it );
+		if ( ent && ent->base.kind == eEC_Bullet )
+		{
+			// Stupid cludge to find the bullet's hit pixel
+			const MSVec halfSize = MSVec( size.x / 2, size.y / 2 );
+			const MSVec bpos = ent->base.pos - MSVec( 4, 0 );
+			const MSVec rpos = min( max( bpos, pos - halfSize ), pos + halfSize );
+			if ( bpos == rpos )
+			{
+				return ent->base.id;
+			}
+		}
+	}
+	return 0;
+}
+
+bool Entity::PlayerTest( const MSVec& pos, const MSVec& size )
+{
+	const SPlayer* const ent = s_player;
+
+	const MSVec ppos = ent->base.pos;
+	const MSVec psize = ent->base.size;
+
+	const MSVec grazeMargin( 4 , 4 );
+	const MSVec dthresh = ( psize + size ) / MSVec( 2, 2 ) - grazeMargin;
+
+	const MSVec dist = ppos - pos;
+	const MSVec absdist = MSVec( abs( dist.x ), abs( dist.y ) );
+
+	return ( absdist.x < dthresh.x && absdist.y < dthresh.y );
 }
 

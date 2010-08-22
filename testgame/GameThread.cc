@@ -78,8 +78,6 @@ void GameThread::GameUpdate()
 	// Entity rendering 
 	Entity::Render();
 
-	Entity::SpawnWaves();
-
 	MSRender::EndScene();
 	MSRender::Sync();
 }
