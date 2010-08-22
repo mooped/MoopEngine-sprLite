@@ -25,6 +25,7 @@ GameThread::GameThread()
 , nextTick( 0 )
 {
 	AM::LoadResources();
+	srand( MSTimer::GetTime() );
 }
 
 GameThread::~GameThread()
@@ -76,6 +77,8 @@ void GameThread::GameUpdate()
 
 	// Entity rendering 
 	Entity::Render();
+
+	Entity::SpawnWaves();
 
 	MSRender::EndScene();
 	MSRender::Sync();

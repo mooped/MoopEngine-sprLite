@@ -10,6 +10,7 @@
 #include "Entity.h"
 
 #include <vector>
+#include <stdlib.h>
 
 #include "MSTimer.h"
 #include "MSInput.h"
@@ -30,6 +31,11 @@ namespace Entity
 
 	bool s_midUpdate = false;
 
+	int s_frame = -1;
+	int s_lastFrameRendered = -1;
+
+	int s_nextWave = 0;
+
 	enum EMagicNumbers
 	{
 		MINX = 0,
@@ -37,6 +43,7 @@ namespace Entity
 		MINY = 0,
 		MAXY = 480,
 		SHIP_SPEED = 3,
+		LASER_RELOAD = 250,
 	};
 
 	// Internal methods
@@ -44,6 +51,8 @@ namespace Entity
 
 	void UpdateEntity( SBase* ent );
 	void RenderEntity( SBase* ent );
+
+	bool NeedAnimUpdate();
 };
 
 // Internals
@@ -97,6 +106,8 @@ void Entity::Delete( EntID id, bool immediate/* = true*/ )
 
 void Entity::Update()
 {
+	++s_frame;
+
 	s_midUpdate = true;
 	for ( EntityList::iterator it = s_entities.begin(), end = s_entities.end(); it != end; ++it )
 	{
@@ -125,6 +136,10 @@ void Entity::Render()
 	{
 		RenderEntity( *it );
 	}
+
+	// Prevent multiple animation updates (which
+	// occur in the render pass) per frame
+	s_lastFrameRendered = s_frame;
 }
 
 void Entity::UpdateEntity( SBase* ent )
@@ -162,10 +177,27 @@ void Entity::UpdateEntity( SBase* ent )
 					const int time = MSTimer::GetTime();
 					if ( time > player->shotTimeout )
 					{
-						SpawnBullet( player->base.pos, MSVec( 1, 0 ) );
-						player->shotTimeout = time + 100;
+						SpawnBullet( player->base.pos, MSVec( 3, 0 ) );
+						player->shotTimeout = time + LASER_RELOAD;
 					}
 				}
+			} break;
+			case eEC_Enemy:
+			{
+				SEnemy* enemy = reinterpret_cast<SEnemy*>( ent );
+				// Enemy movement
+				enemy->base.pos = enemy->base.pos + enemy->vel;
+				MSVec halfSize = MSVec( enemy->base.size.x / 2, enemy->base.size.y / 2 );
+				if ( 	enemy->base.pos.x < MINX - halfSize.x ||
+							//enemy->base.pos.x > MAXX + halfSize.x ||
+							enemy->base.pos.y < MINY - halfSize.y ||
+							enemy->base.pos.y > MAXY + halfSize.y )
+				{
+					Delete( enemy->base.id, false );
+				}
+				// Update render data to match state
+				enemy->base.render = AM::Enemy( enemy->element, enemy->state );
+				// ToDo: Fire stuff!
 			} break;
 			case eEC_Bullet:
 			{
@@ -194,12 +226,20 @@ void Entity::RenderEntity( SBase* ent )
 				SRenderAnimSprite* sprite = reinterpret_cast<SRenderAnimSprite*>( ent->render );
 				MSSprite::RenderSprite( sprite->sprite.sheet, sprite->sprite.sprite, ent->pos, ent->layer, ent->size );
 				// Tick the anim
-				++sprite->sprite.sprite;
-				if ( sprite->sprite.sprite > sprite->end ) sprite->sprite.sprite = sprite->start;
+				if ( NeedAnimUpdate() && ( s_frame % sprite->frequency ) == 0 )
+				{
+					++sprite->sprite.sprite;
+					if ( sprite->sprite.sprite > sprite->end ) sprite->sprite.sprite = sprite->start;
+				}
 			} break;
 			default: break;
 		};
 	}
+}
+
+bool Entity::NeedAnimUpdate()
+{
+	return s_frame != s_lastFrameRendered;
 }
 
 // Spawn helpers
@@ -217,6 +257,23 @@ Entity::EntID Entity::SpawnPlayer( const MSVec& pos )
 	return Entity::Add( reinterpret_cast<Entity::SBase*>( player ) );
 }
 
+Entity::EntID Entity::SpawnEnemy( const MSVec& pos, const MSVec& vel, Entity::EEnemyElement element )
+{
+	Entity::SEnemy* enemy = new Entity::SEnemy;
+
+	enemy->base.id = 0;
+	enemy->base.kind = Entity::eEC_Enemy;
+	enemy->base.pos = pos;
+	enemy->base.layer = 5;
+	enemy->base.size = MSVec( 32, 16 );
+	enemy->base.render = AM::Enemy( element, eSS_Moving );
+	enemy->element = element;
+	enemy->vel = vel;
+	enemy->state = eSS_Moving;
+
+	return Entity::Add( reinterpret_cast<Entity::SBase*>( enemy ) );
+}
+
 Entity::EntID Entity::SpawnBullet( const MSVec& pos, const MSVec& vel )
 {
 	Entity::SBullet* bullet = new Entity::SBullet;
@@ -224,11 +281,43 @@ Entity::EntID Entity::SpawnBullet( const MSVec& pos, const MSVec& vel )
 	bullet->base.id = 0;
 	bullet->base.kind = Entity::eEC_Bullet;
 	bullet->base.pos = pos;
-	bullet->base.layer = 5;
+	bullet->base.layer = 6;
 	bullet->base.size = MSVec( 32, 16 );
 	bullet->base.render = AM::Weapon( eWT_Lazzor );
 	bullet->vel = vel;
 
 	return Entity::Add( reinterpret_cast<Entity::SBase*>( bullet ) );
+}
+
+void Entity::SpawnWaves()
+{
+	// TESTCODE: Spawn new enemies if necessary
+	const int time = MSTimer::GetTime();
+	if ( time > s_nextWave )
+	{
+		// Decide on a base position
+		// THIS APPROACH TO RANDOM NUMBERS IS HORRIBLE BUT IT WILL DO!
+		MSVec pos = MSVec( MAXX + 8, MINY + ( rand() % ( MAXY - MINY ) ) );
+		EEnemyElement elem = static_cast<EEnemyElement>( rand() %  Entity::eEE_Count );
+
+		// Pick a formation
+		const int formations = 2;
+		const int formation = rand() % formations;
+		switch ( formation )
+		{
+			case 0:
+			{
+				Entity::SpawnEnemy( pos, MSVec( -2, 0 ), elem );
+			} break;
+			case 1:
+			{
+				Entity::SpawnEnemy( pos, MSVec( -2, 0 ), elem );
+				Entity::SpawnEnemy( pos + MSVec( 24, -16 ), MSVec( -2, 0 ), elem );
+				Entity::SpawnEnemy( pos + MSVec( 24, 16 ), MSVec( -2, 0 ), elem );
+			} break;
+		}
+
+		s_nextWave = time + 1750;
+	}
 }
 

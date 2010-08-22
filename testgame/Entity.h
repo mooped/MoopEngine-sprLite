@@ -24,6 +24,7 @@ namespace Entity
 	{
 		eEC_Base = 0,
 		eEC_Player,
+		eEC_Enemy,
 		eEC_Bullet,
 	};
 
@@ -73,6 +74,7 @@ namespace Entity
 	struct SRenderAnimSprite
 	{
 		SRenderSprite sprite;
+		int frequency;
 		MSSprite::SpriteID start;
 		MSSprite::SpriteID end;
 	};
@@ -93,6 +95,14 @@ namespace Entity
 		int shotTimeout;
 	};
 
+	struct SEnemy
+	{
+		SBase base;
+		EEnemyElement element;
+		MSVec vel;
+		EShipState state;
+	};
+
 	struct SBullet
 	{
 		SBase base;
@@ -107,7 +117,10 @@ namespace Entity
 
 	// Spawn helpers
 	EntID SpawnPlayer( const MSVec& pos );
+	EntID SpawnEnemy( const MSVec& pos, const MSVec& vel, EEnemyElement element );
 	EntID SpawnBullet( const MSVec& pos, const MSVec& vel );
+
+	void SpawnWaves();
 };
 
 #endif

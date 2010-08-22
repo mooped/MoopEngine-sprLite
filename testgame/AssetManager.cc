@@ -44,20 +44,61 @@ void AM::LoadResources()
 	m_player[Entity::eSS_Moving].sprite.base.kind = Entity::eRC_AnimSprite;
 	m_player[Entity::eSS_Moving].sprite.sheet = AM::Ships();
 	m_player[Entity::eSS_Moving].sprite.sprite = 1;
+	m_player[Entity::eSS_Moving].frequency = 4;
 	m_player[Entity::eSS_Moving].start = 1;
 	m_player[Entity::eSS_Moving].end = 4;
+
+	// Enemy render objects
+	// Fire
+	// 	Passive
+	m_enemy[Entity::eEE_Fire][Entity::eSS_Passive].sprite.base.kind = Entity::eRC_Sprite;
+	m_enemy[Entity::eEE_Fire][Entity::eSS_Passive].sprite.sheet = AM::Ships();
+	m_enemy[Entity::eEE_Fire][Entity::eSS_Passive].sprite.sprite = 8;
+	// 	Moving
+	m_enemy[Entity::eEE_Fire][Entity::eSS_Moving].sprite.base.kind = Entity::eRC_AnimSprite;
+	m_enemy[Entity::eEE_Fire][Entity::eSS_Moving].sprite.sheet = AM::Ships();
+	m_enemy[Entity::eEE_Fire][Entity::eSS_Moving].sprite.sprite = 9;
+	m_enemy[Entity::eEE_Fire][Entity::eSS_Moving].frequency = 5;
+	m_enemy[Entity::eEE_Fire][Entity::eSS_Moving].start = 9;
+	m_enemy[Entity::eEE_Fire][Entity::eSS_Moving].end = 12;
+	// Water
+	// 	Passive
+	m_enemy[Entity::eEE_Water][Entity::eSS_Passive].sprite.base.kind = Entity::eRC_Sprite;
+	m_enemy[Entity::eEE_Water][Entity::eSS_Passive].sprite.sheet = AM::Ships();
+	m_enemy[Entity::eEE_Water][Entity::eSS_Passive].sprite.sprite = 16;
+	// 	Moving
+	m_enemy[Entity::eEE_Water][Entity::eSS_Moving].sprite.base.kind = Entity::eRC_AnimSprite;
+	m_enemy[Entity::eEE_Water][Entity::eSS_Moving].sprite.sheet = AM::Ships();
+	m_enemy[Entity::eEE_Water][Entity::eSS_Moving].sprite.sprite = 17;
+	m_enemy[Entity::eEE_Water][Entity::eSS_Moving].frequency = 6;
+	m_enemy[Entity::eEE_Water][Entity::eSS_Moving].start = 17;
+	m_enemy[Entity::eEE_Water][Entity::eSS_Moving].end = 20;
+	// Earth
+	// 	Passive
+	m_enemy[Entity::eEE_Earth][Entity::eSS_Passive].sprite.base.kind = Entity::eRC_Sprite;
+	m_enemy[Entity::eEE_Earth][Entity::eSS_Passive].sprite.sheet = AM::Ships();
+	m_enemy[Entity::eEE_Earth][Entity::eSS_Passive].sprite.sprite = 24;
+	// 	Moving
+	m_enemy[Entity::eEE_Earth][Entity::eSS_Moving].sprite.base.kind = Entity::eRC_AnimSprite;
+	m_enemy[Entity::eEE_Earth][Entity::eSS_Moving].sprite.sheet = AM::Ships();
+	m_enemy[Entity::eEE_Earth][Entity::eSS_Moving].sprite.sprite = 25;
+	m_enemy[Entity::eEE_Earth][Entity::eSS_Moving].frequency = 12;
+	m_enemy[Entity::eEE_Earth][Entity::eSS_Moving].start = 25;
+	m_enemy[Entity::eEE_Earth][Entity::eSS_Moving].end = 28;
 
 	// Weapon render objects
 	// Lazzor
 	m_weapon[Entity::eWT_Lazzor].sprite.base.kind = Entity::eRC_AnimSprite;
 	m_weapon[Entity::eWT_Lazzor].sprite.sheet = AM::Ships();
 	m_weapon[Entity::eWT_Lazzor].sprite.sprite = 40;
+	m_weapon[Entity::eWT_Lazzor].frequency = 6;
 	m_weapon[Entity::eWT_Lazzor].start = 40;
 	m_weapon[Entity::eWT_Lazzor].end = 43;
 	// Flamer
 	m_weapon[Entity::eWT_Flamer].sprite.base.kind = Entity::eRC_AnimSprite;
 	m_weapon[Entity::eWT_Flamer].sprite.sheet = AM::Ships();
 	m_weapon[Entity::eWT_Flamer].sprite.sprite = 48;
+	m_weapon[Entity::eWT_Flamer].frequency = 2;
 	m_weapon[Entity::eWT_Flamer].start = 48;
 	m_weapon[Entity::eWT_Flamer].end = 52;
 }
