@@ -339,6 +339,22 @@
 				</Filter>
 			</Filter>
 		</Filter>
+		<Filter
+			Name="Resources"
+			>
+			<File
+				RelativePath="..\..\icon.ico"
+				>
+			</File>
+		</Filter>
+		<File
+			RelativePath=".\astrovax.rc"
+			>
+		</File>
+		<File
+			RelativePath=".\resource.h"
+			>
+		</File>
 	</Files>
 	<Globals>
 	</Globals>
