@@ -11,7 +11,7 @@
 
 #include "MSFont.h"
 
-//#define TESTBUILD
+#define TESTBUILD
 
 #if defined( TESTBUILD )
 #define TEXDIR "../../"
@@ -19,7 +19,7 @@
 #if defined( WIN32 )
 #define TEXDIR "./"
 #elif defined( MACOSX )
-#define TEXDIR "../Resources/
+#define TEXDIR "../Resources/"
 #endif
 #endif
 
