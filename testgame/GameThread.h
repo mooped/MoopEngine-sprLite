@@ -14,13 +14,12 @@
 
 #include "MSThread.h"
 
+#include "Game.h"
+
 class GameThread : public MSThread
 {
 private:
-	int nextTick;
-
-protected:
-	void GameUpdate();
+	Game m_game;
 
 public:
 	GameThread();

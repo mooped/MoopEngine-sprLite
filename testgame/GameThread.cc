@@ -20,7 +20,6 @@
 
 GameThread::GameThread()
 : MSThread()
-, nextTick( 0 )
 {
 	AM::LoadResources();
 	srand( MSTimer::GetTime() );
@@ -33,41 +32,12 @@ GameThread::~GameThread()
 
 void GameThread::RunThread()
 {
-	Entity::BeginGame();
+	m_game.Begin();
 
 	while ( !ExitRequested() )
 	{
-		// Lock to ~60fps
-		const int time = MSTimer::GetTime();
-		if ( time > nextTick )
-		{
-			nextTick = time + 16;
-		}
-		else
-		{
-			sleep( 0 );
-			continue;
-		}
-
-		MSTimer::FrameStart();
-		MSInput::ResetFrameKeys();
-
-		GameUpdate();
+		m_game.Update();
 	}
 	Exit();
-}
-
-void GameThread::GameUpdate()
-{
-	MSRender::ClearColour( 0x000000ff );;
-	MSRender::BeginScene();
-
-	Entity::Update();
-
-	// Entity rendering 
-	Entity::Render();
-
-	MSRender::EndScene();
-	MSRender::Sync();
 }
 
