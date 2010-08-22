@@ -11,6 +11,7 @@
 #define ASSETMANAGER_DEF
 
 #include "MSSprite.h"
+#include "Entity.h"
 
 namespace AM
 {
@@ -18,6 +19,11 @@ namespace AM
 	void UnloadResources();
 
 	MSSprite::SheetID Ships();
+
+	Entity::SRenderBase* Player( Entity::EShipState state );
+	Entity::SRenderBase* Enemy( Entity::EEnemyElement element, Entity::EShipState state );
+
+	Entity::SRenderBase* Weapon( Entity::EWeaponType type );
 };
 
 #endif

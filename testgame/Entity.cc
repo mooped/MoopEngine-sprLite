@@ -202,20 +202,13 @@ void Entity::RenderEntity( SBase* ent )
 Entity::EntID Entity::SpawnPlayer( const MSVec& pos )
 {
 	Entity::SPlayer* player = new Entity::SPlayer;
-	Entity::SRenderAnimSprite* playerSprite = new Entity::SRenderAnimSprite;
 
 	player->base.id = 0;
 	player->base.kind = Entity::eEC_Player;
 	player->base.pos = pos;
 	player->base.layer = 4;
 	player->base.size = MSVec( 32, 16 );
-	player->base.render = reinterpret_cast<Entity::SRenderBase*>( playerSprite );
-
-	playerSprite->sprite.base.kind = Entity::eRC_AnimSprite;
-	playerSprite->sprite.sheet = AM::Ships();
-	playerSprite->sprite.sprite = 0;
-	playerSprite->start = 1;
-	playerSprite->end = 4;
+	player->base.render = AM::Player( eSS_Moving );
 
 	return Entity::Add( reinterpret_cast<Entity::SBase*>( player ) );
 }
@@ -223,19 +216,14 @@ Entity::EntID Entity::SpawnPlayer( const MSVec& pos )
 Entity::EntID Entity::SpawnBullet( const MSVec& pos, const MSVec& vel )
 {
 	Entity::SBullet* bullet = new Entity::SBullet;
-	Entity::SRenderSprite* bulletSprite = new Entity::SRenderSprite;
 
 	bullet->base.id = 0;
 	bullet->base.kind = Entity::eEC_Bullet;
 	bullet->base.pos = pos;
 	bullet->base.layer = 5;
 	bullet->base.size = MSVec( 32, 16 );
-	bullet->base.render = reinterpret_cast<Entity::SRenderBase*>( bulletSprite );
+	bullet->base.render = AM::Weapon( eWT_Lazzor );
 	bullet->vel = vel;
-
-	bulletSprite->base.kind = Entity::eRC_Sprite;
-	bulletSprite->sheet = AM::Ships();
-	bulletSprite->sprite = 40;
 
 	return Entity::Add( reinterpret_cast<Entity::SBase*>( bullet ) );
 }

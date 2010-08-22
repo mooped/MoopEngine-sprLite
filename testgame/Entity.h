@@ -34,6 +34,29 @@ namespace Entity
 		eRC_AnimSprite,
 	};
 
+	enum EShipState
+	{
+		eSS_Passive = 0,
+		eSS_Moving,
+		eSS_Count,
+	};
+
+	enum EEnemyElement
+	{
+		eEE_Fire = 0,
+		eEE_Water,
+		eEE_Earth,
+		//eEE_Air,
+		eEE_Count,
+	};
+
+	enum EWeaponType
+	{
+		eWT_Lazzor = 0,
+		eWT_Flamer,
+		eWT_Count,
+	};
+
 	// Entity data structures
 	struct SRenderBase
 	{
