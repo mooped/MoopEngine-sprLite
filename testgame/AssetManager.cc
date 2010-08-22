@@ -53,11 +53,11 @@ void AM::LoadResources()
 	m_weapon[Entity::eWT_Lazzor].sprite.sheet = AM::Ships();
 	m_weapon[Entity::eWT_Lazzor].sprite.sprite = 40;
 	// Flamer
-	m_weapon[Entity::eWT_Lazzor].sprite.base.kind = Entity::eRC_AnimSprite;
-	m_weapon[Entity::eWT_Lazzor].sprite.sheet = AM::Ships();
-	m_weapon[Entity::eWT_Lazzor].sprite.sprite = 48;
-	m_weapon[Entity::eWT_Lazzor].start = 48;
-	m_weapon[Entity::eWT_Lazzor].end = 52;
+	m_weapon[Entity::eWT_Flamer].sprite.base.kind = Entity::eRC_AnimSprite;
+	m_weapon[Entity::eWT_Flamer].sprite.sheet = AM::Ships();
+	m_weapon[Entity::eWT_Flamer].sprite.sprite = 48;
+	m_weapon[Entity::eWT_Flamer].start = 48;
+	m_weapon[Entity::eWT_Flamer].end = 52;
 }
 
 void AM::UnloadResources()
