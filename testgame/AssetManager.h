@@ -27,6 +27,8 @@ namespace AM
 	Entity::SRenderBase* Weapon( Entity::EWeaponType type );
 
 	Entity::SRenderBase* Shield();
+
+	MSSprite::SpriteID TestTube();
 };
 
 #endif

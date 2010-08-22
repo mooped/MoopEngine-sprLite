@@ -55,7 +55,6 @@ void MSMain::Main()
 	MSCmdBuf::SetMultithread( false );
 	MSRenderThread::SetGameUpdateFunc( &UpdateGame );
 	game = new Game;
-	game->Begin();
 #endif
 
 	// Launch render thread

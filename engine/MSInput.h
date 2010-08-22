@@ -17,6 +17,7 @@ namespace MSInput
 
 	bool Key( char key );
 	bool DebouncedKey( char key );
+	void ResetKey( char key );
 
 	void ResetKeys();
 	void ResetFrameKeys();

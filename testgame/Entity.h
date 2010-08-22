@@ -61,6 +61,11 @@ namespace Entity
 	};
 
 	// Entity data structures
+	enum EMagicNumbers_Ext
+	{
+		MAX_RESOURCES = 9,
+	};
+
 	struct SRenderBase
 	{
 		ERenderClass kind;
@@ -107,6 +112,9 @@ namespace Entity
 		int megaVacIntegrity;
 		bool shieldUp;
 		bool sucking;
+		EEnemyElement res[MAX_RESOURCES];
+		int resources;
+		EEnemyElement special;
 	};
 
 	struct SEnemy
@@ -121,12 +129,16 @@ namespace Entity
 	{
 		SBase base;
 		MSVec vel;
+		EWeaponType type;
 	};
 
 	EntID Add( SBase* ent );
 	void Delete( EntID id, bool immediate = true );
 
 	void BeginGame();
+	bool IsGameOver();
+	int GetScore();
+	void FinishGame();
 
 	void Update();
 	void Render();
@@ -134,7 +146,7 @@ namespace Entity
 	// Spawn helpers
 	EntID SpawnPlayer( const MSVec& pos );
 	EntID SpawnEnemy( const MSVec& pos, const MSVec& vel, EEnemyElement element );
-	EntID SpawnBullet( const MSVec& pos, const MSVec& vel );
+	EntID SpawnBullet( const MSVec& pos, const MSVec& vel, EWeaponType type );
 };
 
 #endif

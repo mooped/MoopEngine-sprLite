@@ -32,8 +32,6 @@ GameThread::~GameThread()
 
 void GameThread::RunThread()
 {
-	m_game.Begin();
-
 	while ( !ExitRequested() )
 	{
 		m_game.Update();

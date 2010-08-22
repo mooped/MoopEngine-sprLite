@@ -107,6 +107,13 @@ void AM::LoadResources()
 	m_weapon[Entity::eWT_Flamer].frequency = 2;
 	m_weapon[Entity::eWT_Flamer].start = 48;
 	m_weapon[Entity::eWT_Flamer].end = 52;
+	// Water
+	m_weapon[Entity::eWT_Water].sprite.base.kind = Entity::eRC_AnimSprite;
+	m_weapon[Entity::eWT_Water].sprite.sheet = AM::Sprites();
+	m_weapon[Entity::eWT_Water].sprite.sprite = 56;
+	m_weapon[Entity::eWT_Water].frequency = 2;
+	m_weapon[Entity::eWT_Water].start = 56;
+	m_weapon[Entity::eWT_Water].end = 59;
 
 	// Shield render object
 	m_shield.sprite.base.kind = Entity::eRC_AnimSprite;
@@ -156,4 +163,9 @@ Entity::SRenderBase* AM::Shield()
 {
 	return reinterpret_cast<Entity::SRenderBase*>( &m_shield );
 }
-	
+
+MSSprite::SpriteID AM::TestTube()
+{
+	return 64;
+}
+

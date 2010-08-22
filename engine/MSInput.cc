@@ -59,6 +59,12 @@ bool MSInput::DebouncedKey( char key )
 	return s_keyPressed[key];
 }
 
+void MSInput::ResetKey( char key )
+{
+	s_keyState[key] = false;
+	s_keyPressed[key] = false;
+}
+
 void MSInput::ResetKeys()
 {
 	for ( int i = 0; i < NKEYS; ++i )

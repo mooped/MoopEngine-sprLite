@@ -15,13 +15,22 @@
 class Game
 {
 private:
+	enum EState
+	{
+		eS_Title = 0,
+		eS_Game,
+		eS_Score,
+		eS_Count,
+	};
+
 	int nextTick;
+	EState state;
+	int score;
 
 public:
 	Game();
 	~Game();
 
-	void Begin();
 	void Update();
 };
 

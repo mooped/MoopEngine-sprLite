@@ -37,6 +37,10 @@ namespace Entity
 	int s_lastFrameRendered = -1;
 
 	int s_nextWave = 0;
+	int s_specialWeaponTimeout = 0;
+
+	int s_score = 0;
+	bool s_gameOver = false;
 
 	enum EMagicNumbers
 	{
@@ -45,16 +49,30 @@ namespace Entity
 		MINY = 40,
 		MAXY = 480,
 		SPAWN_MARGIN = 40,
+
 		SHIP_SPEED = 3,
+
 		LASER_RELOAD = 250,
+		SPECIAL_WEAPON_TIME = 10000,
+
 		STARTING_HULL_INTEGRITY = 12,
 		STARTING_MEGAVAX_INTEGRITY = 60,
+
+		SCORE_CRASH = -10,
+		SCORE_JETTISON = -5,
+		SCORE_STUN = 1,
+		SCORE_SUCK = 5,
+		SCORE_BARGE = 10,
+		SCORE_ELEMENTAL = 50,
+		SCORE_SPECIAL = 100,
+		SCORE_UBER = 1000,
 	};
 
 	// Internal methods
 	EntID AssignID();
 
 	void UpdateEntity( SBase* ent );
+	SBase* GetEntity( EntID id );
 	void UpdateSucking();
 	void RenderEntity( SBase* ent );
 	void RenderObject( SBase* ent, SRenderBase* obj, MSVec scale = MSVec( 1, 1 ), int layer = -1 );
@@ -71,6 +89,11 @@ namespace Entity
 	void ShieldDown();
 
 	void ConsumeEntity( EntID id );
+
+	void FireSpecialWeapon();
+	void FireSpecialWeapon( EEnemyElement element );
+
+	void AwardPoints( int points );
 };
 
 // Internals
@@ -127,6 +150,52 @@ void Entity::BeginGame()
 	Entity::SpawnPlayer( MSVec( 64, 64 ) );
 }
 
+int Entity::GetScore()
+{
+	return s_score;
+}
+
+void Entity::AwardPoints( int points )
+{
+	s_score += points;
+	if ( s_score < 0 ) s_score = 0;
+}
+
+bool Entity::IsGameOver()
+{
+	return s_gameOver;
+}
+
+void Entity::FinishGame()
+{
+	MASSERT( !s_midUpdate, "Cannot clean up mid update!" );
+
+	// Delete the player's render proxy (the rest are static)
+	delete s_player->base.render;
+	s_player = NULL;
+
+	// Delete all entities
+	for ( EntityList::iterator it = s_entities.begin(), end = s_entities.end(); it != end; ++it )
+	{
+		if ( *it ) delete *it;
+	}
+
+	// Clear all lists
+	s_entities.clear();
+	s_newEntities.clear();
+	s_deletedEntities.clear();
+	
+	// Reset all statics
+	s_currentId = s_firstDynamic;
+	s_midUpdate = false;
+	s_frame = -1;
+	s_lastFrameRendered = -1;
+	s_nextWave = 0;
+	s_specialWeaponTimeout = 0;
+	s_score = 0;
+	s_gameOver = false;
+}
+
 void Entity::Update()
 {
 	++s_frame;
@@ -173,7 +242,7 @@ void Entity::UpdateSucking()
 				const MSVec dist = ent->base.pos - ppos;
 				const MSVec conedist = MSVec( dist.x + 64, abs( dist.y ) );
 				// Only consider enemies in a cone to the front
-				if ( conedist.x >= 0 && conedist.y <= conedist.x )
+				if ( conedist.x >= 0 && conedist.x < 256 && conedist.y <= conedist.x )
 				{
 					const MSVec suck = min( dist, MSVec( 4, 4 ) );
 					ent->base.pos = ent->base.pos - suck;
@@ -210,6 +279,11 @@ void Entity::UpdateEntity( SBase* ent )
 			case eEC_Player:
 			{
 				SPlayer* player = reinterpret_cast<SPlayer*>( ent );
+				// Check for game over
+				if ( player->hullIntegrity <= 0 || player->megaVacIntegrity <= 0 )
+				{
+					s_gameOver = true;
+				}
 				// Player movement
 				if ( MSInput::Key( 'w' ) )
 				{
@@ -235,6 +309,11 @@ void Entity::UpdateEntity( SBase* ent )
 				{
 					player->sucking = false;
 				}
+				if ( MSInput::Key( 'e' ) )
+				{
+					MSInput::ResetKey( 'e' );
+					FireSpecialWeapon();
+				}
 				// Keep player on screen
 				MSVec halfSize = MSVec( player->base.size.x / 2, player->base.size.y / 2 );
 				player->base.pos = min( max( player->base.pos, MSVec( MINX, MINY ) + MSVec( halfSize ) ), MSVec( MAXX, MAXY ) - halfSize );
@@ -244,9 +323,28 @@ void Entity::UpdateEntity( SBase* ent )
 					const int time = MSTimer::GetTime();
 					if ( time > player->shotTimeout )
 					{
-						SpawnBullet( player->base.pos, MSVec( 3, 0 ) );
+						EWeaponType weapon = eWT_Lazzor;
+						switch ( player->special )
+						{
+							case eEE_Fire:
+							{
+								weapon = eWT_Flamer;
+							} break;
+							case eEE_Water:
+							{
+								weapon = eWT_Water;
+							} break;
+						}
+						SpawnBullet( player->base.pos, MSVec( 3, 0 ), weapon );
 						player->shotTimeout = time + LASER_RELOAD;
 					}
+				}
+				// Reset special weapon?
+				if ( MSTimer::GetTime() > s_specialWeaponTimeout )
+				{
+					player->special = eEE_Count;
+					s_specialWeaponTimeout = 0;
+					ShieldDown();
 				}
 			} break;
 			case eEC_Enemy:
@@ -271,12 +369,46 @@ void Entity::UpdateEntity( SBase* ent )
 				// Collision tests
 				if ( EntID bullet = BulletTest( enemy->base.pos, enemy->base.size ) )
 				{
+					SBullet* bulletent = reinterpret_cast<SBullet*>( GetEntity( bullet ) );
 					enemy->state = eSS_Passive;
+					switch ( bulletent->type )
+					{
+						case eWT_Lazzor:
+						{
+							AwardPoints( SCORE_STUN );
+						} break;
+						case eWT_Flamer:
+						{
+							if ( enemy->element == eEE_Water )
+							{
+								Delete( enemy->base.id, false );
+							}
+							AwardPoints( SCORE_ELEMENTAL );
+						} break;
+						case eWT_Water:
+						{
+							if ( enemy->element == eEE_Fire )
+							{
+								Delete( enemy->base.id, false );
+							}
+							AwardPoints( SCORE_ELEMENTAL );
+						} break;
+						default: break;
+					}
 					Delete( bullet, false );
+					return;
 				}
 				if ( enemy->state == eSS_Moving && PlayerTest( enemy->base.pos, enemy->base.size ) )
 				{
-					--s_player->hullIntegrity;
+					if ( !s_player->shieldUp )
+					{
+						--s_player->hullIntegrity;
+						AwardPoints( SCORE_CRASH );
+					}
+					else
+					{
+						AwardPoints( SCORE_BARGE );
+					}
 					Delete( enemy->base.id, false );
 				}
 				// Update render data to match state
@@ -291,6 +423,18 @@ void Entity::UpdateEntity( SBase* ent )
 			default: break;
 		}
 	}
+}
+
+Entity::SBase* Entity::GetEntity( Entity::EntID id )
+{
+	for ( EntityList::iterator it = s_entities.begin(), end = s_entities.end(); it != end; ++it )
+	{
+		if ( *it && (*it)->id == id )
+		{
+			return *it;
+		}
+	}
+	return NULL;
 }
 
 void Entity::RenderEntity( SBase* ent )
@@ -337,7 +481,12 @@ void Entity::RenderObject( SBase* ent, SRenderBase* obj, MSVec scale/* = MSVec( 
 void Entity::RenderHUD()
 {
 	// Title
-	MSFont::RenderString( "ASTROVAX!", MSVec( 320, 36 ), 5, MSVec( 12, 32 ), 0xff0000ff, true );
+	MSFont::RenderString( "ASTROVAX!", MSVec( 320, 36 ), 5, MSVec( 12, 24 ), 0xff0000ff, true );
+
+	// Score
+	char score[32];
+	snprintf( score, 32, "%i", s_score );
+	MSFont::RenderString( score, MSVec( 320, 64 ), 5, MSVec( 20, 32 ), 0xff0000ff, true );
 
 	// Hull integrity
 	char hull[16];
@@ -351,6 +500,27 @@ void Entity::RenderHUD()
 	MSVec mvpos( MAXX - MSFont::CalculateSize( "MEGAVAC", MSVec( 12, 16 ) ).x - 8, 8 );
 	MSFont::RenderString( "MEGAVAC", mvpos, 5, MSVec( 12, 16 ) );
 	MSFont::RenderString( megavac, mvpos + MSVec( 8, 18 ), 5, MSVec( 12, 16 ) );
+
+	// Resources
+	MSVec start( 32, 42 );
+	int first = MAX_RESOURCES - s_player->resources;
+	for ( int i = first; i < MAX_RESOURCES; ++i )
+	{
+		int idx = i - first;
+		// BEWARE VILE HARDCODING AHEAD
+		MSSprite::RenderSprite( AM::Sprites(), /*Eeugh!*/8 + 8 * s_player->res[idx], start + MSVec( 32 * i, 0 ), 6, MSVec( 32, 16 ), 0xffffffff );
+		// WHEW! WE GOT THROUGH THAT
+	}
+	// 'Test Tube'
+	MSSprite::RenderSprite( AM::Sprites(), AM::TestTube(), start, 5, MSVec( 32, 16 ), 0x7f7fffff );
+	for ( int i = 1; i < 5; ++i )
+	{
+		MSSprite::RenderSprite( AM::Sprites(), AM::TestTube() + 2, start + MSVec( 32 * i, 0 ), 5, MSVec( 32, 16 ), 0x7f7fffff );
+	}
+	MSSprite::RenderSprite( AM::Sprites(), AM::TestTube() + 1, start + MSVec( 32 * 5, 0 ), 5, MSVec( 32, 16 ), 0x7f7fffff );
+	MSSprite::RenderSprite( AM::Sprites(), AM::TestTube() + 2, start + MSVec( 32 * 6, 0 ), 5, MSVec( 32, 16 ), 0x7f7fffff );
+	MSSprite::RenderSprite( AM::Sprites(), AM::TestTube() + 2, start + MSVec( 32 * 7, 0 ), 5, MSVec( 32, 16 ), 0x7f7fffff );
+	MSSprite::RenderSprite( AM::Sprites(), AM::TestTube() + 3, start + MSVec( 32 * 8, 0 ), 5, MSVec( 32, 16 ), 0x7f7fffff );
 }
 
 bool Entity::NeedAnimUpdate()
@@ -381,6 +551,8 @@ Entity::EntID Entity::SpawnPlayer( const MSVec& pos )
 	player->hullIntegrity = STARTING_HULL_INTEGRITY;
 	player->megaVacIntegrity = STARTING_MEGAVAX_INTEGRITY;
 	player->shieldUp = false;
+	player->resources = 0;
+	player->special = eEE_Count;	// No special weapon
 
 	s_player = player;
 
@@ -404,7 +576,7 @@ Entity::EntID Entity::SpawnEnemy( const MSVec& pos, const MSVec& vel, Entity::EE
 	return Entity::Add( reinterpret_cast<Entity::SBase*>( enemy ) );
 }
 
-Entity::EntID Entity::SpawnBullet( const MSVec& pos, const MSVec& vel )
+Entity::EntID Entity::SpawnBullet( const MSVec& pos, const MSVec& vel, EWeaponType weapon )
 {
 	SBullet* bullet = new SBullet;
 
@@ -413,8 +585,9 @@ Entity::EntID Entity::SpawnBullet( const MSVec& pos, const MSVec& vel )
 	bullet->base.pos = pos;
 	bullet->base.layer = 6;
 	bullet->base.size = MSVec( 32, 16 );
-	bullet->base.render = AM::Weapon( eWT_Lazzor );
+	bullet->base.render = AM::Weapon( weapon );
 	bullet->vel = vel;
+	bullet->type = weapon;
 
 	return Entity::Add( reinterpret_cast<Entity::SBase*>( bullet ) );
 }
@@ -507,7 +680,53 @@ void Entity::ShieldDown()
 
 void Entity::ConsumeEntity( Entity::EntID id )
 {
-	// ToDo: Add to resources
-	Delete( id, false );
+	SEnemy* ent = reinterpret_cast<SEnemy*>( GetEntity( id ) );
+	if ( ent )
+	{
+		if ( s_player->resources < MAX_RESOURCES )
+		{
+			s_player->res[s_player->resources++] = ent->element;
+		}
+		AwardPoints( SCORE_SUCK );
+		Delete( id, false );
+	}
+}
+
+void Entity::FireSpecialWeapon()
+{
+	// Got enough resources?
+	if ( s_player->resources > 0 )
+	{
+		if ( s_player->resources >= 3 )
+		{
+			// Do they match?
+			const int start = s_player->resources - 3;
+			EEnemyElement type = s_player->res[start];
+			if ( s_player->res[start + 1] == type && s_player->res[start + 2] == type )
+			{
+				// We can fire
+				FireSpecialWeapon( type );
+				s_player->resources -= 3;
+				AwardPoints( SCORE_SPECIAL );
+				return;
+			}
+		}
+
+		// Otherwise we jettison a resource
+		--s_player->resources;
+		AwardPoints( SCORE_JETTISON );
+	}
+}
+
+void Entity::FireSpecialWeapon( EEnemyElement element )
+{
+	// Set the timeout to reset the special weapon
+	s_specialWeaponTimeout = MSTimer::GetTime() + SPECIAL_WEAPON_TIME;
+	// Set the special weapon type
+	s_player->special = element;
+	if ( element == eEE_Earth )
+	{
+		ShieldUp();
+	}
 }
 
