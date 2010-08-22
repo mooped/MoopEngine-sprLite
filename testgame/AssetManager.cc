@@ -11,7 +11,17 @@
 
 #include "MSFont.h"
 
+//#define TESTBUILD
+
+#if defined( TESTBUILD )
 #define TEXDIR "../../"
+#else
+#if defined( WIN32 )
+#define TEXDIR "./"
+#elif defined( MACOSX )
+#define TEXDIR "../Resources/
+#endif
+#endif
 
 namespace AM
 {

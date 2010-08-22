@@ -135,7 +135,7 @@ void MSRenderThread::Quad( MSVec verts[4], int layer, MSVec uvs[2], Colour rgba 
 		// Convert coordinates
 		float x[4];
 		float y[4];
-		float z = -layer;
+		float z = static_cast<float>( -layer );
 		float u[2];
 		float v[2];
 		float xStep = 1.0f / static_cast<float>( s_width );

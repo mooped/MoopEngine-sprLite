@@ -13,6 +13,7 @@
 #include <assert.h>
 
 // Useful types
+typedef unsigned char byte;
 typedef unsigned int u_int;
 typedef unsigned short u_short;
 typedef unsigned char u_char;
@@ -36,6 +37,17 @@ enum ESpecialKeys
 };
 
 // Useful macros
+
+#ifndef NULL
+// Eww
+#define NULL 0
+#endif
+
+#ifdef WIN32
+// Eeeeurgh
+#define snprintf _snprintf_s
+#endif
+
 
 // Align (align parameter must be a power of 2)
 #define ALIGNP2( offset, align ) \

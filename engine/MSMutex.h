@@ -32,7 +32,7 @@ namespace MSAtomic
 	
 	inline bool CompareExchange( int oldValue, int newValue, int* value )
 	{
-		return InterlockedCompareExchange( reinterpret_cast<LPLONG>( value ), static_cast<LONG>( newValue ), static_cast<LONG>( oldValue ) );
+		return InterlockedCompareExchange( reinterpret_cast<LPLONG>( value ), static_cast<LONG>( newValue ), static_cast<LONG>( oldValue ) ) == 0;
 	}
 };
 

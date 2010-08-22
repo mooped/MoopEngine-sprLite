@@ -50,7 +50,7 @@ void MSThread::Run( void )
 	pthread_attr_t attr;
 	pthread_attr_init( &attr );
 	pthread_attr_setdetachstate( &attr, PTHREAD_CREATE_JOINABLE );
-	if ( pthread_create( &m_data->ref, NULL, RunThread_Impl, this ) )
+	if ( pthread_create( &m_data->ref, NULL, 3_Impl, this ) )
 	{
 		MASSERT( 0, "Create thread failed.\n" );
 	}
@@ -116,6 +116,11 @@ void MSThread::Run( void )
 	{
 		MASSERT( 0, "Create thread failed.\n" );
 	}
+}
+
+void MSThread::RunThread( void )
+{
+	Exit();
 }
 
 void MSThread::Exit( void )

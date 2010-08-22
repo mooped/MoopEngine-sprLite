@@ -11,6 +11,7 @@
 
 #include <vector>
 #include <stdlib.h>
+#include <string.h>
 
 #include "MSTimer.h"
 #include "MSInput.h"

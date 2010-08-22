@@ -45,8 +45,8 @@ void MSFont::RenderString( const char* const pszString, const MSVec& pos, int la
 	size_t length = strlen( pszString );
 
 	MSVec p = pos;
-	const int spacing = size.x * 0.1f;
-	const int xoffset = size.x + spacing;
+	const int spacing = static_cast<int>( size.x * 0.1f );
+	const int xoffset = static_cast<int>( size.x + spacing );
 	if ( center )
 	{
 		p = p - MSVec( ( ( size.x + spacing ) * length - ( size.x + spacing ) ) / 2, size.y / 2 );
@@ -105,7 +105,7 @@ void MSFont::RenderCharacter( const u_char character, const MSVec& pos, int laye
 MSVec MSFont::CalculateSize( const char* const pszString, const MSVec& size )
 {
 	const size_t length = strlen( pszString );
-	const int spacing = size.x * 0.1f;
+	const int spacing = static_cast<int>( size.x * 0.1f );
 
 	return MSVec(
 		( size.x + spacing ) * length - ( size.x + spacing ),

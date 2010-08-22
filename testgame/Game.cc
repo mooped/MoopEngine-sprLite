@@ -16,6 +16,11 @@
 
 #include <stdio.h>
 
+#ifdef WIN32
+#include <windows.h>
+#define sleep Sleep
+#endif
+
 #include "Entity.h"
 #include "AssetManager.h"
 

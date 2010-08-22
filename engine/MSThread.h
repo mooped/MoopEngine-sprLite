@@ -15,14 +15,14 @@
 class MSThread
 {
 public:
-	MSThread( void );
-	virtual ~MSThread( void );
+	MSThread();
+	virtual ~MSThread();
 
-	void Run( void );
+	void Run();
 protected:
-	virtual void RunThread( void );	// Override this. Default just exits.
-	inline bool ExitRequested( void ) { return m_kill; }
-	void Exit( void );
+	virtual void RunThread();	// Override this. Default just exits.
+	inline bool ExitRequested() { return m_kill; }
+	void Exit();
 private:
 
 	static void* RunThread_Impl( void* pInst );
