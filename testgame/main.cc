@@ -9,17 +9,25 @@
 // System
 #include <stdio.h>
 
-// Game
-#include "GameThread.h"
-
 #define MULTITHREAD 0
 
+#if MULTITHREAD
+#include "GameThread.h"
 static MSThread* gt;
+#else
+#include "MSCmdBuf.h"
+#endif
+
+// Game
+#include "Game.h"
+
 static Game* game;
 
 void ExitCallback()
 {
+#if MULTITHREAD
 	delete gt;
+#endif
 	MSInput::Shutdown();
 }
 
@@ -43,9 +51,11 @@ void MSMain::Main()
 	gt = new GameThread;
 	gt->Run();
 #else
+	printf( "[Main] Launching game\n" );
+	MSCmdBuf::SetMultithread( false );
+	MSRenderThread::SetGameUpdateFunc( &UpdateGame );
 	game = new Game;
 	game->Begin();
-	MSRenderThread::SetGameUpdateFunc( &UpdateGame );
 #endif
 
 	// Launch render thread

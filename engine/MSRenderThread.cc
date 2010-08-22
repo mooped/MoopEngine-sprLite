@@ -180,19 +180,25 @@ bool MSRenderThread::ProcessCommand()
 {
 	unsigned int &idx = s_curCmd;
 	MSCmdBuf::CmdBuffer* buffer = MSCmdBuf::GetBuffer();
-	buffer->lock.Lock();
-	const bool rendering = buffer->rendering;
-	if ( !rendering )
+	if ( MSCmdBuf::IsMultithreaded() )
 	{
-		buffer->lock.Unlock();
-		MSCmdBuf::SwapRenderingBuffer();
-		return false;
+		buffer->lock.Lock();
+		const bool rendering = buffer->rendering;
+		if ( !rendering )
+		{
+			buffer->lock.Unlock();
+			MSCmdBuf::SwapRenderingBuffer();
+			return false;
+		}
 	}
 	if ( idx >= buffer->valid_length )
 	{
 		MSCmdBuf::Clear();
 		idx = 0;
-		buffer->lock.Unlock();
+		if ( MSCmdBuf::IsMultithreaded () )
+		{
+			buffer->lock.Unlock();
+		}
 		return false;
 	}
 	MSRender::ECmd cmd = static_cast<MSRender::ECmd>( MSCmdBuf::GetBuffer()->buffer[idx++] );
@@ -239,7 +245,10 @@ bool MSRenderThread::ProcessCommand()
 		} break;
 	}
 
-	buffer->lock.Unlock();
+	if ( MSCmdBuf::IsMultithreaded () )
+	{
+		buffer->lock.Unlock();
+	}
 	return true;
 }
 

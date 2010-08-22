@@ -29,6 +29,9 @@ namespace MSCmdBuf
 		bool rendering;	// True if rendering from, otherwise writing to
 	};
 
+	void SetMultithread( bool mt );
+	bool IsMultithreaded();
+
 	void LockForWriting();
 	void UnlockForWriting();
 	void FinishedRendering();

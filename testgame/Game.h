@@ -7,6 +7,9 @@
  *
  */
 
+#ifndef GAME_DEF
+#define GAME_DEF
+
 #include "MSEngine.h"
 
 class Game
@@ -21,4 +24,6 @@ public:
 	void Begin();
 	void Update();
 };
+
+#endif
 

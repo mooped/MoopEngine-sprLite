@@ -21,30 +21,45 @@ namespace MSCmdBuf
 	int s_renderIdx = 1;
 	MSCmdBuf::CmdBuffer* s_commands = &s_buffers[s_cmdIdx];
 	MSCmdBuf::CmdBuffer* s_rendering = &s_buffers[s_renderIdx];
+	bool multithread = false;
+}
+
+void MSCmdBuf::SetMultithread( bool mt )
+{
+	multithread = mt;
+}
+
+bool MSCmdBuf::IsMultithreaded()
+{
+	return multithread;
 }
 
 // Locking
 void MSCmdBuf::LockForWriting()
 {
-	s_commands->lock.Lock();
-	if ( s_commands->rendering )
+	if ( multithread )
 	{
-		s_commands->lock.Unlock();
-		s_cmdIdx = ( s_cmdIdx == 0 ) ? 1 : 0;
-		s_commands = &s_buffers[s_cmdIdx];
 		s_commands->lock.Lock();
 		if ( s_commands->rendering )
 		{
 			s_commands->lock.Unlock();
-			while ( s_commands->rendering );
-			LockForWriting();
+			s_cmdIdx = ( s_cmdIdx == 0 ) ? 1 : 0;
+			s_commands = &s_buffers[s_cmdIdx];
+			s_commands->lock.Lock();
+			if ( s_commands->rendering )
+			{
+				s_commands->lock.Unlock();
+				while ( s_commands->rendering );
+				LockForWriting();
+			}
 		}
 	}
 }
 
 void MSCmdBuf::UnlockForWriting()
 {
-	s_commands->lock.Unlock();
+	if ( multithread )
+		s_commands->lock.Unlock();
 }
 
 void MSCmdBuf::FinishedRendering()
@@ -59,8 +74,11 @@ void MSCmdBuf::FinishedWriting()
 
 void MSCmdBuf::SwapRenderingBuffer()
 {
-	s_renderIdx = ( s_renderIdx == 0 ) ? 1 : 0;
-	s_rendering = &s_buffers[s_cmdIdx];
+	if ( multithread )
+	{
+		s_renderIdx = ( s_renderIdx == 0 ) ? 1 : 0;
+		s_rendering = &s_buffers[s_cmdIdx];
+	}
 }
 
 // Command buffer implementation
@@ -141,6 +159,13 @@ void MSCmdBuf::Dispatch( void )
 
 MSCmdBuf::CmdBuffer* MSCmdBuf::GetBuffer()
 {
-	return s_rendering;
+	if ( IsMultithreaded() )
+	{
+		return s_rendering;
+	}
+	else
+	{
+		return s_commands;
+	}
 }
 
