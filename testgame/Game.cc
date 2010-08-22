@@ -72,7 +72,7 @@ void Game::Update()
 			MSFont::RenderString( " WSAD : MOVE               ", MSVec( 320, 220 ), 5, MSVec( 16, 16 ), 0xffffffff, true );
 
 			MSFont::RenderString( "SUCK UP STUNNED ENEMIES", MSVec( 320, 260 ), 5, MSVec( 16, 16 ), 0xffffffff, true );
-			MSFont::RenderString( "TURN MATCHING SETS INTO POWEUPS", MSVec( 320, 290 ), 5, MSVec( 16, 16 ), 0xffffffff, true );
+			MSFont::RenderString( "TURN MATCHING SETS INTO POWEURPS", MSVec( 320, 290 ), 5, MSVec( 16, 16 ), 0xffffffff, true );
 			MSFont::RenderString( "JETTISON MISMATCHED ENEMIES", MSVec( 320, 320 ), 5, MSVec( 16, 16 ), 0xffffffff, true );
 			MSFont::RenderString( "ELEMENTAL KILLS SCORE EXTRA POINTS", MSVec( 320, 350 ), 5, MSVec( 16, 16 ), 0xffffffff, true );
 
