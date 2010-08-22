@@ -5,7 +5,7 @@ v1.0
 http://moop.org.uk
 mooped@gmail.com
 
-Special thanks to Candice for being awesome, MrBrick for nifty idea and the
+Special thanks to Candice for being awesome, MrBrick for nifty ideas and the
 rest of the #burrito lot for support and additional awesomeness.
 
 A game about defending a giant space vacuum cleaner from oncoming enemies.
