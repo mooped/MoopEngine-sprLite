@@ -45,6 +45,8 @@ namespace MSRenderThread
 	unsigned int s_width = 640;	// Virtual pixel dimensions
 	unsigned int s_height = 480;
 	MSImage* s_pImage = NULL;	// Currently bound image
+
+	UpdateFunc* s_pfnUpdateFunc;
 };
 
 void MSRenderThread::BeginScene()
@@ -243,10 +245,21 @@ bool MSRenderThread::ProcessCommand()
 
 void MSRenderThread::ProcessCommands()
 {
+	// Update the game if running single threaded
+	if ( s_pfnUpdateFunc )
+	{
+		s_pfnUpdateFunc();
+	}
+
 	// ProcessCommands
 	while ( ProcessCommand() );
 	MSCmdBuf::FinishedRendering();
 
 	MSLauncher::RequestRedisplay();
+}
+
+void MSRenderThread::SetGameUpdateFunc( MSRenderThread::UpdateFunc* pfnUpdate )
+{
+	s_pfnUpdateFunc = pfnUpdate;
 }
 

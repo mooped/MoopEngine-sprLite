@@ -15,9 +15,14 @@
 
 namespace MSRenderThread
 {
+	typedef void (UpdateFunc)();
+
 	// Management
 	void CreateRT();	// This does not return! Stupid GLUT
 	void ProcessCommands();
+
+	// For single threaded games
+	void SetGameUpdateFunc( UpdateFunc* pfnUpdate );
 };
 
 #endif

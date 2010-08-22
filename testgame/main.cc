@@ -12,12 +12,23 @@
 // Game
 #include "GameThread.h"
 
+#define MULTITHREAD 0
+
 static MSThread* gt;
+static Game* game;
 
 void ExitCallback()
 {
 	delete gt;
 	MSInput::Shutdown();
+}
+
+void UpdateGame()
+{
+	if ( game )
+	{
+		game->Update();
+	}
 }
 
 void MSMain::Main()
@@ -26,10 +37,16 @@ void MSMain::Main()
 	MSLauncher::SetExitCallback( &ExitCallback );
 	MSInput::Initialise();
 
+#if MULTITHREAD
 	// Launch game thread
 	printf( "[Main] Launching game thread\n" );
 	gt = new GameThread;
 	gt->Run();
+#else
+	game = new Game;
+	game->Begin();
+	MSRenderThread::SetGameUpdateFunc( &UpdateGame );
+#endif
 
 	// Launch render thread
 	printf( "[Main] Launching render thread\n" );
