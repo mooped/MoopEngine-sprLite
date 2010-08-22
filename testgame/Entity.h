@@ -106,6 +106,7 @@ namespace Entity
 		int hullIntegrity;
 		int megaVacIntegrity;
 		bool shieldUp;
+		bool sucking;
 	};
 
 	struct SEnemy

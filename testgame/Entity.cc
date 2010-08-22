@@ -55,6 +55,7 @@ namespace Entity
 	EntID AssignID();
 
 	void UpdateEntity( SBase* ent );
+	void UpdateSucking();
 	void RenderEntity( SBase* ent );
 	void RenderObject( SBase* ent, SRenderBase* obj, MSVec scale = MSVec( 1, 1 ), int layer = -1 );
 	void RenderHUD();
@@ -68,6 +69,8 @@ namespace Entity
 
 	void ShieldUp();
 	void ShieldDown();
+
+	void ConsumeEntity( EntID id );
 };
 
 // Internals
@@ -127,12 +130,17 @@ void Entity::BeginGame()
 void Entity::Update()
 {
 	++s_frame;
-
 	s_midUpdate = true;
+
 	for ( EntityList::iterator it = s_entities.begin(), end = s_entities.end(); it != end; ++it )
 	{
 		UpdateEntity( *it );
 	}
+
+	UpdateSucking();
+
+	SpawnWaves();
+
 	s_midUpdate = false;
 
 	// Add new entities
@@ -148,9 +156,35 @@ void Entity::Update()
 		Delete( (*it), true );
 	}
 	s_deletedEntities.clear();
+}
 
-	// Spawn a new wave if necessary
-	SpawnWaves();
+void Entity::UpdateSucking()
+{
+	if ( s_player->sucking )
+	{
+		const MSVec& ppos = s_player->base.pos;
+	
+		// Get a list of enemies within range
+		for ( EntityList::iterator it = s_entities.begin(), end = s_entities.end(); it != end; ++it )
+		{
+			SEnemy* ent = reinterpret_cast<SEnemy*>( *it );
+			if ( ent->base.kind == eEC_Enemy && ent->state == eSS_Passive )
+			{
+				const MSVec dist = ent->base.pos - ppos;
+				const MSVec conedist = MSVec( dist.x + 64, abs( dist.y ) );
+				// Only consider enemies in a cone to the front
+				if ( conedist.x >= 0 && conedist.y <= conedist.x )
+				{
+					const MSVec suck = min( dist, MSVec( 4, 4 ) );
+					ent->base.pos = ent->base.pos - suck;
+					if ( dist - suck == MSVec( 0, 0 ) )
+					{
+						ConsumeEntity( ent->base.id );
+					}
+				}
+			}
+		}
+	}
 }
 
 void Entity::Render()
@@ -193,9 +227,13 @@ void Entity::UpdateEntity( SBase* ent )
 				{
 					player->base.pos.x += SHIP_SPEED;
 				}
-				if ( MSInput::Key( 'q' ) )	// TESTCODE: shield
+				if ( MSInput::Key( 'q' ) )
 				{
-					if ( player->shieldUp ) ShieldDown(); else ShieldUp();
+					player->sucking = true;
+				}
+				else
+				{
+					player->sucking = false;
 				}
 				// Keep player on screen
 				MSVec halfSize = MSVec( player->base.size.x / 2, player->base.size.y / 2 );
@@ -219,9 +257,12 @@ void Entity::UpdateEntity( SBase* ent )
 				{
 					enemy->base.pos = enemy->base.pos + enemy->vel;
 					MSVec halfSize = MSVec( enemy->base.size.x / 2, enemy->base.size.y / 2 );
-					if ( 	enemy->base.pos.x < MINX - halfSize.x ||
-								//enemy->base.pos.x > MAXX + halfSize.x ||
-								enemy->base.pos.y < MINY - halfSize.y ||
+					if ( 	enemy->base.pos.x < MINX - halfSize.x )
+					{
+						--s_player->megaVacIntegrity;
+						Delete( enemy->base.id, false );
+					}
+					if (	enemy->base.pos.y < MINY - halfSize.y ||
 								enemy->base.pos.y > MAXY + halfSize.y )
 					{
 						Delete( enemy->base.id, false );
@@ -235,7 +276,8 @@ void Entity::UpdateEntity( SBase* ent )
 				}
 				if ( enemy->state == eSS_Moving && PlayerTest( enemy->base.pos, enemy->base.size ) )
 				{
-					MASSERT( 0, "DEADDEADDEAD" );
+					--s_player->hullIntegrity;
+					Delete( enemy->base.id, false );
 				}
 				// Update render data to match state
 				enemy->base.render = AM::Enemy( enemy->element, enemy->state );
@@ -298,10 +340,17 @@ void Entity::RenderHUD()
 	MSFont::RenderString( "ASTROVAX!", MSVec( 320, 36 ), 5, MSVec( 12, 32 ), 0xff0000ff, true );
 
 	// Hull integrity
+	char hull[16];
+	snprintf( hull, 16, "%i", s_player->hullIntegrity );
 	MSFont::RenderString( "HULL", MSVec( 8, 8 ), 5, MSVec( 12, 16 ) );
+	MSFont::RenderString( hull, MSVec( 16, 26 ), 5, MSVec( 12, 16 ) );
 
 	// MegaVac integrity
-	MSFont::RenderString( "MEGAVAC", MSVec( MAXX - MSFont::CalculateSize( "MEGAVAC", MSVec( 12, 16 ) ).x - 8, 8 ), 5, MSVec( 12, 16 ) );
+	char megavac[16];
+	snprintf( megavac, 16, "%i", s_player->megaVacIntegrity );
+	MSVec mvpos( MAXX - MSFont::CalculateSize( "MEGAVAC", MSVec( 12, 16 ) ).x - 8, 8 );
+	MSFont::RenderString( "MEGAVAC", mvpos, 5, MSVec( 12, 16 ) );
+	MSFont::RenderString( megavac, mvpos + MSVec( 8, 18 ), 5, MSVec( 12, 16 ) );
 }
 
 bool Entity::NeedAnimUpdate()
@@ -454,5 +503,11 @@ void Entity::ShieldDown()
 {
 	s_player->shieldUp = false;
 	reinterpret_cast<SRenderMux*>( s_player->base.render)->obj[1] = NULL;
+}
+
+void Entity::ConsumeEntity( Entity::EntID id )
+{
+	// ToDo: Add to resources
+	Delete( id, false );
 }
 
