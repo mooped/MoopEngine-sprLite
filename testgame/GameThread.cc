@@ -12,13 +12,11 @@
 #include "MSTimer.h"
 #include "MSInput.h"
 #include "MSRender.h"
-#include "MSFont.h"
-#include "MSSprite.h"
 
 #include <stdio.h>
 
-#include "AssetManager.h"
 #include "Entity.h"
+#include "AssetManager.h"
 
 GameThread::GameThread()
 : MSThread()
@@ -35,7 +33,7 @@ GameThread::~GameThread()
 
 void GameThread::RunThread()
 {
-	GameSetup();
+	Entity::BeginGame();
 
 	while ( !ExitRequested() )
 	{
@@ -59,21 +57,12 @@ void GameThread::RunThread()
 	Exit();
 }
 
-void GameThread::GameSetup()
-{
-	// Create the player's entity
-	Entity::SpawnPlayer( MSVec( 64, 64 ) );
-}
-
 void GameThread::GameUpdate()
 {
 	MSRender::ClearColour( 0x000000ff );;
 	MSRender::BeginScene();
 
 	Entity::Update();
-
-	// Hard coded rendering
-	MSFont::RenderString( "ENEMIES AS WEAPONS!", MSVec( 320, 36 ), 5, MSVec( 24, 32 ), 0xffff00ff, true );
 
 	// Entity rendering 
 	Entity::Render();

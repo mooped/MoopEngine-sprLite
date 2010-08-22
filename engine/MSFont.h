@@ -22,6 +22,8 @@ namespace MSFont
 
 	void RenderString( const char* const pszString, const MSVec& pos, int layer, const MSVec& size, const Colour rgba = 0xffffffff, const bool center = false );
 	void RenderCharacter( const u_char character, const MSVec& pos, int layer, const MSVec& size, const Colour rgba = 0xffffffff );
+
+	MSVec CalculateSize( const char* const pszString, const MSVec& size );
 };
 
 #endif

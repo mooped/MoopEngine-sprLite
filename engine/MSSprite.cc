@@ -83,3 +83,16 @@ void MSSprite::RenderSprite( SheetID sheet, SpriteID sprite, const MSVec& pos, i
 	}
 }
 
+MSVec MSSprite::GetSpriteSize( SheetID sheet )
+{
+	if ( sheet < s_sheets.size() )
+	{
+		const SSheet sprites = s_sheets[sheet];
+		return sprites.m_size;
+	}
+	else 
+	{
+		return MSVec( 0, 0 );
+	}
+}
+

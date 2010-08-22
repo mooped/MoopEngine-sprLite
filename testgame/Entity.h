@@ -32,6 +32,7 @@ namespace Entity
 	{
 		eRC_Base = 0,
 		eRC_Sprite,
+		eRC_Mux,
 		eRC_AnimSprite,
 	};
 
@@ -55,6 +56,7 @@ namespace Entity
 	{
 		eWT_Lazzor = 0,
 		eWT_Flamer,
+		eWT_Water,
 		eWT_Count,
 	};
 
@@ -79,6 +81,14 @@ namespace Entity
 		MSSprite::SpriteID end;
 	};
 
+	struct SRenderMux
+	{
+		SRenderBase base;
+		SRenderBase* obj[2];
+		MSVec scale[2];
+		int layeroffset[2];
+	};
+
 	struct SBase
 	{
 		EntID id;
@@ -93,6 +103,9 @@ namespace Entity
 	{
 		SBase base;
 		int shotTimeout;
+		int hullIntegrity;
+		int megaVacIntegrity;
+		bool shieldUp;
 	};
 
 	struct SEnemy
@@ -111,6 +124,8 @@ namespace Entity
 
 	EntID Add( SBase* ent );
 	void Delete( EntID id, bool immediate = true );
+
+	void BeginGame();
 
 	void Update();
 	void Render();

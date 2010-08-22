@@ -102,3 +102,14 @@ void MSFont::RenderCharacter( const u_char character, const MSVec& pos, int laye
 	}
 }
 
+MSVec MSFont::CalculateSize( const char* const pszString, const MSVec& size )
+{
+	const size_t length = strlen( pszString );
+	const int spacing = size.x * 0.1f;
+
+	return MSVec(
+		( size.x + spacing ) * length - ( size.x + spacing ),
+		size.y
+	);
+}
+

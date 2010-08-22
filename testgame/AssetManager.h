@@ -18,12 +18,15 @@ namespace AM
 	void LoadResources();
 	void UnloadResources();
 
-	MSSprite::SheetID Ships();
+	MSSprite::SheetID Sprites();
+	MSSprite::SheetID BigSprites();
 
 	Entity::SRenderBase* Player( Entity::EShipState state );
 	Entity::SRenderBase* Enemy( Entity::EEnemyElement element, Entity::EShipState state );
 
 	Entity::SRenderBase* Weapon( Entity::EWeaponType type );
+
+	Entity::SRenderBase* Shield();
 };
 
 #endif

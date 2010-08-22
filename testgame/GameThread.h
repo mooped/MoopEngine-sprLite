@@ -20,7 +20,6 @@ private:
 	int nextTick;
 
 protected:
-	void GameSetup();
 	void GameUpdate();
 
 public:

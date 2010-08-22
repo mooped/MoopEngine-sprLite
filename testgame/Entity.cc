@@ -14,6 +14,7 @@
 
 #include "MSTimer.h"
 #include "MSInput.h"
+#include "MSFont.h"
 
 #include "AssetManager.h"
 
@@ -46,6 +47,8 @@ namespace Entity
 		SPAWN_MARGIN = 40,
 		SHIP_SPEED = 3,
 		LASER_RELOAD = 250,
+		STARTING_HULL_INTEGRITY = 12,
+		STARTING_MEGAVAX_INTEGRITY = 60,
 	};
 
 	// Internal methods
@@ -53,6 +56,8 @@ namespace Entity
 
 	void UpdateEntity( SBase* ent );
 	void RenderEntity( SBase* ent );
+	void RenderObject( SBase* ent, SRenderBase* obj, MSVec scale = MSVec( 1, 1 ), int layer = -1 );
+	void RenderHUD();
 
 	bool NeedAnimUpdate();
 
@@ -60,6 +65,9 @@ namespace Entity
 
 	EntID BulletTest( const MSVec& pos, const MSVec& size );
 	bool PlayerTest( const MSVec& pos, const MSVec& size );
+
+	void ShieldUp();
+	void ShieldDown();
 };
 
 // Internals
@@ -111,6 +119,11 @@ void Entity::Delete( EntID id, bool immediate/* = true*/ )
 	}
 }
 
+void Entity::BeginGame()
+{
+	Entity::SpawnPlayer( MSVec( 64, 64 ) );
+}
+
 void Entity::Update()
 {
 	++s_frame;
@@ -142,6 +155,8 @@ void Entity::Update()
 
 void Entity::Render()
 {
+	RenderHUD();
+
 	for ( EntityList::iterator it = s_entities.begin(), end = s_entities.end(); it != end; ++it )
 	{
 		RenderEntity( *it );
@@ -177,6 +192,10 @@ void Entity::UpdateEntity( SBase* ent )
 				else if ( MSInput::Key( 'd' ) )
 				{
 					player->base.pos.x += SHIP_SPEED;
+				}
+				if ( MSInput::Key( 'q' ) )	// TESTCODE: shield
+				{
+					if ( player->shieldUp ) ShieldDown(); else ShieldUp();
 				}
 				// Keep player on screen
 				MSVec halfSize = MSVec( player->base.size.x / 2, player->base.size.y / 2 );
@@ -220,7 +239,6 @@ void Entity::UpdateEntity( SBase* ent )
 				}
 				// Update render data to match state
 				enemy->base.render = AM::Enemy( enemy->element, enemy->state );
-				// ToDo: Fire stuff!
 			} break;
 			case eEC_Bullet:
 			{
@@ -237,17 +255,25 @@ void Entity::RenderEntity( SBase* ent )
 {
 	if ( ent && ent->render )
 	{
-		switch ( ent->render->kind )
+		RenderObject( ent, ent->render );
+	}
+}
+
+void Entity::RenderObject( SBase* ent, SRenderBase* obj, MSVec scale/* = MSVec( 1, 1 )*/, int layer/* = -1*/ )
+{
+	if ( obj )
+	{
+		switch ( obj->kind )
 		{
 			case eRC_Sprite:
 			{
-				SRenderSprite* sprite = reinterpret_cast<SRenderSprite*>( ent->render );
-				MSSprite::RenderSprite( sprite->sheet, sprite->sprite, ent->pos, ent->layer, ent->size );
+				SRenderSprite* sprite = reinterpret_cast<SRenderSprite*>( obj );
+				MSSprite::RenderSprite( sprite->sheet, sprite->sprite, ent->pos, ( layer == -1 ) ? ent->layer : layer, ent->size * scale );
 			} break;
 			case eRC_AnimSprite:
 			{
-				SRenderAnimSprite* sprite = reinterpret_cast<SRenderAnimSprite*>( ent->render );
-				MSSprite::RenderSprite( sprite->sprite.sheet, sprite->sprite.sprite, ent->pos, ent->layer, ent->size );
+				SRenderAnimSprite* sprite = reinterpret_cast<SRenderAnimSprite*>( obj );
+				MSSprite::RenderSprite( sprite->sprite.sheet, sprite->sprite.sprite, ent->pos, ( layer == -1 ) ? ent->layer : layer, ent->size * scale );
 				// Tick the anim
 				if ( NeedAnimUpdate() && ( s_frame % sprite->frequency ) == 0 )
 				{
@@ -255,9 +281,27 @@ void Entity::RenderEntity( SBase* ent )
 					if ( sprite->sprite.sprite > sprite->end ) sprite->sprite.sprite = sprite->start;
 				}
 			} break;
+			case eRC_Mux:
+			{
+				SRenderMux* mux = reinterpret_cast<SRenderMux*>( obj );
+				RenderObject( ent, mux->obj[0], mux->scale[0], ent->layer + mux->layeroffset[0] );
+				RenderObject( ent, mux->obj[1], mux->scale[1], ent->layer + mux->layeroffset[1] );
+			} break;
 			default: break;
 		};
 	}
+}
+
+void Entity::RenderHUD()
+{
+	// Title
+	MSFont::RenderString( "ASTROVAX!", MSVec( 320, 36 ), 5, MSVec( 12, 32 ), 0xff0000ff, true );
+
+	// Hull integrity
+	MSFont::RenderString( "HULL", MSVec( 8, 8 ), 5, MSVec( 12, 16 ) );
+
+	// MegaVac integrity
+	MSFont::RenderString( "MEGAVAC", MSVec( MAXX - MSFont::CalculateSize( "MEGAVAC", MSVec( 12, 16 ) ).x - 8, 8 ), 5, MSVec( 12, 16 ) );
 }
 
 bool Entity::NeedAnimUpdate()
@@ -268,14 +312,26 @@ bool Entity::NeedAnimUpdate()
 // Spawn helpers
 Entity::EntID Entity::SpawnPlayer( const MSVec& pos )
 {
-	Entity::SPlayer* player = new Entity::SPlayer;
+	SPlayer* player = new SPlayer;
+	SRenderMux* renderMux = new SRenderMux;
+	renderMux->base.kind = eRC_Mux;
+	renderMux->obj[0] = AM::Player( eSS_Moving );
+	renderMux->obj[1] = NULL;
+	renderMux->scale[0] = MSVec( 1, 1 );
+	renderMux->scale[1] = MSVec( 1, 2 );
+	renderMux->layeroffset[0] = 0;
+	renderMux->layeroffset[1] = -1;
 
 	player->base.id = 0;
-	player->base.kind = Entity::eEC_Player;
+	player->base.kind = eEC_Player;
 	player->base.pos = pos;
 	player->base.layer = 4;
 	player->base.size = MSVec( 32, 16 );
-	player->base.render = AM::Player( eSS_Moving );
+	player->base.render = reinterpret_cast<SRenderBase*>( renderMux );
+	player->shotTimeout = 0;
+	player->hullIntegrity = STARTING_HULL_INTEGRITY;
+	player->megaVacIntegrity = STARTING_MEGAVAX_INTEGRITY;
+	player->shieldUp = false;
 
 	s_player = player;
 
@@ -284,10 +340,10 @@ Entity::EntID Entity::SpawnPlayer( const MSVec& pos )
 
 Entity::EntID Entity::SpawnEnemy( const MSVec& pos, const MSVec& vel, Entity::EEnemyElement element )
 {
-	Entity::SEnemy* enemy = new Entity::SEnemy;
+	SEnemy* enemy = new SEnemy;
 
 	enemy->base.id = 0;
-	enemy->base.kind = Entity::eEC_Enemy;
+	enemy->base.kind = eEC_Enemy;
 	enemy->base.pos = pos;
 	enemy->base.layer = 5;
 	enemy->base.size = MSVec( 32, 16 );
@@ -301,10 +357,10 @@ Entity::EntID Entity::SpawnEnemy( const MSVec& pos, const MSVec& vel, Entity::EE
 
 Entity::EntID Entity::SpawnBullet( const MSVec& pos, const MSVec& vel )
 {
-	Entity::SBullet* bullet = new Entity::SBullet;
+	SBullet* bullet = new SBullet;
 
 	bullet->base.id = 0;
-	bullet->base.kind = Entity::eEC_Bullet;
+	bullet->base.kind = eEC_Bullet;
 	bullet->base.pos = pos;
 	bullet->base.layer = 6;
 	bullet->base.size = MSVec( 32, 16 );
@@ -386,5 +442,17 @@ bool Entity::PlayerTest( const MSVec& pos, const MSVec& size )
 	const MSVec absdist = MSVec( abs( dist.x ), abs( dist.y ) );
 
 	return ( absdist.x < dthresh.x && absdist.y < dthresh.y );
+}
+
+void Entity::ShieldUp()
+{
+	s_player->shieldUp = true;
+	reinterpret_cast<SRenderMux*>( s_player->base.render)->obj[1] = AM::Shield();
+}
+
+void Entity::ShieldDown()
+{
+	s_player->shieldUp = false;
+	reinterpret_cast<SRenderMux*>( s_player->base.render)->obj[1] = NULL;
 }
 

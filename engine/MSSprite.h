@@ -24,6 +24,7 @@ namespace MSSprite
 	void Shutdown();
 
 	void RenderSprite( SheetID sheet, SpriteID sprite, const MSVec& pos, int layer, const MSVec& size, const Colour rgba = 0xffffffff );
+	MSVec GetSpriteSize( SheetID sheet );
 };
 
 #endif
