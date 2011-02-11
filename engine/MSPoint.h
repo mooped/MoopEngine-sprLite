@@ -24,6 +24,8 @@ public:
 	MSPoint() : x( (T)0 ), y( (T)0 ) {};
 	MSPoint( T x, T y ) : x( (T)x ), y( (T)y ) {};
 	MSPoint( const MSPoint& other ) : x( (T)other.x ), y( (T)other.y ) {};
+	template <typename F>
+	MSPoint( const MSPoint<F>& other ) : x( (F)other.x ), y( (F) other.y ) {};
 
 	MSPoint& operator=( const MSPoint& other )
 	{
@@ -34,9 +36,18 @@ public:
 		}
 		return *this;
 	}
+
+	template <typename F>
+	MSPoint<F>& operator=( const MSPoint& other )
+	{
+		x = (F)other.x;
+		y = (F)other.y;
+		return *this;
+	}
 };
 
 typedef MSPoint<int> MSVec;
+typedef MSPoint<float> FVec;
 
 template <typename T>
 MSPoint<T> operator+( const MSPoint<T>& a, const MSPoint<T>& b )
@@ -51,9 +62,27 @@ MSPoint<T> operator-( const MSPoint<T>& a, const MSPoint<T>& b )
 }
 
 template <typename T>
+MSPoint<T> operator-( const MSPoint<T>& a )
+{
+	return MSPoint<T>( -a.x, -a.y );
+}
+
+template <typename T>
 MSPoint<T> operator*( const MSPoint<T>& a, const MSPoint<T>& b )
 {
 	return MSPoint<T>( a.x * b.x, a.y * b.y );
+}
+
+template <typename T>
+T dot( const MSPoint<T>& a, const MSPoint<T>& b )
+{
+	return a.x * b.x + a.y * b.y;
+}
+
+template <typename T>
+MSPoint<T> operator*( const MSPoint<T>& a, const float& b )
+{
+	return MSPoint<T>( a.x * b, a.y * b );
 }
 
 template <typename T>

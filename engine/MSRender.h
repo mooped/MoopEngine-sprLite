@@ -12,6 +12,8 @@
 
 #include "MSEngine.h"
 #include "MSPoint.h"
+#include "MSCmdBuf.h"
+#include "MSEffect.h"
 
 class MSImage;
 
@@ -20,12 +22,15 @@ namespace MSRender
 	// Render command enums
 	enum ECmd
 	{
-		eCmd_BeginScene = 0,
+		eCmd_NOP = MSCmdBuf::eCmd_NOP,
+		eCmd_SKP = MSCmdBuf::eCmd_SKP,
+		eCmd_BeginScene,
 		eCmd_EndScene,
 		eCmd_Sync,
 		eCmd_ClearColour,
 		eCmd_SetTexture,
 		eCmd_Quad,
+		eCmd_DebugLine,
 
 		eCmd_Invalid,
 	};
@@ -39,6 +44,8 @@ namespace MSRender
 
 	void SetTexture( MSImage* pImage );
 	void Quad( MSVec verts[4], int layer, MSVec uvs[2], Colour rgba );
+
+	void DebugLine( MSVec a, MSVec b, Colour rgba );
 };
 
 #endif

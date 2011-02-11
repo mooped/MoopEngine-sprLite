@@ -21,6 +21,7 @@ namespace MSLauncher
 {
 	typedef void (TickFn)();
 	typedef void (Callback)();
+	typedef void (IntIntCallback)(int w, int h);
 	typedef void (KeyCallback)(unsigned char key);
 
 	const char* GetBasePath();
@@ -28,6 +29,7 @@ namespace MSLauncher
 	void RequestRedisplay();
 	void SwapBuffers();
 
+	void SetReshapeCallback( IntIntCallback* pfnCallback );
 	void SetDisplayCallback( Callback* pfnCallback );
 	void SetExitCallback( Callback* pfnCallback );
 	void SetKeyUpCallback( KeyCallback* pfnCallback );
@@ -37,6 +39,8 @@ namespace MSLauncher
 
 	void SetTitle( const char* const title );
 };
+
+int main( int argc, char** const argv );
 
 #endif
 

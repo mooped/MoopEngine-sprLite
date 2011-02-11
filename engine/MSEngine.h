@@ -20,11 +20,25 @@ typedef unsigned char u_char;
 
 typedef unsigned int Colour;
 
+//typedef unsigned long long int u64;
+//typedef long long int s64;
+typedef unsigned int u32;
+typedef int s32;
+typedef unsigned short u16;
+typedef short s16;
+typedef unsigned char u8;
+typedef char s8;
+
 // Hashing
 #define MHash djb2
 typedef unsigned int MHashID;
 
 MHashID MHash( const char* pszString );
+
+// Endian swapping
+//u64 swap_endian64( u64 n );
+u32 swap_endian32( u32 n );
+u16 swap_endian16( u16 n );
 
 // Magic numbers
 enum ESpecialKeys
@@ -58,10 +72,18 @@ enum ESpecialKeys
 	(align + ((offset - 1) & ~(align - 1))) - offset
 
 // Settings
-#ifdef WIN32
+#if defined(WIN32)
 #define USE_WIN32THREADS 1
-#elif MACOSX
+#define USE_GLES 0
+#elif defined(FREEBSD) || defined(LINUX)
 #define USE_PTHREADS 1
+#define USE_GLES 0
+#elif defined(MACOSX)
+#define USE_PTHREADS 1
+#define USE_GLES 0
+#elif defined(IOS)
+#define USE_PTHREADS 1
+#define USE_GLES 1
 #endif
 
 #define MASSERT( cond, msg ) assert( cond && msg );

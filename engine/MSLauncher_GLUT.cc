@@ -12,6 +12,8 @@
 // System libraries
 #if defined(WIN32)
 #include <glut.h>
+#elif defined(FREEBSD) || defined(LINUX)
+#include <GL/glut.h>
 #elif defined(MACOSX)
 #include <GLUT/glut.h>
 #endif

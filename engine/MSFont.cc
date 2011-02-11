@@ -113,3 +113,8 @@ MSVec MSFont::CalculateSize( const char* const pszString, const MSVec& size )
 	);
 }
 
+const char* const MSFont::GetCharSet()
+{
+	return s_pCharSet;
+}
+

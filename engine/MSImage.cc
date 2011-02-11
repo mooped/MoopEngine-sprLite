@@ -10,6 +10,7 @@
 #include "MSImage.h"
 
 #include <stdio.h>
+#include <string.h>
 
 #pragma pack(push,1)
 struct TGAHeader
@@ -37,11 +38,20 @@ void MSImage::LoadTGA( const char* const filename )
 	if ( f )
 	{
 		TGAHeader header;
-		int read;
+		int read = 0;
 
 		// Read in the header
-		fread( &header, sizeof( TGAHeader ), 1, f );
+		read = fread( &header, sizeof( TGAHeader ), 1, f );
 		MASSERT( read, "[LoadTGA] Unexpected EOF." );
+
+#ifdef BIGENDIAN
+		header.colourmapstart = swap_endian16( header.colourmapstart );
+		header.colourmaplength = swap_endian16( header.colourmaplength );
+		header.xstart = swap_endian16( header.xstart );
+		header.ystart = swap_endian16( header.ystart );
+		header.width = swap_endian16( header.width );
+		header.height = swap_endian16( header.height );
+#endif
 
 		if ( header.bits == 32 )
 		{
@@ -82,6 +92,16 @@ MSImage::MSImage( const char* const filename )
 , m_data( NULL )
 {
 	LoadTGA( filename );
+}
+
+MSImage::MSImage( const MHashID hash, const int width, const int height )
+: m_hash( hash )
+, m_ref( ~0 )
+, m_width( width )
+, m_height( height )
+, m_data( new u_char[width * height * 4] )
+{
+	memset( m_data, 0x00, width * height * 4 );
 }
 
 MSImage::~MSImage()

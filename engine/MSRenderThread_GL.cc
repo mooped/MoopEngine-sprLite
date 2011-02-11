@@ -1,5 +1,5 @@
 /*
- *  MSRenderThread.cc
+ *  MSRenderThread_GL.cc
  *  testgame
  *
  *  Created by Steve Barnett on 20/08/2010.
@@ -19,9 +19,14 @@
 #include "GL.h"
 #include "GLU.h"
 #include "GLEXT.h"  // For GL_BGRA among other things
+#elif defined(LINUX) || defined(FREEBSD)
+#include "GL/gl.h"
+#include "GL/glu.h"
 #elif defined(MACOSX)
 #include "OpenGL/GL.h"
 #include "OpenGL/GLU.h"
+#elif defined(IOS)
+#error "MSRenderThread_GL does not support iOS, use MSRenderThread_GLES."
 #endif
 
 #include <string.h>
@@ -38,9 +43,10 @@ namespace MSRenderThread
 	void SetTexture( class MSImage* pImage );
 	void Quad( MSVec verts[4], int layer, MSVec uvs[2], Colour rgba );
 
+	void DebugLine( MSVec verts[2], Colour rgba );
+
 	bool ProcessCommand();
 
-	u_int s_curCmd = 0;
 	Colour s_clearcolour = 0x000000ff;
 	unsigned int s_width = 640;	// Virtual pixel dimensions
 	unsigned int s_height = 480;
@@ -107,9 +113,7 @@ void MSRenderThread::SetTexture( class MSImage* pImage )
 
 			glBindTexture( GL_TEXTURE_2D, texName );
 			glTexImage2D( GL_TEXTURE_2D, 0, 4, pImage->GetWidth(), pImage->GetHeight(), 0, GL_BGRA, GL_UNSIGNED_BYTE, pImage->GetData() );
-
 			glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE );
-
 			glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST );
 			glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST );
 			glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE );
@@ -152,8 +156,29 @@ void MSRenderThread::Quad( MSVec verts[4], int layer, MSVec uvs[2], Colour rgba 
 			u[i] = uvs[i].x * uStep;
 			v[i] = 1.0f - ( uvs[i].y * vStep );
 		}
-	
+
 		// Draw the quad - expect clockwise winding
+#if 0
+		const float data[] = 
+		{
+			u[0], v[0],			// UV
+			x[0], y[0], z,	// Vert
+			u[1], v[0],
+			x[1], y[1], z,
+			u[1], v[1],
+			x[2], y[2], z,
+			u[0], v[1],
+			x[3], y[3], z,
+		};
+
+    glVertexAttribPointer( ATTRIB_VERTEX, 3, GL_FLOAT, 0, 5, data );
+    glEnableVertexAttribArray( ATTRIB_VERTEX );
+    glVertexAttribPointer( ATTRIB_TEXCOORD, 2, GL_FLOAT, 0, 5, &data[2] );
+    glEnableVertexAttribArray( ATTRIB_TEXCOORD);
+
+		glDrawArrays( GL_TRIANGLE_STRIP, 0, sizeof( data ) / sizeof( float ) );
+
+#else
 		glBegin( GL_QUADS );
 		glTexCoord2f( u[0], v[0] );
 		glVertex3f( x[0], y[0], z );
@@ -164,11 +189,39 @@ void MSRenderThread::Quad( MSVec verts[4], int layer, MSVec uvs[2], Colour rgba 
 		glTexCoord2f( u[0], v[1] );
 		glVertex3f( x[3], y[3], z );
 		glEnd();
+#endif
 	}
 	else
 	{
 		MASSERT( 0, "Drawing a quad with no image bound." );
 	}
+}
+
+void MSRenderThread::DebugLine( MSVec verts[2], Colour rgba )
+{
+	// Set colour
+	const unsigned char ucRed = ( (rgba & 0xff000000) >> 24 );
+	const unsigned char ucGreen = ( (rgba & 0x00ff0000) >> 16 );
+	const unsigned char ucBlue = ( (rgba & 0x0000ff00) >> 8 );
+	const unsigned char ucAlpha = ( rgba & 0x000000ff );
+	glColor4ub( ucRed, ucGreen, ucBlue, ucAlpha );
+	
+	// Convert coordinates
+	float x[2];
+	float y[2];
+	float z = -1.f;
+	float xStep = 1.0f / static_cast<float>( s_width );
+	float yStep = 1.0f / static_cast<float>( s_height );
+	for ( int i = 0; i < 2; ++i )
+	{
+		x[i] = verts[i].x * xStep;
+		y[i] = verts[i].y * yStep;
+	}
+
+	glBegin( GL_LINES );
+	glVertex3f( x[0], y[0], z );
+	glVertex3f( x[1], y[1], z );
+	glEnd();
 }
 
 void MSRenderThread::CreateRT()
@@ -178,32 +231,35 @@ void MSRenderThread::CreateRT()
 
 bool MSRenderThread::ProcessCommand()
 {
-	unsigned int &idx = s_curCmd;
 	MSCmdBuf::CmdBuffer* buffer = MSCmdBuf::GetBuffer();
-	if ( MSCmdBuf::IsMultithreaded() )
+	unsigned int &idx = buffer->start;
+
+	if ( buffer->start == buffer->end )
 	{
-		buffer->lock.Lock();
-		const bool rendering = buffer->rendering;
-		if ( !rendering )
-		{
-			buffer->lock.Unlock();
-			MSCmdBuf::SwapRenderingBuffer();
-			return false;
-		}
-	}
-	if ( idx >= buffer->valid_length )
-	{
-		MSCmdBuf::Clear();
-		idx = 0;
-		if ( MSCmdBuf::IsMultithreaded () )
-		{
-			buffer->lock.Unlock();
-		}
 		return false;
 	}
-	MSRender::ECmd cmd = static_cast<MSRender::ECmd>( MSCmdBuf::GetBuffer()->buffer[idx++] );
+	else if ( buffer->start < buffer->end )
+	{
+		if ( idx < buffer->start || idx > buffer->end ) { return false; }
+	}
+	else
+	{
+		if ( idx > buffer->start || idx < buffer->end ) { return false; }
+	}
+
+	MSRender::ECmd cmd = static_cast<MSRender::ECmd>( buffer->buffer[idx++] );
 	switch( cmd )
 	{
+		case MSRender::eCmd_NOP:
+		{
+			// NOP
+		} break;
+		case MSRender::eCmd_SKP:
+		{
+			const unsigned int n = static_cast<unsigned int>( buffer->buffer[idx++] );
+			// SKiP n - 2
+			idx += n - 2;
+		} break;
 		case MSRender::eCmd_BeginScene:
 		{
 			BeginScene();
@@ -239,16 +295,25 @@ bool MSRenderThread::ProcessCommand()
 			Colour rgba = buffer->buffer[idx++];
 			Quad( verts, layer, uvs, rgba );
 		} break;
+		case MSRender::eCmd_DebugLine:
+		{
+			MSVec verts[2];
+			memcpy( verts, &MSCmdBuf::GetBuffer()->buffer[idx], sizeof( verts ) );
+			idx += sizeof( verts ) / sizeof( u_int );
+			Colour rgba = buffer->buffer[idx++];
+			DebugLine( verts, rgba );
+		} break;
 		default:
 		{
 			MASSERT( 0, "Unexpected render command." );
 		} break;
 	}
-
-	if ( MSCmdBuf::IsMultithreaded () )
+	
+	if ( idx >= MAX_RENDER_COMMANDS )
 	{
-		buffer->lock.Unlock();
+		idx = 0;
 	}
+
 	return true;
 }
 
@@ -262,7 +327,6 @@ void MSRenderThread::ProcessCommands()
 
 	// ProcessCommands
 	while ( ProcessCommand() );
-	MSCmdBuf::FinishedRendering();
 
 	MSLauncher::RequestRedisplay();
 }

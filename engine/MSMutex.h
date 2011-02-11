@@ -36,7 +36,7 @@ namespace MSAtomic
 	}
 };
 
-#elif defined(LINUX)
+#elif defined(LINUX) || defined(FREEBSD)
 
 // Use GCC builtin atomics on Linux
 namespace MSAtomic
@@ -57,7 +57,7 @@ namespace MSAtomic
 	}
 };
 
-#elif defined(MACOSX)
+#elif defined(MACOSX) || defined(IOS)
 // See: man atomic
 
 #include <libkern/OSAtomic.h>

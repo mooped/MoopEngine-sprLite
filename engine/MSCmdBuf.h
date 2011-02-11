@@ -11,7 +11,6 @@
 #define MCOMMANDBUFFER_DEF
 
 #define MAX_RENDER_COMMANDS 65536
-#define MAX_INDIVIDUAL_COMMAND 1024
 
 #include "MSPoint.h"
 #include "MSMutex.h"
@@ -20,25 +19,25 @@ namespace MSCmdBuf
 {
 	struct CmdBuffer
 	{
-		CmdBuffer( void ) : valid_length( 0 ), length( 0 ) {}
+		CmdBuffer( void ) : start( 0 ), end( 0 ), working( 0 ) {}
 
 		unsigned int buffer[MAX_RENDER_COMMANDS];
-		unsigned int valid_length;	// Data in the buffer that is complete
-		unsigned int length;	// Data in the buffer
-		MSMutex lock;
-		bool rendering;	// True if rendering from, otherwise writing to
+		unsigned int start;
+		unsigned int end;
+		unsigned int working;
+	};
+
+	enum Commands
+	{
+		eCmd_NOP = 0,
+		eCmd_SKP = 1,
 	};
 
 	void SetMultithread( bool mt );
 	bool IsMultithreaded();
 
-	void LockForWriting();
-	void UnlockForWriting();
-	void FinishedRendering();
-	void FinishedWriting();
-	void SwapRenderingBuffer();
-
 	void Clear();
+	void Check( unsigned int size );
 	void Extend( unsigned int size );
 
 	void AddCommand( unsigned int cmd );
@@ -49,6 +48,9 @@ namespace MSCmdBuf
 	void AddPointer( void* const pPtr );
 	void AddData( const void* const pPtr, unsigned int size );
 	void AddString( const char* __restrict const pStr );
+
+	void AddNOP();
+	void AddSKP( unsigned int n );
 
 	void Dispatch();
 
