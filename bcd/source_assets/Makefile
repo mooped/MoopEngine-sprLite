@@ -5,7 +5,8 @@ all: psds
 
 psds: \
 $(TEXDIR)/charset.tga \
-$(TEXDIR)/bunny.tga
+$(TEXDIR)/bunny.tga \
+$(TEXDIR)/chicken.tga
 
 $(TEXDIR)/%.tga: textures/%.psd
 	$(CONVERT) $< -depth 32 -flatten -alpha on +compress $@
