@@ -67,13 +67,16 @@ void Character::Update()
 			} break;
 		}
 	
-		const int level = m_pGame->ProbeHeight( m_pos.x + size.x / 2 );
+		const int level = m_pGame->ProbeHeight( m_pos.x + ( size.x / 3 ) );
+
+		MSSprite::RenderSprite( 0, 0, m_pos + MSVec( size.x / 3, 0 ), 1, MSVec( 10, 10 ), 0xffffffff );
+
 	
 		if ( m_pos.y > level )
 		{
 			if ( m_pos.y > level + m_vel.y )
 			{
-				if ( !m_airborne || m_vel.y > 1 )
+				if ( !m_airborne && m_vel.y > 0 )
 				{
 					// D:
 					m_pGame->SetFailed();
@@ -127,8 +130,6 @@ GameImpl::GameImpl()
 , m_victory( false )
 , m_failure( false )
 {
-	fprintf( stderr, "GameImpl created\n" );
-
 	int largehit = 0;
 	for ( int i = 0; i < LEVEL_LEN; ++i )
 	{
@@ -195,13 +196,10 @@ GameImpl::GameImpl()
 
 GameImpl::~GameImpl()
 {
-	fprintf( stderr, "GameImpl deleted\n" );
 }
 
 void GameImpl::Update()
 {
-	fprintf( stderr, "GameImpl update\n" );
-
 	m_position += 2;
 
 	if ( m_position > ( LEVEL_LEN * 64 ) - ( PER_SCREEN + 1 ) * 128 )
@@ -308,8 +306,6 @@ int GameImpl::ProbeHeight( int x )
 
 void GameImpl::Reset()
 {
-	fprintf( stderr, "GameImpl reset\n" );
-
 	m_position = 0;
 	m_stage = 0;
 	m_victory = false;
