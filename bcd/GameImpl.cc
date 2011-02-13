@@ -127,7 +127,7 @@ void Character::Render()
 
 GameImpl::GameImpl()
 : m_position( 0 )
-, m_stage( 0 )
+, m_stage( 1 )
 , m_victory( false )
 , m_failure( false )
 {
