@@ -14,7 +14,6 @@
 
 class MSMenu;
 class GameImpl;
-struct STitleMenu;
 struct SGameMenu;
 
 enum { GAME_VERSION = 1 };
@@ -39,7 +38,6 @@ private:
 	EState m_pauseState;
 
 	MSMenu* m_pMenu;
-	STitleMenu* m_pTitleMenu;
 	SGameMenu* m_pGameMenu;
 
 	GameImpl* m_pGame;

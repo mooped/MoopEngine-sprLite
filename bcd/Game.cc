@@ -33,28 +33,6 @@ static void ButtonCallback( void* ptr )
 	*reinterpret_cast<bool*>(ptr) = true;
 }
 
-struct STitleMenu
-{
-	STitleMenu()
-	{
-		Reset();
-	}
-	void Reset()
-	{
-		m_playRequested = false;
-		m_quitRequested = false;
-	}
-
-	void RegisterFields( MSMenu& menu )
-	{
-		menu.RegisterField( "PLAY", &ButtonCallback, reinterpret_cast<void*>( &m_playRequested ) );
-		//menu.RegisterField( "QUIT", &ButtonCallback, reinterpret_cast<void*>( &m_quitRequested ) );
-	}
-
-	bool m_playRequested;
-	bool m_quitRequested;
-};
-
 struct SGameMenu
 {
 	SGameMenu()
@@ -88,7 +66,6 @@ Game::Game()
 , m_nextTick( 0 )
 , m_state( eS_Title )
 ,	m_pMenu( NULL )
-, m_pTitleMenu( new STitleMenu )
 , m_pGameMenu( new SGameMenu )
 {
 	srand( MSTimer::GetTime() );
@@ -99,7 +76,6 @@ Game::Game()
 Game::~Game()
 {
 	delete m_pMenu;
-	delete m_pTitleMenu;
 	delete m_pGameMenu;
 
 	// Unload resources
@@ -156,34 +132,22 @@ void Game::Update()
 
 void Game::UpdateTitle()
 {
-	if ( !m_pMenu )
-	{
-		m_pMenu = new MSMenu();
-		m_pMenu->RegisterField( "BUNNY CHICKEN DINOSAUR" );
-		m_pTitleMenu->RegisterFields( *m_pMenu );
-	}
+	MSFont::RenderString( "BUNNY CHICKEN DINOSAUR", MSVec( 320, 50 ), 5, MSVec( 24, 24 ), 0xffffffff, true );
+	MSFont::RenderString( "HELP A BUNNY A CHICKEN AND A DINOSAUR", MSVec( 320, 100 ), 5, MSVec( 16, 16 ), 0xffffffff, true );
+	MSFont::RenderString( "ESCAPE TO A PLACE THAT WILL ACCEPT", MSVec( 320, 130 ), 5, MSVec( 16, 16 ), 0xffffffff, true );
+	MSFont::RenderString( "THEIR UNORTHODOX LOVE", MSVec( 320, 160 ), 5, MSVec( 16, 16 ), 0xffffffff, true );
 
-	m_pMenu->Update();
-	m_pMenu->Render( MSVec( 32, 128 ) );
+	MSFont::RenderString( "PRESS SPACE", MSVec( 320, 400 ), 5, MSVec( 32, 32 ), 0xffffffff, true );
 
 	MSFont::RenderString( "COPYRIGHT ` 2010 STEVE BARNETT. ALL RIGHTS RESERVED.", MSVec( 320, 470 ), 5, MSVec( 10, 10 ), 0xffffffff, true );
 
 	MSSprite::RenderSprite( Setup::Sheet( Setup::eSp_Title, 0 ), Setup::Sprite( Setup::eSp_Title, 0 ), MSVec( 320, 240 ), 5, MSVec( 256, 256 ), 0xffffffff );
 
-	if ( m_pTitleMenu->m_playRequested )
+	if ( MSInput::Key( ' ' ) )
 	{
-		delete m_pMenu;
-		m_pMenu = NULL;
-		m_pTitleMenu->Reset();
-
+		MSInput::ResetKey( ' ' );
 		m_pauseState = eS_GameMenu;
 		m_state = eS_Game;
-	}
-	else if ( m_pTitleMenu->m_quitRequested )
-	{
-		delete m_pMenu;
-		m_pMenu = NULL;
-		m_quit = true;
 	}
 }
 
@@ -204,7 +168,7 @@ void Game::UpdateGame()
 		delete m_pGame;
 		m_pGame = NULL;
 	}
-	if ( m_pGame->Failure() )
+	else if ( m_pGame->Failure() )
 	{
 		m_state = eS_Failure;
 		delete m_pGame;
@@ -232,6 +196,9 @@ void Game::UpdateGameMenu()
 
 	m_pMenu->Update();
 	m_pMenu->Render( MSVec( 32, 128 ) );
+
+	MSFont::RenderString( "USE W AND A TO NAVIGATE THE MENU", MSVec( 320, 350 ), 5, MSVec( 24, 24 ), 0xffffffff, true );
+	MSFont::RenderString( "PRESS SPACE", MSVec( 320, 400 ), 5, MSVec( 32, 32 ), 0xffffffff, true );
 
 	MSFont::RenderString( "COPYRIGHT ` 2010 STEVE BARNETT. ALL RIGHTS RESERVED.", MSVec( 320, 470 ), 5, MSVec( 10, 10 ), 0xffffffff, true );
 
