@@ -59,7 +59,7 @@ enum ESpecialKeys
 
 #ifdef WIN32
 // Eeeeurgh
-#define snprintf _snprintf_s
+#define snprintf _sprintf_s
 #endif
 
 

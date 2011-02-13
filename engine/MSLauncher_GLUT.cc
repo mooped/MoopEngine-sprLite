@@ -12,7 +12,7 @@
 // System libraries
 #if defined(WIN32)
 #define _WCHAR_T_DEFINED
-#include "glut.h"
+#include "freeglut.h"
 #include <stdlib.h>
 #elif defined(FREEBSD) || defined(LINUX)
 #include <GL/glut.h>

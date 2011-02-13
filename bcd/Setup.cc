@@ -111,7 +111,7 @@ void Setup::LoadResources()
 		char stage[10];
 		strncpy( stage, s_stages[i].texture, 8 );
 		stage[8] = '\0';
-		snprintf( buffer, 255, "%s%s%s", TEXDIR, stage, ".tga" );
+		sprintf( buffer, "%s%s%s", TEXDIR, stage, ".tga" );
 		image = new MSImage( buffer );
 		s_spriteImages.push_back( image );
 		sprite = MSSprite::AddSheet( image, MSVec( 32, 96 ) );
