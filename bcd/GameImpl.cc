@@ -4,6 +4,7 @@
 
 #include "MSSprite.h"
 #include "MSRender.h"
+#include "MSInput.h"
 
 #include "Setup.h"
 
@@ -16,6 +17,50 @@ void Character::Update()
 {
 	++m_frame;
 	if ( m_frame >= 3 ) m_frame = 0;
+
+	m_vel = m_vel + MSVec( 0, 1 );
+	m_pos = m_pos + m_vel;
+
+	Setup::STweaks tweaks = Setup::GetTweaks();
+
+	int vel;
+	switch ( m_type )
+	{
+		case Setup::eCh_Bunny:
+		{
+			vel = tweaks.bunnyjump;
+		} break;
+		case Setup::eCh_Chicken:
+		{
+			vel = tweaks.chickenjump;
+		} break;
+		case Setup::eCh_Dinosaur:
+		{
+			vel = tweaks.dinosaurjump;
+		} break;
+	}
+
+	const int level = m_pGame->ProbeHeight( m_pos.x );
+
+	if ( m_pos.y > level )
+	{
+		m_vel.y = 0;
+		m_pos.y = level;
+		m_airborne = false;
+	}
+
+	if ( MSInput::Key( m_key ) && !m_airborne )
+	{
+		m_vel.y -= vel;
+		if ( m_type != Setup::eCh_Chicken )
+		{
+			m_airborne = true;
+		}
+	}
+	if ( m_type == Setup::eCh_Chicken && !m_airborne && m_vel.y > 5 )
+	{
+		m_airborne = true;
+	}
 }
 
 void Character::Render()
@@ -44,7 +89,7 @@ void Character::Render()
 		} break;
 	}
 
-	MSSprite::RenderSprite( data.sheet, data.run[m_frame], m_pos, m_type + 1, size * 2, colour );
+	MSSprite::RenderSprite( data.sheet, data.run[m_frame], m_pos - MSVec( 0, size.y), m_type + 1, size * 2, colour );
 }
 
 GameImpl::GameImpl()
@@ -84,9 +129,9 @@ GameImpl::GameImpl()
 		}
 	}
 
-	m_char[0] = Character( Setup::eCh_Bunny );
-	m_char[1] = Character( Setup::eCh_Chicken );
-	m_char[2] = Character( Setup::eCh_Dinosaur );
+	m_char[0] = Character( Setup::eCh_Bunny, 'q', this );
+	m_char[1] = Character( Setup::eCh_Chicken, 'w', this );
+	m_char[2] = Character( Setup::eCh_Dinosaur, 'e', this );
 }
 
 GameImpl::~GameImpl()
@@ -113,8 +158,6 @@ void GameImpl::Update()
 
 void GameImpl::Render()
 {
-	static int starttile = 0;
-
 	Setup::STweaks tweaks = Setup::GetTweaks();
 	Setup::SStage stage = Setup::GetStage( m_stage );
 
@@ -134,10 +177,11 @@ void GameImpl::Render()
 
 	for ( int i = 0; i <= PER_SCREEN; ++i )
 	{
-		const int tile = m_backdrop[i + starttile];
-		if ( tile >= 0 && tile <= 5 )
+		const int tile = ( m_position + i * 64 ) / 64;
+		const int bgtile = m_backdrop[tile];
+		if ( bgtile >= 0 && bgtile <= 5 )
 		{
-			Setup::ESprites id = bg[tile];
+			Setup::ESprites id = bg[bgtile];
 			MSSprite::RenderSprite( Setup::Sheet( id ), Setup::Sprite( id ), MSVec( i * 64 + 32 - ( m_position % 64 ), 96 ), 6, MSVec( 64, 192 ), stage.bg );
 		}
 	}
@@ -153,7 +197,8 @@ void GameImpl::Render()
 
 	for ( int i = 0; i <= PER_SCREEN; ++i )
 	{
-		const int height = m_heights[i + starttile];
+		const int tile = ( m_position + i * 64 ) / 64;
+		const int height = m_heights[tile];
 		if ( height > 0 && height < 5 )
 		{
 			Setup::ESprites id = fg[height - 1];
@@ -166,12 +211,25 @@ void GameImpl::Render()
 	{
 		m_char[i].Render();
 	}
+}
 
-	// Scrolling (yuck!)
-	if ( m_position % 64 == 63 )
+int GameImpl::ProbeHeight( int x )
+{
+	static const int s_levels[5] =
 	{
-		++starttile;
-	}
+		96 * 2,	// Floor
+		90 * 2,
+		65 * 2,
+		50 * 2,
+		22 * 2,	// Highest
+	};
+
+	const int i = ( m_position + x ) / 64;
+	const int height = m_heights[i];
+	assert( height >= 0 );
+	assert( height < 5 );
+	const int level = s_levels[height];
+	return level;
 }
 
 void GameImpl::Reset()

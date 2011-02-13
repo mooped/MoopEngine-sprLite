@@ -174,13 +174,11 @@ void Setup::UnloadResources()
 
 MSSprite::SheetID Setup::Sheet( ESprites id )
 {
-	fprintf( stderr, "Id: %i Sheet: %i\n", id, s_sprites[id].sheet );
 	return s_sprites[id].sheet;
 }
 
 MSSprite::SpriteID Setup::Sprite( ESprites id )
 {
-	fprintf( stderr, "Id: %i Sprite: %i\n", id, s_sprites[id].sprite );
 	return s_sprites[id].sprite;
 }
 

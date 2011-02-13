@@ -51,13 +51,13 @@ namespace Setup
 	{
 		unsigned int stricttwocolour;
 		unsigned int bunnycolour;
-		unsigned int bunnyreserved1;
+		unsigned int bunnyjump;
 		unsigned int bunnyreserved2;
 		unsigned int chickencolour;
-		unsigned int chickenreserved1;
+		unsigned int chickenjump;
 		unsigned int chickenreserved2;
 		unsigned int dinosaurcolour;
-		unsigned int dinosaurreserved1;
+		unsigned int dinosaurjump;
 		unsigned int dinosaurreserved2;
 	};
 
