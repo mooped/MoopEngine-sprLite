@@ -11,7 +11,9 @@
 
 // System libraries
 #if defined(WIN32)
-#include <glut.h>
+#define _WCHAR_T_DEFINED
+#include "glut.h"
+#include <stdlib.h>
 #elif defined(FREEBSD) || defined(LINUX)
 #include <GL/glut.h>
 #elif defined(MACOSX)

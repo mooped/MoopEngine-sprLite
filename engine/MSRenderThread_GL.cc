@@ -16,9 +16,9 @@
 
 // System libraries
 #if defined(WIN32)
-#include "GL.h"
-#include "GLU.h"
-#include "GLEXT.h"  // For GL_BGRA among other things
+#include "GL/GL.h"
+#include "GL/GLU.h"
+#include "GL/GLEXT.h"  // For GL_BGRA among other things
 #elif defined(LINUX) || defined(FREEBSD)
 #include "GL/gl.h"
 #include "GL/glu.h"

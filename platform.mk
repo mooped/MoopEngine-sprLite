@@ -19,10 +19,10 @@ PLATFORM_CFLAGS=-DLINUX -DUNIX
 PLATFORM_LDFLAGS=-lglut -lGL
 endif
 
-ifeq ($(UNAME_S), MSYS)
+ifeq ($(UNAME_S), MINGW32_NT-6.1)
 PLATFORM=WIN32
-PLATFORM_CFLAGS=-DWIN32 -DUNIX
-PLATFORM_LDFLAGS=-lglut -lGL
+PLATFORM_CFLAGS=-DWIN32 -DUNIX -I/c/Users/moop/devel/freeglut/include
+PLATFORM_LDFLAGS=-lopengl32 -lfreeglut -L/c/Users/moop/devel/freeglut/lib -L/c/MinGW/lib/lib/
 endif
 
 ifeq ($(UNAME_P), i386)

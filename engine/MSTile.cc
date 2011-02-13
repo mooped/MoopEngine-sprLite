@@ -12,6 +12,10 @@
 #include <vector>
 #include <stdio.h>
 
+#ifdef WIN32
+#include <memory.h>
+#endif
+
 namespace MSTile
 {
 	enum EFileVersion
