@@ -8,6 +8,7 @@ class GameImpl
 	int m_heights[LEVEL_LEN];
 	int m_backdrop[LEVEL_LEN];
 	int m_position;
+	int m_stage;
 
 public:
 	GameImpl();

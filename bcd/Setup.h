@@ -13,6 +13,8 @@
 #include "MSImage.h"
 #include "MSSprite.h"
 
+#include <vector>
+
 namespace Setup
 {
 	void LoadResources();
@@ -44,6 +46,32 @@ namespace Setup
 	MSSprite::SheetID Sheet( ESprites id );
 	MSSprite::SpriteID Sprite( ESprites id );
 	const char* const DataPath();
+
+	struct STweaks
+	{
+		unsigned int stricttwocolour;
+		unsigned int bunnycolour;
+		unsigned int bunnyreserved1;
+		unsigned int bunnyreserved2;
+		unsigned int chickencolour;
+		unsigned int chickenreserved1;
+		unsigned int chickenreserved2;
+		unsigned int dinosaurcolour;
+		unsigned int dinosaurreserved1;
+		unsigned int dinosaurreserved2;
+	};
+
+	struct SStage
+	{
+		char texture[8];
+		unsigned int bg;
+		unsigned int fg;
+		unsigned int sky;
+	};
+
+	STweaks GetTweaks();
+	int GetNumStages();
+	SStage GetStage( int i );
 
 	struct SSpriteData
 	{

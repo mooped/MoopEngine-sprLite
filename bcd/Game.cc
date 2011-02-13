@@ -93,6 +93,7 @@ Game::Game()
 {
 	srand( MSTimer::GetTime() );
 	Setup::LoadResources();
+	MSRender::ClearColour( 0x000000ff );
 }
 
 Game::~Game()
@@ -122,7 +123,6 @@ void Game::Update()
 	MSTimer::FrameStart();
 	MSInput::ResetFrameKeys();
 
-	MSRender::ClearColour( 0x000000ff );;
 	MSRender::BeginScene();
 
 	switch ( m_state )

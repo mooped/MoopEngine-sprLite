@@ -2,6 +2,9 @@
 
 #include "GameImpl.h"
 
+#include "MSSprite.h"
+#include "MSRender.h"
+
 #include "Setup.h"
 
 #include <stdio.h>
@@ -11,6 +14,7 @@
 
 GameImpl::GameImpl()
 : m_position( 0 )
+, m_stage( 0 )
 {
 	fprintf( stderr, "GameImpl created\n" );
 
@@ -67,6 +71,12 @@ void GameImpl::Render()
 {
 	static int starttile = 0;
 
+	Setup::STweaks tweaks = Setup::GetTweaks();
+	Setup::SStage stage = Setup::GetStage( m_stage );
+
+	// Sky
+	MSRender::ClearColour( stage.sky );
+
 	// Background
 	static Setup::ESprites bg[6] =
 	{
@@ -84,7 +94,7 @@ void GameImpl::Render()
 		if ( tile >= 0 && tile <= 5 )
 		{
 			Setup::ESprites id = bg[tile];
-			MSSprite::RenderSprite( Setup::Sheet( id ), Setup::Sprite( id ), MSVec( i * 64 + 32 - ( m_position % 64 ), 96 ), 6, MSVec( 64, 192 ), 0xff00ffff );
+			MSSprite::RenderSprite( Setup::Sheet( id ), Setup::Sprite( id ), MSVec( i * 64 + 32 - ( m_position % 64 ), 96 ), 6, MSVec( 64, 192 ), stage.bg );
 		}
 	}
 
@@ -103,7 +113,7 @@ void GameImpl::Render()
 		if ( height > 0 && height < 5 )
 		{
 			Setup::ESprites id = fg[height - 1];
-			MSSprite::RenderSprite( Setup::Sheet( id ), Setup::Sprite( id ), MSVec( i * 64 + 32 - ( m_position % 64 ), 96 ), 5, MSVec( 64, 192 ), 0xffffffff );
+			MSSprite::RenderSprite( Setup::Sheet( id ), Setup::Sprite( id ), MSVec( i * 64 + 32 - ( m_position % 64 ), 96 ), 5, MSVec( 64, 192 ), stage.fg );
 		}
 	}
 

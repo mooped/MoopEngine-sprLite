@@ -22,6 +22,7 @@
 #endif
 
 #include <vector>
+#include <stdio.h>
 
 namespace Setup
 {
@@ -29,6 +30,9 @@ namespace Setup
 	std::vector<MSImage*> s_spriteImages;
 
 	SSpriteData s_sprites[eSp_Count];
+
+	STweaks s_tweaks;
+	std::vector<SStage> s_stages;
 };
 
 void Setup::LoadResources()
@@ -76,6 +80,37 @@ void Setup::LoadResources()
 	s_spriteImages.push_back( image );
 	sprite = MSSprite::AddSheet( image, MSVec( 256, 256 ) );
 	s_sprites[eSp_Defeat] = SSpriteData( sprite, 0 );
+
+	// Load tweaks
+	{
+		FILE* f = fopen( TEXDIR "tweaks.dat", "rb" );
+		fread( &s_tweaks, sizeof( s_tweaks), 1, f );
+		fclose( f );
+		fprintf( stderr, "Tweaks:\n" );
+		fprintf( stderr, "\tstricttwocolour: 0x%x\n", s_tweaks.stricttwocolour );
+		fprintf( stderr, "\tbunnycolour: 0x%x\n", s_tweaks.bunnycolour );
+		fprintf( stderr, "\tchickencolour: 0x%x\n", s_tweaks.chickencolour );
+		fprintf( stderr, "\tdinosaurcolour: 0x%x\n", s_tweaks.dinosaurcolour );
+		fprintf( stderr, "\n" );
+	}
+
+	// Load stage data
+	{
+		FILE* f = fopen( TEXDIR "stages.dat", "rb" );
+		int nstages = 0;
+		fread( &nstages, sizeof( nstages ), 1, f );
+		s_stages.reserve( nstages );
+		fprintf( stderr, "Stages: %i\n", nstages );
+		for ( int i = 0; i < nstages; ++i )
+		{
+			fprintf( stderr, "Stage %i:\n", i );
+			fread( &s_stages[i], sizeof( SStage ), 1, f );
+			fprintf( stderr, "\tbg: 0x%x\n", s_stages[i].bg );
+			fprintf( stderr, "\tfg: 0x%x\n", s_stages[i].fg );
+			fprintf( stderr, "\tsky: 0x%x\n", s_stages[i].sky );
+		}
+		fclose( f );
+	}
 }
 
 void Setup::UnloadResources()
@@ -106,5 +141,20 @@ MSSprite::SpriteID Setup::Sprite( ESprites id )
 const char* const Setup::DataPath()
 {
 	return TEXDIR;
+}
+
+Setup::STweaks Setup::GetTweaks()
+{
+	return s_tweaks;
+}
+
+int	Setup::GetNumStages()
+{
+	return s_stages.size();
+}
+
+Setup::SStage Setup::GetStage( int i )
+{
+	return s_stages[i];
 }
 
