@@ -69,9 +69,6 @@ void Character::Update()
 	
 		const int level = m_pGame->ProbeHeight( m_pos.x + ( size.x / 3 ) );
 
-		MSSprite::RenderSprite( 0, 0, m_pos + MSVec( size.x / 3, 0 ), 1, MSVec( 10, 10 ), 0xffffffff );
-
-	
 		if ( m_pos.y > level )
 		{
 			if ( m_pos.y > level + m_vel.y )
@@ -91,6 +88,10 @@ void Character::Update()
 		{
 			m_vel.y -= vel;
 			m_airborne = true;
+		}
+		else if ( !MSInput::Key( m_key ) && m_vel.y < 0 )
+		{
+			m_vel.y = 0;
 		}
 	}
 }

@@ -48,7 +48,7 @@ struct STitleMenu
 	void RegisterFields( MSMenu& menu )
 	{
 		menu.RegisterField( "PLAY", &ButtonCallback, reinterpret_cast<void*>( &m_playRequested ) );
-		menu.RegisterField( "QUIT", &ButtonCallback, reinterpret_cast<void*>( &m_quitRequested ) );
+		//menu.RegisterField( "QUIT", &ButtonCallback, reinterpret_cast<void*>( &m_quitRequested ) );
 	}
 
 	bool m_playRequested;
@@ -74,7 +74,7 @@ struct SGameMenu
 		menu.RegisterField( "RESUME", &ButtonCallback, reinterpret_cast<void*>( &m_resumeRequested ) );
 		menu.RegisterField( "RESTART", &ButtonCallback, reinterpret_cast<void*>( &m_resetRequested ) );
 		menu.RegisterField( "QUIT TO MENU", &ButtonCallback, reinterpret_cast<void*>( &m_menuRequested ) );
-		menu.RegisterField( "QUIT", &ButtonCallback, reinterpret_cast<void*>( &m_quitRequested ) );
+		//menu.RegisterField( "QUIT", &ButtonCallback, reinterpret_cast<void*>( &m_quitRequested ) );
 	}
 
 	bool m_resumeRequested;
