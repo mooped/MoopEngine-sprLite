@@ -67,6 +67,7 @@ Game::Game()
 , m_state( eS_Title )
 ,	m_pMenu( NULL )
 , m_pGameMenu( new SGameMenu )
+, m_pGame( NULL )
 {
 	srand( MSTimer::GetTime() );
 	Setup::LoadResources();
