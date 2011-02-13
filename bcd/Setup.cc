@@ -50,14 +50,12 @@ void Setup::LoadResources()
 	s_sprites[eSp_High1] = SSpriteData( sprite, 5 );
 	s_sprites[eSp_High2] = SSpriteData( sprite, 6 );
 	s_sprites[eSp_High3] = SSpriteData( sprite, 7 );
-	s_sprites[eSp_Large1] = SSpriteData( sprite, 9 );
-
-
-	s_sprites[eSp_Large2] = SSpriteData( sprite, 10 );
-	s_sprites[eSp_Large3] = SSpriteData( sprite, 11 );
-	s_sprites[eSp_Small1] = SSpriteData( sprite, 12 );
-	s_sprites[eSp_Small2] = SSpriteData( sprite, 13 );
-	s_sprites[eSp_Small3] = SSpriteData( sprite, 14 );
+	s_sprites[eSp_Large1] = SSpriteData( sprite, 8 );
+	s_sprites[eSp_Large2] = SSpriteData( sprite, 9 );
+	s_sprites[eSp_Large3] = SSpriteData( sprite, 10 );
+	s_sprites[eSp_Small1] = SSpriteData( sprite, 11 );
+	s_sprites[eSp_Small2] = SSpriteData( sprite, 12 );
+	s_sprites[eSp_Small3] = SSpriteData( sprite, 13 );
 
 	image = new MSImage( TEXDIR "title.tga" );
 	s_spriteImages.push_back( image );

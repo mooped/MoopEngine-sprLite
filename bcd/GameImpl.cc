@@ -84,7 +84,7 @@ void GameImpl::Render()
 		if ( tile >= 0 && tile <= 5 )
 		{
 			Setup::ESprites id = bg[tile];
-			MSSprite::RenderSprite( Setup::Sheet( id ), Setup::Sprite( id ), MSVec( i * 64 + 32 - ( m_position % 64 ), 128 ), 6, MSVec( 64, 192 ), 0xff00ffff );
+			MSSprite::RenderSprite( Setup::Sheet( id ), Setup::Sprite( id ), MSVec( i * 64 + 32 - ( m_position % 64 ), 96 ), 6, MSVec( 64, 192 ), 0xff00ffff );
 		}
 	}
 
@@ -103,7 +103,7 @@ void GameImpl::Render()
 		if ( height > 0 && height < 5 )
 		{
 			Setup::ESprites id = fg[height - 1];
-			MSSprite::RenderSprite( Setup::Sheet( id ), Setup::Sprite( id ), MSVec( i * 64 + 32 - ( m_position % 64 ), 128 ), 5, MSVec( 64, 192 ), 0xffffffff );
+			MSSprite::RenderSprite( Setup::Sheet( id ), Setup::Sprite( id ), MSVec( i * 64 + 32 - ( m_position % 64 ), 96 ), 5, MSVec( 64, 192 ), 0xffffffff );
 		}
 	}
 
