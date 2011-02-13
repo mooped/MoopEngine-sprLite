@@ -26,6 +26,8 @@
 
 #include "Setup.h"
 
+#include "GameImpl.h"
+
 static void ButtonCallback( void* ptr )
 {
 	*reinterpret_cast<bool*>(ptr) = true;
@@ -153,8 +155,6 @@ void Game::UpdateTitle()
 		m_pTitleMenu->RegisterFields( *m_pMenu );
 	}
 
-	fprintf( stderr, "TITLE\n" );
-
 	m_pMenu->Update();
 	m_pMenu->Render( MSVec( 32, 128 ) );
 
@@ -168,8 +168,6 @@ void Game::UpdateTitle()
 
 		m_pauseState = eS_GameMenu;
 		m_state = eS_Game;
-
-		// Initialise game
 	}
 	else if ( m_pTitleMenu->m_quitRequested )
 	{
@@ -182,6 +180,13 @@ void Game::UpdateTitle()
 void Game::UpdateGame()
 {
 	// Update the game
+	if ( !m_pGame )
+	{
+		m_pGame = new GameImpl();
+	}
+
+	m_pGame->Update();
+	m_pGame->Render();
 
 	if ( MSInput::Key( 27 ) ) // Esc
 	{
@@ -233,6 +238,11 @@ void Game::UpdateGameMenu()
 		delete m_pMenu;
 		m_pMenu = NULL;
 		m_pGameMenu->Reset();
+
+		if ( m_pGame )
+		{
+			delete m_pGame;
+		}
 
 		m_quit = true;
 	}

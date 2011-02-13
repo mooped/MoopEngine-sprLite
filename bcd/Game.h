@@ -13,6 +13,7 @@
 #include "MSEngine.h"
 
 class MSMenu;
+class GameImpl;
 struct STitleMenu;
 struct SGameMenu;
 
@@ -39,13 +40,12 @@ private:
 	STitleMenu* m_pTitleMenu;
 	SGameMenu* m_pGameMenu;
 
+	GameImpl* m_pGame;
+
 protected:
 	void UpdateTitle();
 	void UpdateGame();
 	void UpdateGameMenu();
-
-	void SaveGame( const char* const filename = NULL );
-	void LoadGame( const char* const filename = NULL );
 
 public:
 	Game();
