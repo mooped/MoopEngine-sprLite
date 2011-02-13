@@ -71,19 +71,19 @@ void Character::Update()
 	
 		if ( m_pos.y > level )
 		{
-			if ( level - m_pos.y < 16 )
+			if ( m_pos.y > level + m_vel.y )
 			{
-				m_vel.y = 0;
-				m_pos.y = level;
-				m_airborne = false;
+				if ( !m_airborne || m_vel.y > 1 )
+				{
+					// D:
+					m_pGame->SetFailed();
+				}
 			}
-			else
-			{
-				// D:
-				m_pGame->SetFailed();
-			}
+			m_vel.y = 0;
+			m_pos.y = level;
+			m_airborne = false;
 		}
-	
+
 		if ( MSInput::Key( m_key ) && !m_airborne )
 		{
 			m_vel.y -= vel;

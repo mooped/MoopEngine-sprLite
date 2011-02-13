@@ -289,6 +289,9 @@ void Game::UpdateVictory()
 {
 	MSSprite::RenderSprite( Setup::Sheet( Setup::eSp_Victory, 0 ), Setup::Sprite( Setup::eSp_Victory, 0 ), MSVec( 320, 240 ), 5, MSVec( 256, 256 ), 0xffffffff );
 
+	MSFont::RenderString( "YOU MADE IT!", MSVec( 320, 100 ), 5, MSVec( 32, 32 ), 0xffffffff, true );
+	MSFont::RenderString( "PRESS SPACE", MSVec( 320, 400 ), 5, MSVec( 32, 32 ), 0xffffffff, true );
+
 	if ( MSInput::Key( ' ' ) )	// Space
 	{
 		MSInput::ResetKey( ' ' );
@@ -299,6 +302,11 @@ void Game::UpdateVictory()
 void Game::UpdateFailure()
 {
 	MSSprite::RenderSprite( Setup::Sheet( Setup::eSp_Defeat, 0 ), Setup::Sprite( Setup::eSp_Defeat, 0 ), MSVec( 320, 240 ), 5, MSVec( 256, 256 ), 0xffffffff );
+
+	MSFont::RenderString( "YOU TRIPPED AND FELL", MSVec( 320, 100 ), 5, MSVec( 24, 24 ), 0xffffffff, true );
+	MSFont::RenderString( "DAYLIGHT IS FADING", MSVec( 320, 150 ), 5, MSVec( 16, 16 ), 0xffffffff, true );
+	MSFont::RenderString( "BUT THERE IS ALWAYS TOMORROW", MSVec( 320, 176 ), 5, MSVec( 16, 16 ), 0xffffffff, true );
+	MSFont::RenderString( "PRESS SPACE", MSVec( 320, 400 ), 5, MSVec( 32, 32 ), 0xffffffff, true );
 
 	if ( MSInput::Key( ' ' ) )	// Space
 	{
