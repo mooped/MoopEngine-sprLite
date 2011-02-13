@@ -168,6 +168,8 @@ void Game::UpdateTitle()
 
 	MSFont::RenderString( "COPYRIGHT ` 2010 STEVE BARNETT. ALL RIGHTS RESERVED.", MSVec( 320, 470 ), 5, MSVec( 10, 10 ), 0xffffffff, true );
 
+	MSSprite::RenderSprite( Setup::Sheet( Setup::eSp_Title, 0 ), Setup::Sprite( Setup::eSp_Title, 0 ), MSVec( 320, 240 ), 5, MSVec( 256, 256 ), 0xffffffff );
+
 	if ( m_pTitleMenu->m_playRequested )
 	{
 		delete m_pMenu;
@@ -233,6 +235,8 @@ void Game::UpdateGameMenu()
 
 	MSFont::RenderString( "COPYRIGHT ` 2010 STEVE BARNETT. ALL RIGHTS RESERVED.", MSVec( 320, 470 ), 5, MSVec( 10, 10 ), 0xffffffff, true );
 
+	MSSprite::RenderSprite( Setup::Sheet( Setup::eSp_Pause, 0 ), Setup::Sprite( Setup::eSp_Pause, 0 ), MSVec( 320, 240 ), 5, MSVec( 256, 256 ), 0xffffffff );
+
 	if ( m_pGameMenu->m_resumeRequested )
 	{
 		delete m_pMenu;
@@ -283,19 +287,23 @@ void Game::UpdateGameMenu()
 
 void Game::UpdateVictory()
 {
+	MSSprite::RenderSprite( Setup::Sheet( Setup::eSp_Victory, 0 ), Setup::Sprite( Setup::eSp_Victory, 0 ), MSVec( 320, 240 ), 5, MSVec( 256, 256 ), 0xffffffff );
+
 	if ( MSInput::Key( ' ' ) )	// Space
 	{
 		MSInput::ResetKey( ' ' );
-		m_state = eS_Title;;
+		m_state = eS_Title;
 	}
 }
 
 void Game::UpdateFailure()
 {
+	MSSprite::RenderSprite( Setup::Sheet( Setup::eSp_Defeat, 0 ), Setup::Sprite( Setup::eSp_Defeat, 0 ), MSVec( 320, 240 ), 5, MSVec( 256, 256 ), 0xffffffff );
+
 	if ( MSInput::Key( ' ' ) )	// Space
 	{
 		MSInput::ResetKey( ' ' );
-		m_state = eS_Title;;
+		m_state = eS_Title;
 	}
 }
 
