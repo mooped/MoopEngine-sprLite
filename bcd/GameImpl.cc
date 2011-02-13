@@ -12,6 +12,41 @@
 
 #define PER_SCREEN (640 / 64)
 
+void Character::Update()
+{
+	++m_frame;
+	if ( m_frame >= 3 ) m_frame = 0;
+}
+
+void Character::Render()
+{
+	Setup::SCharData data = Setup::GetChar( m_type );
+	Setup::STweaks tweaks = Setup::GetTweaks();
+
+	unsigned int colour;
+	MSVec size;
+	switch ( m_type )
+	{
+		case Setup::eCh_Bunny:
+		{
+			colour = tweaks.bunnycolour;
+			size = MSVec( 40, 40 );
+		} break;
+		case Setup::eCh_Chicken:
+		{
+			colour = tweaks.chickencolour;
+			size = MSVec( 32, 40 );
+		} break;
+		case Setup::eCh_Dinosaur:
+		{
+			colour = tweaks.dinosaurcolour;
+			size = MSVec( 72, 48 );
+		} break;
+	}
+
+	MSSprite::RenderSprite( data.sheet, data.run[m_frame], m_pos, m_type + 1, size * 2, colour );
+}
+
 GameImpl::GameImpl()
 : m_position( 0 )
 , m_stage( 0 )
@@ -48,6 +83,10 @@ GameImpl::GameImpl()
 			} break;
 		}
 	}
+
+	m_char[0] = Character( Setup::eCh_Bunny );
+	m_char[1] = Character( Setup::eCh_Chicken );
+	m_char[2] = Character( Setup::eCh_Dinosaur );
 }
 
 GameImpl::~GameImpl()
@@ -64,6 +103,11 @@ void GameImpl::Update()
 	if ( m_position > ( LEVEL_LEN * 32 ) - ( PER_SCREEN + 1 ) )
 	{
 		m_position = 0;
+	}
+
+	for ( int i = 0; i < NUM_CHARS; ++i )
+	{
+		m_char[i].Update();
 	}
 }
 
@@ -115,6 +159,12 @@ void GameImpl::Render()
 			Setup::ESprites id = fg[height - 1];
 			MSSprite::RenderSprite( Setup::Sheet( id ), Setup::Sprite( id ), MSVec( i * 64 + 32 - ( m_position % 64 ), 96 ), 5, MSVec( 64, 192 ), stage.fg );
 		}
+	}
+
+	// Character
+	for ( int i = 0; i < NUM_CHARS; ++i )
+	{
+		m_char[i].Render();
 	}
 
 	// Scrolling (yuck!)

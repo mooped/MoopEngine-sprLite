@@ -82,6 +82,23 @@ namespace Setup
 		MSSprite::SheetID sheet;
 		MSSprite::SpriteID sprite;
 	};
+
+	struct SCharData
+	{
+		MSSprite::SheetID sheet;
+		MSSprite::SpriteID run[3];
+		MSSprite::SpriteID jump[3];
+		MSSprite::SpriteID fall[3];
+	};
+
+	enum EChar
+	{
+		eCh_Bunny = 0,
+		eCh_Chicken,
+		eCh_Dinosaur,
+	};
+
+	SCharData GetChar( EChar id );
 };
 
 #endif

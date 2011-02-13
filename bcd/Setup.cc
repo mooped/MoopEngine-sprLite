@@ -33,6 +33,8 @@ namespace Setup
 
 	STweaks s_tweaks;
 	std::vector<SStage> s_stages;
+
+	SCharData s_chars[3];
 };
 
 void Setup::LoadResources()
@@ -43,6 +45,7 @@ void Setup::LoadResources()
 	MSImage* image = NULL;
 	MSSprite::SpriteID sprite = 0;
 
+	// Foreground and background
 	image = new MSImage( TEXDIR "terrain.tga" );
 	s_spriteImages.push_back( image );
 	sprite = MSSprite::AddSheet( image, MSVec( 32, 96 ) );
@@ -80,6 +83,49 @@ void Setup::LoadResources()
 	s_spriteImages.push_back( image );
 	sprite = MSSprite::AddSheet( image, MSVec( 256, 256 ) );
 	s_sprites[eSp_Defeat] = SSpriteData( sprite, 0 );
+
+	// Characters
+	image = new MSImage( TEXDIR "bunny.tga" );
+	s_spriteImages.push_back( image );
+	sprite = MSSprite::AddSheet( image, MSVec( 40, 40 ) );
+	s_chars[0].sheet = sprite;
+	s_chars[0].run[0] = 0;
+	s_chars[0].run[1] = 1;
+	s_chars[0].run[2] = 2;
+	s_chars[0].jump[0] = 3;
+	s_chars[0].jump[1] = 4;
+	s_chars[0].jump[2] = 5;
+	s_chars[0].fall[0] = 6;
+	s_chars[0].fall[1] = 7;
+	s_chars[0].fall[2] = 8;
+
+	image = new MSImage( TEXDIR "chicken.tga" );
+	s_spriteImages.push_back( image );
+	sprite = MSSprite::AddSheet( image, MSVec( 32, 40 ) );
+	s_chars[1].sheet = sprite;
+	s_chars[1].run[0] = 0;
+	s_chars[1].run[1] = 1;
+	s_chars[1].run[2] = 2;
+	s_chars[1].jump[0] = 4;
+	s_chars[1].jump[1] = 5;
+	s_chars[1].jump[2] = 6;
+	s_chars[1].fall[0] = 8;
+	s_chars[1].fall[1] = 9;
+	s_chars[1].fall[2] = 10;
+
+	image = new MSImage( TEXDIR "dinosaur.tga" );
+	s_spriteImages.push_back( image );
+	sprite = MSSprite::AddSheet( image, MSVec( 72, 48 ) );
+	s_chars[2].sheet = sprite;
+	s_chars[2].run[0] = 0;
+	s_chars[2].run[1] = 1;
+	s_chars[2].run[2] = 2;
+	s_chars[2].jump[0] = 3;
+	s_chars[2].jump[1] = 4;
+	s_chars[2].jump[2] = 5;
+	s_chars[2].fall[0] = 6;
+	s_chars[2].fall[1] = 7;
+	s_chars[2].fall[2] = 8;
 
 	// Load tweaks
 	{
@@ -156,5 +202,10 @@ int	Setup::GetNumStages()
 Setup::SStage Setup::GetStage( int i )
 {
 	return s_stages[i];
+}
+
+Setup::SCharData Setup::GetChar( EChar id )
+{
+	return s_chars[id];
 }
 
