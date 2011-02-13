@@ -11,7 +11,11 @@ $(TEXDIR)/bunny.tga \
 $(TEXDIR)/chicken.tga \
 $(TEXDIR)/dinosaur.tga \
 $(TEXDIR)/terrain.tga \
-$(TEXDIR)/country.tga
+$(TEXDIR)/country.tga \
+$(TEXDIR)/title.tga \
+$(TEXDIR)/pause.tga \
+$(TEXDIR)/victory.tga \
+$(TEXDIR)/defeat.tga
 
 data: \
 $(DATADIR)/tweaks.dat \
@@ -22,6 +26,7 @@ $(TEXDIR)/%.tga: textures/%.psd
 
 $(DATADIR)/%.dat: data/%.hex
 	$(XXD) -r $< > $@
+	$(XXD) $@ > $<
 
 clean:
 	rm -f $(TEXDIR)/*.tga
