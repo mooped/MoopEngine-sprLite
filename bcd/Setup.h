@@ -43,8 +43,8 @@ namespace Setup
 		eSp_Count,
 	};
 
-	MSSprite::SheetID Sheet( ESprites id );
-	MSSprite::SpriteID Sprite( ESprites id );
+	MSSprite::SheetID Sheet( ESprites id, int stage );
+	MSSprite::SpriteID Sprite( ESprites id, int stage );
 	const char* const DataPath();
 
 	struct STweaks

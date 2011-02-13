@@ -18,48 +18,77 @@ void Character::Update()
 	++m_frame;
 	if ( m_frame >= 3 ) m_frame = 0;
 
-	m_vel = m_vel + MSVec( 0, 1 );
-	m_pos = m_pos + m_vel;
-
-	Setup::STweaks tweaks = Setup::GetTweaks();
-
-	int vel;
-	switch ( m_type )
+	if ( m_type == Setup::eCh_Chicken )
 	{
-		case Setup::eCh_Bunny:
+		if ( m_frame == 0 )
 		{
-			vel = tweaks.bunnyjump;
-		} break;
-		case Setup::eCh_Chicken:
-		{
-			vel = tweaks.chickenjump;
-		} break;
-		case Setup::eCh_Dinosaur:
-		{
-			vel = tweaks.dinosaurjump;
-		} break;
-	}
-
-	const int level = m_pGame->ProbeHeight( m_pos.x );
-
-	if ( m_pos.y > level )
-	{
-		m_vel.y = 0;
-		m_pos.y = level;
-		m_airborne = false;
-	}
-
-	if ( MSInput::Key( m_key ) && !m_airborne )
-	{
-		m_vel.y -= vel;
-		if ( m_type != Setup::eCh_Chicken )
-		{
-			m_airborne = true;
+			m_pos = m_pos + m_vel;
+			m_vel.y += ( m_vel.y > 0 ) ? 1 : -1;
+			if ( m_vel.y > 5 || m_vel.y < -5 )
+			{
+				m_vel.y = ( m_vel.y > 0 ) ? -1 : 1;
+			}
 		}
 	}
-	if ( m_type == Setup::eCh_Chicken && !m_airborne && m_vel.y > 5 )
+	else
 	{
-		m_airborne = true;
+		m_vel = m_vel + MSVec( 0, 1 );
+		m_pos = m_pos + m_vel;
+	
+		if ( m_airborne )
+		{
+			m_pos.x += 2;
+		}
+		else if ( m_pos.x > m_xtarget )
+		{
+			m_pos.x -= 2;
+		}
+	
+		Setup::STweaks tweaks = Setup::GetTweaks();
+	
+		int vel;
+		MSVec size;
+		switch ( m_type )
+		{
+			case Setup::eCh_Bunny:
+			{
+				vel = tweaks.bunnyjump;
+				size = MSVec( 40, 40 );
+			} break;
+			case Setup::eCh_Chicken:
+			{
+				vel = tweaks.chickenjump;
+				size = MSVec( 32, 40 );
+			} break;
+			case Setup::eCh_Dinosaur:
+			{
+				vel = tweaks.dinosaurjump;
+				size = MSVec( 72, 48 );
+			} break;
+		}
+	
+		const int level = m_pGame->ProbeHeight( m_pos.x + size.x / 2 );
+	
+		if ( m_pos.y > level )
+		{
+			if ( level - m_pos.y < 16 )
+			{
+				m_vel.y = 0;
+				m_pos.y = level;
+				m_airborne = false;
+			}
+			else
+			{
+				// D:
+				exit( 0 );
+			}
+		}
+	
+		if ( MSInput::Key( m_key ) && !m_airborne )
+		{
+			m_vel.y -= vel;
+			m_airborne = true;
+		}
 	}
 }
 
@@ -85,7 +114,7 @@ void Character::Render()
 		case Setup::eCh_Dinosaur:
 		{
 			colour = tweaks.dinosaurcolour;
-			size = MSVec( 72, 48 );
+			size = MSVec( 72, 40 );
 		} break;
 	}
 
@@ -98,12 +127,40 @@ GameImpl::GameImpl()
 {
 	fprintf( stderr, "GameImpl created\n" );
 
+	int largehit = 0;
 	for ( int i = 0; i < LEVEL_LEN; ++i )
 	{
-		m_heights[i] = rand() % 4 + 1;
+		if ( i < 8 || i > LEVEL_LEN - ( 2 * PER_SCREEN ) )
+		{
+			m_heights[i] = 0;
+		}
+		else
+		{
+			switch ( largehit )
+			{
+				case 1:
+				case 2:
+				{
+					m_heights[i] = 4;
+					--largehit;
+				} break;
+				default:
+				{
+					m_heights[i] = rand() % 4 + 1;
+					if ( m_heights[i] - m_heights[i - 1] >= 2 )
+					{
+						--m_heights[i];
+					}
+					if ( m_heights[i] == 4 )
+					{
+						largehit = 2;
+					}
+				} break;
+			}
+		}
 		m_backdrop[i] = rand() % 6;
 	}
-	int largehit = 0;
+	largehit = 0;
 	for ( int i = 0; i < LEVEL_LEN; ++i )
 	{
 		switch ( largehit )
@@ -143,11 +200,18 @@ void GameImpl::Update()
 {
 	fprintf( stderr, "GameImpl update\n" );
 
-	++m_position;
+	m_position += 2;
 
-	if ( m_position > ( LEVEL_LEN * 32 ) - ( PER_SCREEN + 1 ) )
+	if ( m_position > ( LEVEL_LEN * 64 ) - ( PER_SCREEN + 1 ) * 128 )
 	{
 		m_position = 0;
+		m_stage += 1;
+		if ( m_stage > Setup::GetNumStages() )
+		{
+			m_stage = 0;
+			// Victory
+			exit( 0 );
+		}
 	}
 
 	for ( int i = 0; i < NUM_CHARS; ++i )
@@ -182,7 +246,7 @@ void GameImpl::Render()
 		if ( bgtile >= 0 && bgtile <= 5 )
 		{
 			Setup::ESprites id = bg[bgtile];
-			MSSprite::RenderSprite( Setup::Sheet( id ), Setup::Sprite( id ), MSVec( i * 64 + 32 - ( m_position % 64 ), 96 ), 6, MSVec( 64, 192 ), stage.bg );
+			MSSprite::RenderSprite( Setup::Sheet( id, m_stage ), Setup::Sprite( id, m_stage ), MSVec( i * 64 + 32 - ( m_position % 64 ), 96 ), 6, MSVec( 64, 192 ), stage.bg );
 		}
 	}
 
@@ -202,7 +266,15 @@ void GameImpl::Render()
 		if ( height > 0 && height < 5 )
 		{
 			Setup::ESprites id = fg[height - 1];
-			MSSprite::RenderSprite( Setup::Sheet( id ), Setup::Sprite( id ), MSVec( i * 64 + 32 - ( m_position % 64 ), 96 ), 5, MSVec( 64, 192 ), stage.fg );
+			if ( tile != 0 && id == Setup::eSp_High2 && m_heights[tile - 1] != 4 )
+			{
+				id = Setup::eSp_High1;
+			}
+			else if ( id == Setup::eSp_High2 && m_heights[tile + 1] != 4 )
+			{
+				id = Setup::eSp_High3;
+			}
+			MSSprite::RenderSprite( Setup::Sheet( id, m_stage ), Setup::Sprite( id, m_stage ), MSVec( i * 64 + 32 - ( m_position % 64 ), 96 ), 5, MSVec( 64, 192 ), stage.fg );
 		}
 	}
 

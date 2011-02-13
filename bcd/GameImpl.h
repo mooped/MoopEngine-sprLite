@@ -1,7 +1,7 @@
 #ifndef GAMEIMPL_DEF
 #define GAMEIMPL_DEF
 
-#define LEVEL_LEN 64
+#define LEVEL_LEN 128
 #define NUM_CHARS 3
 
 #include "Setup.h"
@@ -17,6 +17,7 @@ class Character
 	bool m_airborne;
 	int m_frame;
 	GameImpl* m_pGame;
+	int m_xtarget;
 public:
 	Character() {}
 	Character( Setup::EChar type, char key, GameImpl* pGame )
@@ -27,7 +28,13 @@ public:
 	, m_airborne( false )
 	, m_frame( 0 )
 	, m_pGame( pGame )
-	{}
+	, m_xtarget( 100 )
+	{
+		if ( m_type == Setup::eCh_Chicken )
+		{
+			m_pos = MSVec( 440, 70 );
+		}
+	}
 
 	void Update();
 	void Render();

@@ -9,11 +9,7 @@
 // System
 #include <stdio.h>
 
-#ifndef IOS
 #define MULTITHREAD 1
-#else
-#define MULTITHREAD 0
-#endif
 
 #if MULTITHREAD
 #include "GameThread.h"
