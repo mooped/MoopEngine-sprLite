@@ -206,7 +206,7 @@ void GameImpl::Update()
 	{
 		m_position = 0;
 		m_stage += 1;
-		if ( m_stage > Setup::GetNumStages() )
+		if ( m_stage >= Setup::GetNumStages() )
 		{
 			m_stage = 0;
 			// Victory
