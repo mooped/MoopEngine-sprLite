@@ -24,6 +24,8 @@
 #define sleep Sleep
 #endif
 
+#include "Setup.h"
+
 static void ButtonCallback( void* ptr )
 {
 	*reinterpret_cast<bool*>(ptr) = true;
@@ -88,6 +90,7 @@ Game::Game()
 , m_pGameMenu( new SGameMenu )
 {
 	srand( MSTimer::GetTime() );
+	Setup::LoadResources();
 }
 
 Game::~Game()
@@ -97,6 +100,7 @@ Game::~Game()
 	delete m_pGameMenu;
 
 	// Unload resources
+	Setup::UnloadResources();
 }
 
 void Game::Update()
@@ -145,9 +149,11 @@ void Game::UpdateTitle()
 	if ( !m_pMenu )
 	{
 		m_pMenu = new MSMenu();
-		m_pMenu->RegisterField( "MENU:" );
+		m_pMenu->RegisterField( "BUNNY CHICKEN DINOSAUR" );
 		m_pTitleMenu->RegisterFields( *m_pMenu );
 	}
+
+	fprintf( stderr, "TITLE\n" );
 
 	m_pMenu->Update();
 	m_pMenu->Render( MSVec( 32, 128 ) );
