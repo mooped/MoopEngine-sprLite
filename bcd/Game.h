@@ -27,6 +27,8 @@ private:
 		eS_Title = 0,
 		eS_Game,
 		eS_GameMenu,
+		eS_Victory,
+		eS_Failure,
 		eS_Count,
 	};
 
@@ -46,6 +48,8 @@ protected:
 	void UpdateTitle();
 	void UpdateGame();
 	void UpdateGameMenu();
+	void UpdateVictory();
+	void UpdateFailure();
 
 public:
 	Game();

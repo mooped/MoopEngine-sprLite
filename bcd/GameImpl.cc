@@ -80,7 +80,7 @@ void Character::Update()
 			else
 			{
 				// D:
-				exit( 0 );
+				m_pGame->SetFailed();
 			}
 		}
 	
@@ -124,6 +124,8 @@ void Character::Render()
 GameImpl::GameImpl()
 : m_position( 0 )
 , m_stage( 0 )
+, m_victory( false )
+, m_failure( false )
 {
 	fprintf( stderr, "GameImpl created\n" );
 
@@ -210,7 +212,7 @@ void GameImpl::Update()
 		{
 			m_stage = 0;
 			// Victory
-			exit( 0 );
+			m_victory = true;
 		}
 	}
 
@@ -307,5 +309,19 @@ int GameImpl::ProbeHeight( int x )
 void GameImpl::Reset()
 {
 	fprintf( stderr, "GameImpl reset\n" );
+
+	m_position = 0;
+	m_stage = 0;
+	m_victory = false;
+	m_failure = false;
 }
 
+bool GameImpl::Victory()
+{
+	return m_victory;
+}
+
+bool GameImpl::Failure()
+{
+	return m_failure;
+}

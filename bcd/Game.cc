@@ -139,6 +139,14 @@ void Game::Update()
 		{
 			UpdateGameMenu();
 		} break;
+		case eS_Victory:
+		{
+			UpdateVictory();
+		} break;
+		case eS_Failure:
+		{
+			UpdateFailure();
+		} break;
 		default: break;
 	}
 
@@ -188,6 +196,22 @@ void Game::UpdateGame()
 	m_pGame->Update();
 	m_pGame->Render();
 
+	if ( m_pGame->Victory() )
+	{
+		m_state = eS_Victory;
+		delete m_pGame;
+		m_pGame = NULL;
+	}
+	if ( m_pGame->Failure() )
+	{
+		m_state = eS_Failure;
+		delete m_pGame;
+		m_pGame = NULL;
+	}
+
+	MSFont::RenderString( "Q : BUNNY JUMP", MSVec( 320, 400 ), 5, MSVec( 32, 32 ), 0xffffffff, true );
+	MSFont::RenderString( "E : DINOSAUR JUMP", MSVec( 320, 440 ), 5, MSVec( 32, 32 ), 0xffffffff, true );
+
 	if ( MSInput::Key( 27 ) ) // Esc
 	{
 		MSInput::ResetKey( 27 );
@@ -223,6 +247,8 @@ void Game::UpdateGameMenu()
 		m_pMenu = NULL;
 		m_pGameMenu->Reset();
 
+		m_pGame->Reset();
+
 		m_state = eS_Game;
 	}
 	else if ( m_pGameMenu->m_menuRequested )
@@ -230,6 +256,12 @@ void Game::UpdateGameMenu()
 		delete m_pMenu;
 		m_pMenu = NULL;
 		m_pGameMenu->Reset();
+
+		if ( m_pGame )
+		{
+			delete m_pGame;
+			m_pGame = NULL;
+		}
 
 		m_state = eS_Title;
 	}
@@ -242,9 +274,28 @@ void Game::UpdateGameMenu()
 		if ( m_pGame )
 		{
 			delete m_pGame;
+			m_pGame = NULL;
 		}
 
 		m_quit = true;
+	}
+}
+
+void Game::UpdateVictory()
+{
+	if ( MSInput::Key( ' ' ) )	// Space
+	{
+		MSInput::ResetKey( ' ' );
+		m_state = eS_Title;;
+	}
+}
+
+void Game::UpdateFailure()
+{
+	if ( MSInput::Key( ' ' ) )	// Space
+	{
+		MSInput::ResetKey( ' ' );
+		m_state = eS_Title;;
 	}
 }
 

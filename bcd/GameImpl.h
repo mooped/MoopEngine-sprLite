@@ -47,6 +47,9 @@ class GameImpl
 	int m_position;
 	int m_stage;
 
+	bool m_victory;
+	bool m_failure;
+
 public:
 	Character m_char[NUM_CHARS];
 
@@ -57,6 +60,11 @@ public:
 	void Render();
 
 	int ProbeHeight( int x );
+
+	bool Victory();
+	bool Failure();
+
+	void SetFailed() { m_failure = true; }
 
 	void Reset();
 };
