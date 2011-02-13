@@ -1,6 +1,7 @@
 CONVERT=convert
 XXD=xxd
 TEXDIR=../
+DATADIR=../
 
 all: psds data
 
@@ -20,8 +21,9 @@ $(TEXDIR)/%.tga: textures/%.psd
 	$(CONVERT) $< -depth 32 -flatten -alpha on +compress $@
 
 $(DATADIR)/%.dat: data/%.hex
-	$(XXD) $< -r > $@
+	$(XXD) -r $< > $@
 
 clean:
 	rm -f $(TEXDIR)/*.tga
+	rm -f $(DATADIR)/*.dat
 
